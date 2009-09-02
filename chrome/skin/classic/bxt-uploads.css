@@ -1,0 +1,104 @@
+/*
+
+Copyright (c) 2009 Robert Johnston
+
+This file is part of Bxtension.
+
+Bxtension is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software  Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+Bxtension is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Bxtension. If not, see http://www.gnu.org/licenses/.
+
+*/
+
+
+#bxt-window-uploads {
+	padding: 0;
+}
+
+#bxt-upload-box {
+	-moz-appearance: none;
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+	overflow: auto;
+	-moz-binding: url(chrome://bxtension/content/bxt-view-uploads.xml#bxt-upload-box);
+}
+
+#bxt-upload-box:focus > richlistitem[type="upload"][selected="true"] label {
+	color: highlighttext;
+}
+
+richlistitem[type="upload"]:not([selected="true"]):nth-child(odd) {
+	background-color: -moz-oddtreerow;
+}
+
+richlistitem[type="upload"][selected="true"] {
+	outline: none;
+}
+
+richlistitem[type="upload"] {
+	min-height: 60px;
+	border: 1px solid transparent;
+	-moz-binding: url(chrome://bxtension/content/bxt-view-uploads.xml#bxt-upload-view);
+}
+
+richlistitem[type="upload"] label {
+	font-size: smaller;
+}
+
+richlistitem[type="upload"] .bxt-upload-info {
+	color: #555;
+}
+
+richlistitem[type="upload"] button {
+	-moz-appearance: none;
+	min-height: 16px;
+	min-width: 16px;
+	max-height: 16px;
+	max-width: 16px;
+	padding: 0;
+	margin: 0 1px 0 1px;
+}
+
+/**
+* Images for buttons in the interface
+*/
+richlistitem[type="upload"] button {
+	list-style-image: url(chrome://mozapps/skin/downloads/buttons.png);
+}
+richlistitem[type="upload"] button[action="cancel"] {
+	-moz-image-region: rect(0px, 16px, 16px, 0px);
+}
+richlistitem[type="upload"] button[action="cancel"]:hover {
+	-moz-image-region: rect(0px, 32px, 16px, 16px);
+}
+richlistitem[type="upload"] button[action="retry"] {
+	-moz-image-region: rect(32px, 16px, 48px, 0px);
+}
+richlistitem[type="upload"] button[action="retry"]:hover {
+	-moz-image-region: rect(32px, 32px, 48px, 16px);
+}
+richlistitem[type="upload"] button[action="remove"] {
+	list-style-image: url(chrome://bxtension/skin/bxt-minibutton-tick.png);
+	-moz-image-region: rect(0px, 16px, 16px, 0px);
+}
+richlistitem[type="upload"] button[action="remove"]:hover {
+	list-style-image: url(chrome://bxtension/skin/bxt-minibutton-tick.png);
+	-moz-image-region: rect(0px, 32px, 16px, 16px);
+}
+
+.bxt-upload-holder {
+	padding: 10px 12px 12px 8px;
+}
+
+.bxt-upload-icons {
+	max-width: 40px;
+}
+
+#tools {
+  -moz-box-pack: start;
+  padding: 2px;
+  -moz-appearance: statusbar;
+}

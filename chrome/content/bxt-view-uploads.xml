@@ -1,0 +1,331 @@
+<?xml version="1.0"?>
+
+<!--
+
+Copyright (c) 2009 Robert Johnston
+
+This file is part of Bxtension.
+
+Bxtension is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software  Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+Bxtension is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Bxtension. If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<binding id="bxt-upload-box" extends="chrome://global/content/bindings/richlistbox.xml#richlistbox">
+		
+		<content>
+			
+			<implementation>
+				
+				<constructor>
+					<![CDATA[
+					
+						var self = this;
+						
+						window.addEventListener("UploadStateChange",function(e) { self.updateView(e); },false,true);
+						window.addEventListener("UploadProgress",function(e) { self.updateProgress(e); },false,true);
+						window.addEventListener("UploadRemoved",function(e) { self.removeView(e); },false,true);
+					]]>
+				</constructor>
+				
+				<method name="boot">
+					<parameter name="controller"/>
+					<body>
+						<![CDATA[
+							
+							var self = this;
+							
+							this.controller = controller;
+							for (var i in this.controller.uploadList) {
+								this.createView(this.controller.uploadList[i]);
+							}
+							document.getElementById("clearListButton").addEventListener("command",
+								function() { self.controller.clearList(); },false,true);
+
+						]]>
+					</body>
+				</method>
+				
+				<method name="createView">
+					<parameter name="upload"/>
+					<body>
+						<![CDATA[
+						
+							var uploadView = document.createElement("richlistitem");
+							uploadView.setAttribute("type","upload");
+							this.appendChild(uploadView);
+							uploadView.setUpload(upload);
+							return uploadView;
+					
+						]]>
+					</body>
+				</method>
+				
+				<method name="removeView">
+					<parameter name="e"/>
+					<body>
+						<![CDATA[
+						
+							var view = document.getElementById(e.uploadId);
+							if (view !== null) {
+								this.removeChild(view);
+							}
+					
+						]]>
+					</body>
+				</method>
+				
+				<method name="updateView">
+					<parameter name="e"/>
+					<body>
+						<![CDATA[
+					
+							var view = document.getElementById(e.uploadId);
+							if (view === null) {
+								view = this.createView(this.controller.getUploadById(e.uploadId));
+							}
+							view.state = e.state;
+						]]>
+					</body>
+				</method>
+				
+				<method name="updateProgress">
+					<parameter name="e"/>
+					<body>
+						<![CDATA[
+						
+							var view = document.getElementById(e.uploadId);
+							if (view === null) {
+								view = this.createView(this.controller.getUploadById(e.uploadId));
+							}
+							view.uploaded = e.loaded;
+						]]>
+					</body>
+				</method>
+				
+			</implementation>
+			
+		</content>
+		
+	</binding>
+
+	<binding id="bxt-upload-view" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+		
+		<resources>
+			<stylesheet src="chrome://bxtension/skin/upload.css"/>
+			<stylesheet src="chrome://mozapps/skin/downloads/downloads.css"/>
+		</resources>
+
+		<content>
+			
+			<xul:vbox flex="1" class="bxt-upload-holder">
+				<xul:label anonid="fileNameLabel" value="" crop="end"/>
+				<xul:hbox align="center" flex="1">
+					<xul:progressmeter anonid="progressMeter" mode="undetermined" flex="1"/>
+					<xul:hbox class="bxt-upload-icons" flex="1" align="center" pack="end">
+						<xul:button anonid="actionButton" class="mini-button" action="cancelUpload"/>
+					</xul:hbox>
+				</xul:hbox>
+				<xul:label class="bxt-upload-info" anonid="infoLabel" value="Queued ..."/>
+			</xul:vbox>
+			
+		</content>
+
+		<implementation>
+			
+			<field name="fileNameLabel">
+				<![CDATA[
+					document.getAnonymousElementByAttribute(this,"anonid","fileNameLabel");
+				]]>
+			</field>
+			<field name="progressMeter">
+				<![CDATA[
+					document.getAnonymousElementByAttribute(this,"anonid","progressMeter");
+				]]>
+			</field>
+			<field name="actionButton">
+				<![CDATA[
+					document.getAnonymousElementByAttribute(this,"anonid","actionButton");
+				]]>
+			</field>
+			<field name="infoLabel">
+				<![CDATA[
+					document.getAnonymousElementByAttribute(this,"anonid","infoLabel");
+				]]>
+			</field>
+			
+			<property name="fileName"/>
+			<property name="fileSize"/>
+			<property name="fileSizeString"/>
+			<property name="upload"/>
+			
+			<property name="state">
+				<setter>
+					<![CDATA[
+					
+						this.setAttribute("state",val);
+						
+						switch(val) {
+							case "queued":
+							this.progressMeter.setAttribute("mode","undetermined");
+							this.actionButton.setAttribute("action","cancel");
+							this.infoLabel.setAttribute("value","Queued ...");
+							break;
+							
+							case "active":
+							this.actionButton.setAttribute("action","cancel");
+							this.infoLabel.setAttribute("value","Starting ...");
+							break;
+							
+							case "cancelled":
+							this.progressMeter.setAttribute("mode","determined");
+							this.progressMeter.setAttribute("value","0");
+							this.infoLabel.setAttribute("value","Cancelled");
+							this.actionButton.setAttribute("action","retry");
+							break;
+							
+							case "succeeded":
+							this.progressMeter.setAttribute("mode","determined");
+							this.progressMeter.setAttribute("value","100");
+							this.actionButton.setAttribute("action","remove");
+							this.infoLabel.setAttribute("value","Done: "+this.upload.req.xhr.getResponseHeader("Location"));
+							break;
+							
+							case "failed":
+							this.progressMeter.setAttribute("mode","determined");
+							this.progressMeter.setAttribute("value","0");
+							this.actionButton.setAttribute("action","retry");
+							this.infoLabel.setAttribute("value",this.upload.req.xhr.responseText);
+							break;
+						}
+						
+						return val;
+					]]>
+				</setter>
+			</property>
+			
+			<property name="uploaded">
+				<setter>
+					<![CDATA[
+					
+						if (this.progressMeter.getAttribute("mode") === "undetermined") {
+							this.progressMeter.setAttribute("mode","determined");
+						}
+					
+						this.progressMeter.setAttribute("value",(val/this.fileSize) * 100);
+						this.updateUploadInfo(val);
+						return val;
+					
+					]]>
+				</setter>
+			</property>
+			
+			<constructor>
+					<![CDATA[
+					
+						var self = this;
+
+						this.actionButton.addEventListener("command",function() { 
+							self.upload[this.getAttribute("action")]();
+						},false,true);
+					
+					]]>
+			</constructor>
+
+			<method name="setUpload">
+				<parameter name="upload"/>
+				<body>
+					<![CDATA[
+						
+						this.upload = upload;
+						this.id = upload.id;
+						this.state = upload.state;
+						
+						this.fileName = this.upload.file.leafName;
+						this.fileSize = this.upload.file.fileSize;
+						this.fileSizeString = this.generateFileSizeString(this.fileSize);
+						
+						this.fileNameLabel.setAttribute("value",this.fileName+" to "+this.upload.req.options.url);
+						
+						if (upload.loaded !== undefined) {
+							this.updateUploadInfo(upload.loaded);
+						}
+						
+					]]>
+				</body>
+			</method>
+			
+			<method name="updateUploadInfo">
+				<parameter name="bytesComplete"/>
+				<body>
+					<![CDATA[
+					
+						var completeString = this.generateFileSizeString(bytesComplete);
+						var elapsed = new Date().getTime() - this.upload.timeStarted;
+						var rate = bytesComplete/(elapsed/1000);
+						var rateString = this.generateFileSizeString(rate);
+						var remainingBytes = this.fileSize - bytesComplete;
+						var remainingTime = Math.round(remainingBytes/rate);
+						var remainingTimeString = this.generateTimeString(remainingTime);
+						
+						var infoString = remainingTimeString+" remaining - "+completeString+" of "+this.fileSizeString+" ("+rateString+"/sec)";
+												
+						this.infoLabel.setAttribute("value",infoString);
+					
+					]]>
+				</body>
+			</method>
+			
+			<method name="generateFileSizeString">
+				<parameter name="bytes"/>
+				<body>
+					<![CDATA[
+					
+						if (bytes < 1024) {
+							unit = (bytes === 1) ? "byte" : "bytes";
+							return Math.round(bytes)+" "+unit;
+						}
+						if (bytes < 1048576) {
+							return (bytes/1024).toFixed(2)+"kB";
+						}
+						return (bytes/1048576).toFixed(2)+"MB";
+					
+					]]>
+				</body>
+			</method>
+			
+			<method name="generateTimeString">
+				<parameter name="secs"/>
+				<body>
+					<![CDATA[
+					
+						var unit;
+						
+						if (secs < 60) {
+							unit = (secs === 1) ? "second" : "seconds";
+							return secs+" "+unit;
+						}
+						if (secs < 3600) {
+							var minutes = Math.round(secs/60);
+							unit = (minutes === 1) ? "minute" : "minutes";
+							return minutes+" "+unit;
+						}
+						var hours = Math.round(secs/3600);
+						unit = (hours === 1) ? "hour" : "hours";
+						return hours+" "+unit;
+					
+					]]>
+				</body>
+			</method>
+
+		</implementation>
+
+	</binding>
+
+</bindings>
