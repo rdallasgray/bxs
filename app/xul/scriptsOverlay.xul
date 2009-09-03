@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<!--
+
+Copyright (c) 2009 Robert Johnston
+
+This file is part of Boxes.
+
+Boxes is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software  Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+Boxes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Boxes. If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
+	
+	<box id="scriptsBox" collapse="true">
+		
+		<script type="application/javascript" src="/Bxs/app/js/common.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/jquery.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Json.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Command.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Ajax.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Scripts.js"/>
+		
+		
+	
+		<script type="application/javascript" src="/Bxs/app/js/jquery.string.1.0.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Mixin.Attributeable.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Mixin.Commandable.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Mixin.Stateable.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Xpath.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Comparator.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Tables.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Panel.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.List.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.String.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Factory.Table.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Factory.Filter.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Factory.List.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Factory.Widget.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Media.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Media.Image.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.View.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.View.Table.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.View.Table.Listbox.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.View.Table.Listbox.Image.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.View.Row.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.View.Row.Listitem.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Controller.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Controller.Table.General.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Controller.Table.Media.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Widget.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Widget.String.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Widget.Boolean.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Widget.List.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Filter.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Filter.Year.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Toolbar.Abstract.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Toolbar.Edit.js"/>
+		
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Cache.js"/>
+
+	</box>
+	
+</overlay>

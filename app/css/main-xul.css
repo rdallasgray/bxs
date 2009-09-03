@@ -1,0 +1,494 @@
+/*
+
+Copyright (c) 2009 Robert Johnston
+
+This file is part of Boxes.
+
+Boxes is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software  Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+Boxes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Boxes. If not, see http://www.gnu.org/licenses/.
+
+*/
+
+.test {
+	-moz-appearance: none;
+	background-color: red;
+}
+
+hbox,vbox,tabbox,tabpanels,tabpanel,listbox,deck {
+	-moz-box-flex: 1;
+}
+
+.report {
+	background-color: white;
+	-moz-box-flex: 1;
+	-moz-box-orient: vertical;
+	border: solid rgb(120,120,120) 1px;
+	margin: 2px;
+	padding: 4px;
+	overflow: auto;
+	height: 200px;
+}
+
+.editBar {
+	-moz-appearance: none;
+	min-height: 0 !important;
+	border: 0;
+	border-left: solid rgb(180,180,180) 1px;
+	margin: -8px 0 0 8px;
+}
+
+.editBar[targetNode="temp-table"] {
+	visibility: collapse;
+}
+
+.editBar toolbarbutton {
+	-moz-appearance: none;
+	-moz-user-focus: normal;
+	-moz-box-pack: center;
+	-moz-box-align: center;
+	border-right: solid rgb(180,180,180) 1px;
+	border-bottom: solid rgb(160,160,160) 1px;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-image: url(/Bxs/app/img/edit_buttons_grad.png);
+	width: 26px;
+}
+
+.editBar toolbarbutton[disabled="true"] {
+	-moz-user-focus: ignore;
+}
+
+.editBar toolbarbutton[disabled="true"] .toolbarbutton-icon {
+	opacity: 0.25;
+}
+
+.editBar toolbarbutton:active {
+	background-image: url(/Bxs/app/img/edit_buttons_grad_active.png);
+}
+.editBar toolbarbutton[disabled="true"]:active {
+	background-image: url(/Bxs/app/img/edit_buttons_grad.png);
+}
+
+.editBar toolbarbutton .toolbarbutton-text {
+	visibility: hidden;
+}
+
+.editBar toolbarbutton[command="newRow-command"] {
+	list-style-image: url(/Bxs/app/img/edit_button_newRow.png);
+}
+
+.editBar toolbarbutton[command="deleteRow-command"] {
+	list-style-image: url(/Bxs/app/img/edit_button_deleteRow.png);
+}
+
+.editBar toolbarbutton[command="edit-command"] {
+	list-style-image: url(/Bxs/app/img/edit_button_edit.png);
+}
+
+.editBar toolbarbutton[command="confirm-command"] {
+	list-style-image: url(/Bxs/app/img/edit_button_confirm.png);
+}
+
+.editBar toolbarbutton[command="cancel-command"] {
+	list-style-image: url(/Bxs/app/img/edit_button_cancel.png);
+}
+
+.editBar toolbarbutton[label="Tools"] {
+	border-right: solid rgb(160,160,160) 1px;
+	list-style-image: url(/Bxs/app/img/edit_button_extra.png);
+}
+
+.hidden {
+	visibility: collapse;
+}
+
+listcell[media="image"] {
+	min-height: 64px;
+	background-repeat: no-repeat;
+	background-position: center left;
+	-moz-box-direction: normal !important;
+}
+
+listcell[media="image"] image {
+	margin: 2px;
+}
+
+listcell[media="image"].listcell-label {
+	visibility: collapse;
+}
+
+.mediaLoading {
+	background-image: url(/Bxs/app/img/loading_16_grey.gif);
+}
+
+.mediaError {
+	background-image: url(/Bxs/app/img/imageNotFound.png);
+}
+
+html,body {
+	background-color:white;
+}
+
+#loading {
+	-moz-box-align: center;
+	-moz-box-pack: center;
+}
+
+#loginUsernameCap,#loginPasswordCap {
+	min-width: 90px;
+	margin-left: 3px;
+}
+
+#loadingScript,#dbStatus,#getConfig,#buildingTables,#tableCounter,#failure {
+	visibility: hidden;
+}
+
+#tempBox {
+	visibility: collapse;
+}
+
+listboxbody {
+	background-color: rgb(250,250,250);
+}
+
+listbox.singleRow listboxbody {
+	overflow: hidden;
+}
+
+listbox.busy listboxbody {
+	background-image: url(/Bxs/app/img/loading_16_grey.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+listbox.busy listitem {
+	opacity: 0;
+}
+
+listbox[disabled="true"] {
+	color: rgb(120,120,120);
+}
+
+listbox {
+	margin: 8px;
+	border-bottom: solid rgb(180,180,180) 1px;
+}
+
+listbox:focus {
+	-moz-box-shadow: rgb(70,100,140) 0 0 8px;
+}
+
+listitem {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	min-height: 20px;
+	background-color: white;
+}
+
+listitem:nth-child(even) {
+	background-color: rgb(245,245,245);
+}
+
+listbox:focus listitem[selected="true"] {
+	background-color: rgb(61,128,223);
+}
+
+listitem[selected="true"] {
+	background-color: rgb(210,210,210);
+	color: white;
+}
+
+listitem.open {
+	background-color: rgb(255,255,245) !important;
+	color: black;
+}
+
+listitem.open .listcell-label {
+	visibility: collapse;
+}
+
+listitem.communicating {
+	background-color: rgb(210,210,210) !important;
+	-moz-user-focus: ignore;
+	-moz-user-select: none;
+}
+
+listitem.open listcell[type="checkbox"] .listcell-check {
+	visibility: collapse;
+}
+
+listcell[type="checkbox"] .listcell-label {
+	visibility: collapse;
+}
+
+listcell[type="checkbox"] {
+	-moz-box-flex: 0;
+}
+
+listbox.deleting listitem[selected="true"] {
+	background-color: rgb(240,160,160) !important;
+	color: white !important;
+}
+
+listitem[disabled="true"] {
+	-moz-user-focus: ignore;
+	-moz-user-select: none;
+}
+
+panel {
+	-moz-appearance: none;
+}
+
+panel listbox {
+	margin: 0;
+}
+
+.small, caption.small label {
+	font-size: 10px;
+}
+
+.strong {
+	font-weight: bold;
+}
+
+listcol {
+	min-width: 40px;
+	-moz-box-flex: 1;
+}
+
+listcol[type="year"] {
+	min-width: 50px;
+}
+
+listcol[type="date"] {
+	min-width: 85px;
+}
+
+listcol[type="image"] {
+	min-width: 90px;
+}
+
+listcol[type="datetime"] {
+	min-width: 135px;
+}
+
+listcell {
+	-moz-box-flex: 1;
+/*	display: -moz-stack;*/
+	padding: 0;
+	margin: 0;
+	border-right: 1px solid rgb(230,231,236);
+	background-color: inherit;
+	color: inherit;
+}
+
+listcell[hidden="true"] {
+	display: none;
+}
+
+listcell label {
+	-moz-appearance: none;
+	padding: 3px 0px 1px 7px;
+	margin: 0px;
+}
+
+textbox {
+	-moz-user-focus: normal;
+}
+
+listcell textbox {
+	-moz-appearance: none;
+	-moz-user-focus: ignore;
+	-moz-box-flex: 1;
+	background-color: inherit;
+	color: inherit;
+	margin: 0;
+	border: 0;
+	padding: 3px 4px 1px 7px;
+}
+/*
+listcell textbox .textbox-input-box {
+	-moz-appearance: none;
+	background-color: rgb(255,255,240);
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+*/
+listcell textbox .textbox-input {
+	-moz-appearance: none;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+listcell textbox .popup-internal-box {
+	-moz-appearance: none;
+	display: none;
+}
+
+.newItem {
+	font-weight: bold;
+}
+
+menulist {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.menu-iconic-text, .menu-text {
+	font-size: 11px !important;
+}
+
+menulist * {
+	-moz-box-flex: 0 !important;
+}
+
+listcell menulist {
+	border: 0;
+	padding: 0;
+	margin: 0 0 1px 0;
+}
+
+listcell menulist menuitem {
+	border: 0;
+	padding: 0 12px 0 0;
+	margin: 0;
+}
+
+listcell .menulist-label {
+	padding: 0;
+	margin: 0;
+}
+
+listcell .menulist-label-box {
+	padding: 0;
+	margin: 0;
+/*	background-color: rgb(255,255,240);*/
+	display: -moz-box;
+	-moz-box-align: start;
+	-moz-box-direction: reverse !important;
+}
+
+listcell .menulist-dropmarker {
+	border: 0;
+}
+
+.listcell-iconic {
+	display: -moz-box;
+	-moz-box-align: start;
+	-moz-box-direction: reverse !important;
+}
+
+.caption-text {
+	font-size: 11px;
+}
+
+listcols {
+	background-color: rgb(240,240,240);
+}
+
+listhead {
+	background-color: rgb(200,200,200);
+}
+
+listbox splitter {
+	-moz-appearance: none;
+	width: 10px;
+	border: 0;
+	opacity: 0;
+}
+
+splitter + listcol {
+	border: 0;
+	margin-left: -10px;
+}
+
+input[type="file"] {
+	margin-right: 4px;
+}
+
+.uploadhbox {
+	-moz-box-orient: horizontal;
+	-moz-box-pack: start;
+	-moz-box-align: start;
+}
+
+tabpanel {
+	-moz-box-orient: vertical !important;
+}
+
+tabpanels {
+	-moz-appearance: none;
+	padding: 14px 0 0 0;
+	border: 0;
+/*	background-color: rgb(220,220,220);*/
+	border-top: solid rgb(160,160,160) 1px;
+	background-image: url(/Bxs/app/img/tabbox_grad.png);
+	background-repeat: repeat-x;
+}
+
+tabbox {
+	margin: 4px 0 0 0;
+	padding: 0;
+}
+
+tab {
+	font-size: 11px;
+}
+
+.tab-text {
+	font-size: 11px;
+	margin-top: -1px;
+	padding: 1px;
+}
+
+checkbox {
+	margin: 1px;
+}
+
+datepicker {
+	-moz-appearance: none;
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+input.datetimepicker-input {
+	-moz-appearance: none;
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+window {
+	padding: 8px;
+}
+
+.uploadForm {
+	margin: 4px;
+}
+
+.controlBox {
+	-moz-box-flex: 0;
+	-moz-box-align: center;
+	margin: -6px 0 -4px 0;
+}
+
+.controlBox menulist {
+	margin: 8px 8px 8px 0;
+}
+
+.controlBox caption {
+	margin: 8px 3px 8px 0;
+}
+
+#userBox {
+	margin-top: 10px;
+}
