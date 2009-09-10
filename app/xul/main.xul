@@ -19,11 +19,11 @@ You should have received a copy of the GNU General Public License along with Box
 <?xul-overlay href="/Bxs/app/xul/scriptsOverlay.xul"?>
 <?xul-overlay href="/Bxs/usr/xul/userContentOverlay.xul"?>
 
-<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="mainWindow">
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="bxs-window-main">
 
-	<box id="scriptsBox" collapse="true"/>
+	<box id="bxs-scripts-box" collapse="true"/>
 
-	<deck id="mainDeck">
+	<deck id="bxs-deck-main">
 
 		<vbox id="loading">
 			<groupbox>
@@ -31,14 +31,14 @@ You should have received a copy of the GNU General Public License along with Box
 					<vbox id="loginBox">
 						<vbox>
 							<hbox align="center">
-								<caption id="loginUsernameCap" label="Username: "/><textbox id="loginUsername" tabindex="1"/>
+								<caption id="loginUsernameCap" label="Username: "/><textbox id="loginUsername" disabled="true" tabindex="1"/>
 
 							</hbox>
 							<hbox align="center">
-								<caption id="loginPasswordCap" label="Password: "/><textbox id="loginPassword" type="password" tabindex="2"/>
+								<caption id="loginPasswordCap" label="Password: "/><textbox id="loginPassword" type="password" disabled="true" tabindex="2"/>
 							</hbox>
 							<hbox align="center">
-								<button id="loginSubmit" label="Log In"/><caption id="loginStatus"/>
+								<button id="loginSubmit" label="Log In" disabled="true"/><caption id="loginStatus"/>
 							</hbox>
 						</vbox>
 					</vbox>

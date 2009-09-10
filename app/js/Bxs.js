@@ -19,7 +19,9 @@ Bxs = {
 		root: "http://"+window.location.hostname
 	},
 	
-	mainDeck: $("#mainDeck"),
+	reqBxtVersion: "1.0.1r7",
+	
+	mainDeck: $("#bxs-deck-main"),
 
 	service: {
 		get: function(serviceRequest) {
@@ -160,13 +162,32 @@ Bxs = {
 		alert(response.status+': '+response.text);
 	},
 	
-	init: function() {		
-		Bxs.login.controls.submit.bind('command',Bxs.login.submit);
-		Bxs.login.controls.password.bind('keypress',Bxs.login.submitOnEnter);
-		Bxs.eventsPublisher = $("#eventsPublisher").get(0);
-		Bxs.login.start();
+	init: function() {
+		
+		document.title = "Boxes: "+window.location.hostname;
+		
+		if (document.documentElement.getAttribute("bxt-version") === "") {
+			Bxs.promptForBxtDownload();
+		}
+		else {
+			Bxs.login.controls.submit.bind('command',Bxs.login.submit);
+			Bxs.login.controls.password.bind('keypress',Bxs.login.submitOnEnter);
+			Bxs.eventsPublisher = $("#eventsPublisher").get(0);
+			Bxs.login.start();
+		}
 	},
+	
+	promptForBxtDownload: function() {
+		var ok = confirm("Boxes needs to download an extension called Bxtension to help with some of its functions. Is this OK with you?");
+		if (ok) {
+			//TODO should do this in an iframe.
+			window.location = "http://www.pausebuttonedit.com/bxtension/bxtension.xpi";
+		}
+		else {
+			alert("Boxes will not function correctly without Bxtension.");
+		}
+	}
 
 };
 
-$(window).one('DOMContentLoaded',Bxs.init);
+$(window).one("load",Bxs.init);
