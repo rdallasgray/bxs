@@ -31,9 +31,9 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 				
 				var self = this;
 			
-				var table = self.parseUrl(true);
+				var url = self.parseUrl(true);
 	
-				Bxs.Ajax.getSchema(table,function(data) {
+				Bxs.Ajax.getSchema(url,function(data) {
 						self.schema = data;
 						$(Bxs.eventsPublisher).trigger("schemaLoaded."+self.attrs.id,[self]);
 					}
@@ -147,7 +147,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 				options = self.getFilterOptions();
 		
 			Bxs.Ajax.get(
-				Bxs.location.root+url,
+				Bxs.Url.root()+url,
 				function(data) {
 					$(Bxs.eventsPublisher).trigger("dataLoaded."+self.attrs.id,[data]);	
 //					$(self.view.domNode).attr("url",url);
@@ -194,7 +194,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 			
 			Bxs.Ajax.getMetadata(fieldName,function(metadata) {
 				
-				Bxs.Ajax.get(Bxs.location.root+"/"+metadata.url+"/"+id, function(data) {
+				Bxs.Ajax.get(Bxs.Url.root()+"/"+metadata.url+"/"+id, function(data) {
 					$(Bxs.eventsPublisher).trigger("loadedLabelFor."+fieldName+"-"+id,[data]);
 				});
 				
@@ -225,7 +225,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 		},
 		
 		getLocation: function() {
-			return Bxs.location.root+this.parseUrl();
+			return Bxs.Url.root()+this.parseUrl();
 		},
 	
 		commands: {
@@ -376,8 +376,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 				
 				case "delete":
 				if (response.status !== 204) {
-					Bxs.serverError(response);
-					self.setState(self.getPreviousState());
+					self.recoverError(response);
 					return;
 				}
 				self.handleDelete(response);
@@ -385,8 +384,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 				
 				case "insert":
 				if (response.status !== 201) {
-					Bxs.serverError(response);
-					self.setState(self.getPreviousState());
+					self.recoverError(response);
 					return;
 				}
 				self.handleInsert(response);
@@ -394,8 +392,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 				
 				case "update":
 				if (response.status !== 200) {
-					Bxs.serverError(response);
-					self.setState(self.getPreviousState());
+					self.recoverError(response);
 					return;
 				}
 				self.handleUpdate(response);
@@ -420,6 +417,11 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 			var newData = Bxs.Json.parse(response.text);
 			this.view.updateEditedRow(newData);
 			this.editClose({ state: "complete" });
+		},
+		
+		recoverError: function(response) {
+			Bxs.serverError(response);
+			self.setState(self.getPreviousState());
 		},
 
 		states: {

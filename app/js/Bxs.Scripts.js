@@ -84,7 +84,7 @@ Bxs.Scripts = {
 			progressBroadcaster = $('#scriptsProgressBroadcaster');
 		
 		Bxs.Scripts.files.forEach(function(file) {
-			$.get([Bxs.location.root,"/Bxs/app/js/",file,".js"].join(''),function(data) {
+			$.get([Bxs.Url.root(),"/Bxs/app/js/",file,".js"].join(''),function(data) {
 				try {
 					eval(data);
 				}

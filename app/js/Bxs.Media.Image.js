@@ -47,7 +47,7 @@ Bxs.Media.Image.prototype = $.extend(true,{},
 				self.callback(self.url);
 			});
 			
-			this.img.src = Bxs.location.root+this.url;
+			this.img.src = Bxs.Url.root()+this.url;
 		}
 	}
 );

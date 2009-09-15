@@ -19,7 +19,7 @@ Bxs.Ajax = {
 			service: "authenticatedRequest",
 			options: {
 				method: "GET",
-				url: Bxs.location.admin+"/auth/login?format=json",
+				url: Bxs.Url.construct(":auth"),
 				username: username,
 				password: password
 			},
@@ -32,39 +32,32 @@ Bxs.Ajax = {
 	
 	get: function(url,callback,options) {
 		
-		var queryString = (typeof options === "object") ? $.param(options) : false,
-			fullUrl = queryString ? url+"?"+queryString : url,
+		var queryString = (typeof options === "object" && options.__count__ > 0) ? $.param(options) : null,
+			parts = (queryString === null) ? [url] : [url,queryString],
+			url = Bxs.Url.construct(parts.join("?")),
 			data;
 		
-		if (Bxs.Cache.get(["inProgress",fullUrl])) {
-			$(Bxs.eventsPublisher).one("ajaxGetSuccess."+fullUrl,function(e,data,notModified) {
+		if (Bxs.Cache.get(["inProgress",url])) {
+			$(Bxs.eventsPublisher).one("ajaxGetSuccess."+url,function(e,data,notModified) {
 				if (typeof callback === "function") {
 					callback(data,notModified);
 				}
 			});
 			return;
 		}
-		
-		var sendOptions = { format: "json" };
-		
-		if (typeof options === "object") {
-			for (var i in options) {
-				sendOptions[i] = options[i];
-			}
-		}
 
-		var ajaxGet = $.getJSON(url,sendOptions,function(data) {
+		var ajaxGet = $.getJSON(url,null,function(data) {
 
 			var notModified = false,
 				etag = ajaxGet.getResponseHeader("Etag"),
-				cachedEtag = Bxs.Cache.get(["Etags",fullUrl]);
+				cachedEtag = Bxs.Cache.get(["Etags",url]);
 
 			if (etag !== null) {
 				if (cachedEtag === etag) {
 					notModified = true;
 				}
 				else {
-					Bxs.Cache.set(["Etags",fullUrl],etag);
+					Bxs.Cache.set(["Etags",url],etag);
 				}
 			}
 			
@@ -72,12 +65,12 @@ Bxs.Ajax = {
 				callback(data,notModified);
 			}
 
-			$(Bxs.eventsPublisher).trigger("ajaxGetSuccess."+fullUrl,[ data, notModified ]);
+			$(Bxs.eventsPublisher).trigger("ajaxGetSuccess."+url,[ data, notModified ]);
 
-			Bxs.Cache.clear(["inProgress",fullUrl]);
+			Bxs.Cache.clear(["inProgress",url]);
 		});
 		
-		Bxs.Cache.set(["inProgress",fullUrl],ajaxGet);
+		Bxs.Cache.set(["inProgress",url],ajaxGet);
 	},
 	
 	getMetadata: function(name,callback) {
@@ -89,7 +82,8 @@ Bxs.Ajax = {
 		}
 		
 		else {
-			this._authenticatedRequest(Bxs.location.admin+"/metadata/"+name,"GET",null,function(response) {
+			var url = Bxs.Url.construct(":metadata/"+name);
+			this._authenticatedRequest(url,"GET",null,function(response) {
 				var metadata = Bxs.Json.parse(response.text);
 				Bxs.Cache.set(["metadata",name],metadata);
 				callback(metadata);
@@ -97,19 +91,19 @@ Bxs.Ajax = {
 		}
 		
 	},
-	
-	getSchema: function(table,callback) {
-		
-		var cached = Bxs.Cache.get(["schema",table]);
+
+	getSchema: function(url,callback) {
+		var url = Bxs.Url.construct(url+"/new"),
+ 			cached = Bxs.Cache.get(["schema",url]);
 		
 		if (cached) {
 			callback(cached);
 		}
 		
 		else {
-			this._authenticatedRequest(Bxs.location.root+"/"+table+"/new","GET",null,function(response) {
+			this._authenticatedRequest(url,"GET",null,function(response) {
 				var schema = Bxs.Json.parse(response.text);
-				Bxs.Cache.set(["schema",table],schema);
+				Bxs.Cache.set(["schema",url],schema);
 				callback(schema);
 			});
 		}
@@ -117,26 +111,26 @@ Bxs.Ajax = {
 	},
 	
 	put: function(url,data,callback) {
-		this._authenticatedRequest(Bxs.location.root+url,"PUT",data,callback);
+		this._authenticatedRequest(Bxs.Url.construct(url),"PUT",data,callback);
 	},
 	
 	post: function(url,data,callback) {
-		this._authenticatedRequest(Bxs.location.root+url,"POST",data,callback);
+		this._authenticatedRequest(Bxs.Url.construct(url),"POST",data,callback);
 	},
 	
 	deleteRow: function(url,callback) {
-		this._authenticatedRequest(Bxs.location.root+url,"DELETE",null,callback);
+		this._authenticatedRequest(Bxs.Url.construct(url),"DELETE",null,callback);
 	},
 		
 	_authenticatedRequest: function(url,method,data,callback) {
 		
 		data = (data !== null) ? Bxs.Json.stringify(data) : null;
-		
+		// TODO use http accept instead of format=json
 		var req = {
 			service: "authenticatedRequest",
 			options: {
 				method: method,
-				url: url+"?format=json",
+				url: url,
 				username: Bxs.auth.username,
 				password: Bxs.auth.password
 			},

@@ -63,11 +63,9 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			$(self.popup).append(sep);
 			
 			Bxs.Ajax.getMetadata(this.fieldName, function(metadata) {
-				
 				self.url = metadata.url;
 				
-				Bxs.Ajax.getSchema(metadata.url, function(columnSchema) {
-					
+				Bxs.Ajax.getSchema("/"+metadata.url, function(columnSchema) {
 					var parentSchema = self.parentView.controller.schema,
 						observedId = self.parentView.attrs.observing,
 						associateKeys = [],

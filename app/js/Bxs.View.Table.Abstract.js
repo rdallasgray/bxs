@@ -139,7 +139,7 @@ Bxs.View.Table.Abstract.prototype = $.extend(true,{},
 				}
 
 				Bxs.Ajax.getMetadata(fieldName, function(metadata) {
-					Bxs.Ajax.get(Bxs.location.root+"/"+metadata.url, function(labelData) {
+					Bxs.Ajax.get(Bxs.Url.root()+"/"+metadata.url, function(labelData) {
 						var labelDataById = {};
 						labelData.forEach(function(el) labelDataById[el.id] = el);
 						

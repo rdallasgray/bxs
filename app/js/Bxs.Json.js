@@ -19,7 +19,10 @@ Bxs.Json = {
 			return JSON.parse(str);
 		}
 		catch(e) {
-			alert("Couldn't parse JSON string: ".str);
+			if (str.length > 128) {
+				str = str.substr(0,128)+" ...";
+			}
+			Bxs.error.fatal("Couldn't parse JSON string: "+str);
 		}
 	},
 	
@@ -28,7 +31,7 @@ Bxs.Json = {
 			return JSON.stringify(obj);
 		}
 		catch(e) {
-			alert("Couldn't convert object to JSON string: ".obj.toSource());
+			Bxs.error.fatal("Couldn't convert object to JSON string: "+obj.toSource());
 		}
 	}
 	

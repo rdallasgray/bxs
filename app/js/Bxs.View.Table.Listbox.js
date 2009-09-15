@@ -96,7 +96,7 @@ Bxs.View.Table.Listbox.prototype = $.extend(true,{},
 					var label = field.slice(0,field.search(/_id$/));
 					// preload the table data
 					Bxs.Ajax.getMetadata(label,function(metadata) {
-						Bxs.Ajax.get(Bxs.location.root+"/"+metadata.url);
+						Bxs.Ajax.get(Bxs.Url.root()+"/"+metadata.url);
 					});
 				}
 				

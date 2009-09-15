@@ -90,7 +90,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				widget.getDomNode().disable();
 				
 				$(Bxs.eventsPublisher).trigger("widgetAppended."+field);
-				
+
 				self.widgetCount--;
 				
 				if (self.widgetCount === 0) {

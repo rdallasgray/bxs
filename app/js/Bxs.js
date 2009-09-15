@@ -19,7 +19,7 @@ Bxs = {
 		root: "http://"+window.location.hostname
 	},
 	
-	reqBxtVersion: "1.0.1r7",
+	reqBxtVersion: "1.0.1.8",
 	
 	mainDeck: $("#bxs-deck-main"),
 
@@ -158,8 +158,16 @@ Bxs = {
 		}
 	},
 	
+	error: {
+		fatal: function(msg) {
+			// TODO make sure all errors are notified (by POSTING to server://base/errors ?), flash just one alert, and shut down
+			Bxs = null;
+			alert("Fatal error: \n"+msg+"\n\nPlease reload Boxes and try again. If errors continue please contact support.");
+		}
+	},
+	
 	serverError: function(response) {
-		alert(response.status+': '+response.text);
+		alert("Error "+response.status+": "+response.text);
 	},
 	
 	init: function() {
@@ -168,6 +176,10 @@ Bxs = {
 		
 		if (document.documentElement.getAttribute("bxt-version") === "") {
 			Bxs.promptForBxtDownload();
+		}
+		else if (document.documentElement.getAttribute("bxt-version").toString().replace(".","") < 
+			Bxs.reqBxtVersion.replace(".","")) {
+			Bxs.promptForBxtUpdate();	
 		}
 		else {
 			Bxs.login.controls.submit.bind('command',Bxs.login.submit);
@@ -180,8 +192,18 @@ Bxs = {
 	promptForBxtDownload: function() {
 		var ok = confirm("Boxes needs to download an extension called Bxtension to help with some of its functions. Is this OK with you?");
 		if (ok) {
-			//TODO should do this in an iframe.
-			window.location = "http://www.pausebuttonedit.com/bxtension/bxtension.xpi";
+			//TODO should do this in an iframe or with installTrigger.
+			window.location = "http://bxtension.googlecode.com/svn/dist/current/bxtension.xpi";
+		}
+		else {
+			alert("Boxes will not function correctly without Bxtension.");
+		}
+	},
+	
+	promptForBxtUpdate: function() {
+		var ok = confirm("Boxes needs to update Bxtension. Is this OK with you?");
+		if (ok) {
+			window.location = "http://bxtension.googlecode.com/svn/dist/current/bxtension.xpi";
 		}
 		else {
 			alert("Boxes will not function correctly without Bxtension.");

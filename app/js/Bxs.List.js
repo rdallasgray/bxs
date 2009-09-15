@@ -29,7 +29,7 @@ Bxs.List.prototype = {
 			
 			self.metadata = metadata;
 			
-			Bxs.Ajax.get(Bxs.location.root+"/"+self.url,function(dataSet,notModified) {
+			Bxs.Ajax.get(Bxs.Url.root()+"/"+self.url,function(dataSet,notModified) {
 				
 				var validCachedNode = false;
 				
