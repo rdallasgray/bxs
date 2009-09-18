@@ -12,14 +12,14 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-Bxs.Controller.Table.Media = function () {
+Bxs.Controller.Collection.Media = function () {
 	
-	Bxs.Controller.Table.General.apply(this,arguments);
+	Bxs.Controller.Collection.General.apply(this,arguments);
 }
 
-Bxs.Controller.Table.Media.prototype = $.extend(true,{},
+Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 	
-	Bxs.Controller.Table.General.prototype, 
+	Bxs.Controller.Collection.General.prototype, 
 	
 	{
 		
@@ -27,7 +27,7 @@ Bxs.Controller.Table.Media.prototype = $.extend(true,{},
 			
 			this.setState("ready");
 			
-			var url = this.getLocation();
+			var url = this.parseUrl();
 			
 			var self = this,
 				req = {
@@ -40,7 +40,7 @@ Bxs.Controller.Table.Media.prototype = $.extend(true,{},
 						contentType: this.attrs.media.type
 					},
 					callback: function() {
-						if (self.getLocation() === url) {
+						if (self.parseUrl() === url) {
 							self.handleData(req.response, "insert");
 						}
 					}

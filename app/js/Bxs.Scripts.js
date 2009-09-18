@@ -29,6 +29,7 @@ Bxs.Scripts = {
 		"Bxs.Panel",
 		"Bxs.List",
 		"Bxs.String",
+		"Bxs.Response",
 
 		"Bxs.Factory.Box",
 		"Bxs.Factory.Filter",

@@ -12,15 +12,15 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-if (Bxs.Controller.Table === undefined) {
-	Bxs.Controller.Table = {};
+if (Bxs.Controller.Collection === undefined) {
+	Bxs.Controller.Collection = {};
 }
 
-Bxs.Controller.Table.General = function () {
+Bxs.Controller.Collection.General = function () {
 	
 }
 
-Bxs.Controller.Table.General.prototype = $.extend(true,{},
+Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 	
 	Bxs.Controller.Abstract.prototype, 
 	
@@ -51,27 +51,27 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 				$(Bxs.eventsPublisher).bind("selectionChanged."+observedId,function() {
 					self.observedSelectionChanged();
 				});
-				$(Bxs.eventsPublisher).bind("listChanged."+observedId,function() {
-					self.observedListChanged();
+				$(Bxs.eventsPublisher).bind("contentChanged."+observedId,function() {
+					self.observedContentChanged();
 				});
 			}
 		},
 		
 		observedSelectionChanged: function() {
 			
-			this.listWithDelay();
+			this.loadData();
 		},
 		
-		observedListChanged: function() {
+		observedContentChanged: function() {
 			
-			this.view.removeAllRows();
+			this.view.clearContent();
 			this.setState("inactive");
 		},
 		
 		observedFilterChanged: function() {
 			
 			if (this.defaultValues !== undefined) {
-				this.listWithDelay();
+				this.loadData();
 			}
 		},
 		
@@ -92,37 +92,6 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 			this.defaultValues = values;
 		},
 		
-		listWithDelay: function() {
-			
-			if (this.selectionTimer !== undefined) {
-				clearTimeout(this.selectionTimer);
-			}
-			var self = this;
-			self.selectionTimer = setTimeout(function() { self.list(); self.setDefaultValues(); },250);
-		},
-	
-		list: function() {
-		
-			var self = this;
-			
-			if (!self.view.isVisible()) {
-				self.view.onVisibility(function() {
-					self.list();
-				});
-				return;
-			}
-			
-			self.setState("busy");
-		
-			$(Bxs.eventsPublisher).one("dataLoaded."+self.attrs.id,function(e,data) {
-				self.view.list(data);
-			});
-			$(Bxs.eventsPublisher).one("viewReady."+self.attrs.id,function() {
-				self.setState("ready");
-			});
-			setTimeout(function() { self.loadData(); },250);
-		},
-		
 		getFilterOptions: function() {
 			
 			if (this.filters === undefined) {
@@ -141,60 +110,47 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 		},
 	
 		loadData: function() {
-		
+						
 			var self = this,
 				url = self.parseUrl(),
-				options = self.getFilterOptions();
+				options = self.getFilterOptions(),
+				loadFunc = function() {
+					
+					if (!self.view.isVisible()) {
+						self.view.onVisibility(loadFunc);
+						return;
+					}
+			
+					self.setState("busy");
 		
-			Bxs.Ajax.get(
-				Bxs.Url.root()+url,
-				function(data) {
-					$(Bxs.eventsPublisher).trigger("dataLoaded."+self.attrs.id,[data]);	
-//					$(self.view.domNode).attr("url",url);
-				},
-				options
-			);
-		},
-		
-		getData: function(id) {
+					$(Bxs.eventsPublisher).one("dataLoaded."+self.attrs.id,function(e,data) {
+						self.view.setContent(data);
+					});
+					$(Bxs.eventsPublisher).one("viewReady."+self.attrs.id,function() {
+						self.setState("ready");
+					});
+			
+					Bxs.Ajax.get(
+						url,
+						function(data) {
+							$(Bxs.eventsPublisher).trigger("dataLoaded."+self.attrs.id,[data]);	
+						},
+						options
+					);
+					self.setDefaultValues();
+				};
 
-			var self = this;
-
-			if (self.getState() !== "ready") {
-				return false;
+			if (this.selectionTimer !== undefined) {
+				clearTimeout(this.selectionTimer);
 			}
-						
-			var data = [];
-
-			var getRowData = function(row) {
-				
-				var dataRow = {};
-				
-				$.each($(row).children("listcell"), function() {
-					dataRow[$(this).attr("name")] = $(this).attr("value");
-				});
-				
-				return dataRow;
-			}
-			
-			if (id !== undefined) {
-				return getRowData($(self.view.domNode).find("listcell[name='id'][value='"+id+"']").parent("listitem").get(0));
-			}
-			
-			$.each($(self.view.domNode).children("listitem"),function() {
-				var row = this;
-				data.push(getRowData(row));
-			});
-			
-			return data;
-			
+			self.selectionTimer = setTimeout(loadFunc,250);
 		},
 		
 		getLabelForAssociatedField: function(fieldName,id) {
 			
 			Bxs.Ajax.getMetadata(fieldName,function(metadata) {
 				
-				Bxs.Ajax.get(Bxs.Url.root()+"/"+metadata.url+"/"+id, function(data) {
+				Bxs.Ajax.get(metadata.url+"/"+id, function(data) {
 					$(Bxs.eventsPublisher).trigger("loadedLabelFor."+fieldName+"-"+id,[data]);
 				});
 				
@@ -202,7 +158,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 		},
 		
 		parseUrl: function(shortUrl) {
-			
+			// TODO Bxs.Url should take this over
 			if (shortUrl === true) {
 				return "/"+this.attrs.rootUrl.split("/").reverse().shift();
 			}
@@ -217,15 +173,11 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 			$.each(split,function(idx) {
 				var str = this.toString();
 				if ($.string(str).startsWith(":")) {
-					split[idx] = $(Bxs.Tables.getById(self.attrs.observing).controller.broadcaster).attr("selectedId");
+					split[idx] = $(Bxs.Boxes.getById(self.attrs.observing).controller.broadcaster).attr("selectedId");
 				}
 			});
 			
 			return split.join("/");
-		},
-		
-		getLocation: function() {
-			return Bxs.Url.root()+this.parseUrl();
 		},
 	
 		commands: {
@@ -327,13 +279,13 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 		},
 	
 		editOpen: function() {
-			Bxs.Tables.disable();
+			Bxs.Boxes.disable();
 			this.view.editOpen();
 			this.setState("editing");
 		},
 	
 		editClose: function(options) {
-			Bxs.Tables.enable();
+			Bxs.Boxes.enable();
 			this.view.editClose(options);
 			this.setState("ready");
 		},
@@ -401,7 +353,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 
 			var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
 			
-			$(Bxs.eventsPublisher).trigger("dataChanged",[{ table: self.attrs.name, action: action, data: newData }]);
+			$(Bxs.eventsPublisher).trigger("dataChanged",[{ box: self.attrs.name, action: action, data: newData }]);
 		},
 		
 		handleDelete: function(response) {
@@ -455,7 +407,7 @@ Bxs.Controller.Table.General.prototype = $.extend(true,{},
 		
 			if (self.attrs.observing === undefined && self.attrs.suppressList === undefined) {
 				$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
-					self.list();
+					self.loadData();
 				});
 			}
 			else {

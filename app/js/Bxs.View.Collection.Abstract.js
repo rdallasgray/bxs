@@ -12,11 +12,11 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-if (Bxs.View.Table === undefined) {
-	Bxs.View.Table = {};
+if (Bxs.View.Collection === undefined) {
+	Bxs.View.Collection = {};
 }
 
-Bxs.View.Table.Abstract = function(node) {
+Bxs.View.Collection.Abstract = function(node) {
 	
 	this.domNode = node;
 	this.autoHideColumns = ["id","created_at","modified_at"];
@@ -25,23 +25,31 @@ Bxs.View.Table.Abstract = function(node) {
 	
 };
 
-Bxs.View.Table.Abstract.prototype = $.extend(true,{},
+Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 	
 	Bxs.View.Abstract,
 	Bxs.Mixin.Attributeable,
 	Bxs.Mixin.Stateable,
 	
 	{	
-		list: function(data) {
+		setContent: function(data) {
+
+			var self = this;
+			
+			$(Bxs.eventsPublisher).trigger("contentChanged."+self.attrs.id);
+			self.clearContent();
+			self.buildContent(data);
+		},
+		
+		clearContent: function() {
+			this.removeAllRows();
+		},
+		
+		buildContent: function(data) {
 
 			var self = this,
-				frag = document.createDocumentFragment();
-			
-			$(Bxs.eventsPublisher).trigger("listChanged."+self.attrs.id);
-			
-			self.removeAllRows();
-			
-			var rows = [];
+				frag = document.createDocumentFragment(),
+				rows = [];
 		
 			$.each(data,function() {
 				rows.push(self.buildRow(this));
@@ -139,7 +147,7 @@ Bxs.View.Table.Abstract.prototype = $.extend(true,{},
 				}
 
 				Bxs.Ajax.getMetadata(fieldName, function(metadata) {
-					Bxs.Ajax.get(Bxs.Url.root()+"/"+metadata.url, function(labelData) {
+					Bxs.Ajax.get(metadata.url, function(labelData) {
 						var labelDataById = {};
 						labelData.forEach(function(el) labelDataById[el.id] = el);
 						

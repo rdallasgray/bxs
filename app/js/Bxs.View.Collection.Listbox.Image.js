@@ -13,15 +13,15 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.View.Table.Listbox.Image = function(node) {
+Bxs.View.Collection.Listbox.Image = function(node) {
 	
-	Bxs.View.Table.Listbox.apply(this,arguments);
+	Bxs.View.Collection.Listbox.apply(this,arguments);
 		
 }
 
-Bxs.View.Table.Listbox.Image.prototype = $.extend(true,{},
+Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 	
-	Bxs.View.Table.Listbox.prototype,
+	Bxs.View.Collection.Listbox.prototype,
 	Bxs.Mixin.Mediable,
 	
 	{
@@ -30,12 +30,12 @@ Bxs.View.Table.Listbox.Image.prototype = $.extend(true,{},
 			
 			var self = this;
 			
-			Bxs.View.Table.Listbox.prototype.list.apply(this,[data]);
+			Bxs.View.Collection.Listbox.prototype.list.apply(this,[data]);
 		},
 		
 		buildRow: function(data) {
 			
-			var row = Bxs.View.Table.Listbox.prototype.buildRow.apply(this,arguments),
+			var row = Bxs.View.Collection.Listbox.prototype.buildRow.apply(this,arguments),
 				col = $(row).children(this.columnType+"[media='image']").get(0),
 				id = $(col).siblings("[name='id']").get(0).getAttribute("value"),
 				url = this.attrs.media.url.replace(/:\w*/,id),
@@ -47,7 +47,7 @@ Bxs.View.Table.Listbox.Image.prototype = $.extend(true,{},
 		
 		buildRowTemplate: function() {
 			
-			Bxs.View.Table.Listbox.prototype.buildRowTemplate.apply(this);
+			Bxs.View.Collection.Listbox.prototype.buildRowTemplate.apply(this);
 
 			var col = document.createElement(this.columnType);
 			$(col).attr({ class: "listcell-iconic", media: "image" });
@@ -57,7 +57,7 @@ Bxs.View.Table.Listbox.Image.prototype = $.extend(true,{},
 		
 		boot: function(schema) {
 			
-			Bxs.View.Table.Listbox.prototype.boot.apply(this,[schema]);
+			Bxs.View.Collection.Listbox.prototype.boot.apply(this,[schema]);
 			
 			this.mediaType = /^\w*/.exec(this.attrs.media.type)[0];
 			

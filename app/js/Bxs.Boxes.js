@@ -12,44 +12,44 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-Bxs.Tables = {
+Bxs.Boxes = {
 	
 	getById: function(id) {
 		
-		var match = Bxs.Tables.collection.filter(function(el) el.controller.attrs.id === id);
+		var match = Bxs.Boxes.collection.filter(function(el) el.controller.attrs.id === id);
 		return match.length > 0 ? match[0] : false;
 	},
 /*	
 	getByUrl: function(url) {
 		
-		var match = Bxs.Tables.collection.filter(function(el) $(el.view.domNode).attr("url") === url);
+		var match = Bxs.Boxes.collection.filter(function(el) $(el.view.domNode).attr("url") === url);
 		return match.length > 0 ? match[0] : false;
 	},
 */	
 	getByName: function(name) {
 		
-		var match = Bxs.Tables.collection.filter(function(el) el.controller.attrs.name === name);
+		var match = Bxs.Boxes.collection.filter(function(el) el.controller.attrs.name === name);
 		return match.length > 0 ? match : false;
 	},
 	
-	add: function(table) {
+	add: function(box) {
 		
-		Bxs.Tables.collection.push(table);
+		Bxs.Boxes.collection.push(box);
 	},
 	
 	remove: function(id) {
 		
-		var newCollection = Bxs.Tables.collection.filter(function(el) el.controller.attrs.id !== id);		
+		var newCollection = Bxs.Boxes.collection.filter(function(el) el.controller.attrs.id !== id);		
 		
-		Bxs.Tables.collection = newCollection;
+		Bxs.Boxes.collection = newCollection;
 	},
 	
 	disable: function() {
-		Bxs.Tables.collection.forEach(function(el) el.view.disable());
+		Bxs.Boxes.collection.forEach(function(el) el.view.disable());
 	},
 	
 	enable: function() {
-		Bxs.Tables.collection.forEach(function(el) el.view.enable());
+		Bxs.Boxes.collection.forEach(function(el) el.view.enable());
 	},
 	
 	collection: []

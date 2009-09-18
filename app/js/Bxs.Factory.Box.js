@@ -16,14 +16,14 @@ if (Bxs.Factory === undefined) {
 	Bxs.Factory = {};
 }
 
-Bxs.Factory.Table = {
+Bxs.Factory.Box = {
 	
 	build: function(node,temp) {
 		
 		temp = temp || false;
 		
 		var nodeType = $.string(node.nodeName).capitalize().str,
-			table = {};
+			box = {};
 		
 		var broadcaster = document.createElement('broadcaster');
 		broadcaster.id = node.id+"_broadcaster";
@@ -40,48 +40,48 @@ Bxs.Factory.Table = {
 			}
 		});
 		
-		table.controller = node.hasAttribute("media") ? new Bxs.Controller.Table.Media : new Bxs.Controller.Table.General;
+		box.controller = node.hasAttribute("media") ? new Bxs.Controller.Collection.Media : new Bxs.Controller.Collection.General;
 		
-		table.controller.setAttributes(node.attributes);
+		box.controller.setAttributes(node.attributes);
 		
-		if (table.controller.hasAttribute("media")) {
-			var mediaType = $.string(/^\w*/.exec(table.controller.attrs.media.type)[0]).capitalize().str;
-			table.view = new Bxs.View.Table[nodeType][mediaType](node);
+		if (box.controller.hasAttribute("media")) {
+			var mediaType = $.string(/^\w*/.exec(box.controller.attrs.media.type)[0]).capitalize().str;
+			box.view = new Bxs.View.Collection[nodeType][mediaType](node);
 		}
 		else {
-			table.view = new Bxs.View.Table[nodeType](node);
+			box.view = new Bxs.View.Collection[nodeType](node);
 		}
-		table.view.setController(table.controller);
-		table.view.setBroadcaster(broadcaster);
-		table.view.setAttributes(node.attributes);
+		box.view.setController(box.controller);
+		box.view.setBroadcaster(broadcaster);
+		box.view.setAttributes(node.attributes);
 		
-		table.controller.setView(table.view);
-		table.controller.setBroadcaster(broadcaster);
+		box.controller.setView(box.view);
+		box.controller.setBroadcaster(broadcaster);
 		
 		var filters = $("[target='"+node.id+"']");
 		$.each(filters, function() {
 			var f = Bxs.Factory.Filter.build(this);
-			table.controller.addFilter(f);
+			box.controller.addFilter(f);
 		});
 		
-		table.controller.init();
+		box.controller.init();
 		
 		if (!temp) {
-			Bxs.Tables.add(table);
+			Bxs.Boxes.add(box);
 			$(Bxs.eventsPublisher).trigger("newTable."+$(node).attr("name"));
 		}
 		
-		return table;
+		return box;
 
 	},
 	
 	init: function() {
 		 
-		$("[view='table']").each(function(node) {
-			Bxs.Factory.Table.build(this);
+		$("[view='box']").each(function(node) {
+			Bxs.Factory.Box.build(this);
 		});
 		
-//		Bxs.Tables.collection[0].view.domNode.focus();
+//		Bxs.Boxes.collection[0].view.domNode.focus();
 	}
 	
 };

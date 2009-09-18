@@ -13,19 +13,19 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.View.Table.Listbox = function(node) {
+Bxs.View.Collection.Listbox = function(node) {
 	
 	// if not passed a node should create its own
-	Bxs.View.Table.Abstract.apply(this,arguments);
+	Bxs.View.Collection.Abstract.apply(this,arguments);
 	
 	this.rowType = "listitem";
 	this.columnType = "listcell";
 		
 }
 
-Bxs.View.Table.Listbox.prototype = $.extend(true,{},
+Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 	
-	Bxs.View.Table.Abstract.prototype,
+	Bxs.View.Collection.Abstract.prototype,
 	
 	{
 		
@@ -86,7 +86,7 @@ Bxs.View.Table.Listbox.prototype = $.extend(true,{},
 			$(container).append(this.domNode);
 			
 			
-			// some of below could be extracted out to Bxs.View.Table.Abstract
+			// some of below could be extracted out to Bxs.View.Collection.Abstract
 			$.each(schema, function(field,values) {
 				
 				if (self.ignoresColumn(field)) return;
@@ -94,9 +94,9 @@ Bxs.View.Table.Listbox.prototype = $.extend(true,{},
 				// deal with *_id, i.e. belongs_to relationships
 				if (/_id$/.test(field)) {
 					var label = field.slice(0,field.search(/_id$/));
-					// preload the table data
+					// preload the box data
 					Bxs.Ajax.getMetadata(label,function(metadata) {
-						Bxs.Ajax.get(Bxs.Url.root()+"/"+metadata.url);
+						Bxs.Ajax.get(metadata.url);
 					});
 				}
 				
