@@ -24,12 +24,12 @@ Bxs.Scripts = {
 		
 		"Bxs.Xpath",
 		"Bxs.Comparator",
-
+		
+		"Bxs.Response",
 		"Bxs.Boxes",
 		"Bxs.Panel",
 		"Bxs.List",
 		"Bxs.String",
-		"Bxs.Response",
 
 		"Bxs.Factory.Box",
 		"Bxs.Factory.Filter",

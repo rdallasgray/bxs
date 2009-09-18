@@ -21,7 +21,6 @@ Bxs.List = function(url,fieldName) {
 Bxs.List.prototype = {
 	
 	boot: function() {
-		
 		this.domNode = document.createDocumentFragment();
 		var self = this;
 		
@@ -29,8 +28,8 @@ Bxs.List.prototype = {
 			
 			self.metadata = metadata;
 			
-			Bxs.Ajax.get(Bxs.Url.root()+"/"+self.url,function(dataSet,notModified) {
-				
+			Bxs.Ajax.get(self.url,function(dataSet,notModified) {
+				console.debug("got dataset for list "+self.url);
 				var validCachedNode = false;
 				
 				if (notModified) {

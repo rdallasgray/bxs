@@ -58,6 +58,21 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			this.defaultValues = {};
 		},
 		
+		addFilter: function(filter) {
+			
+			if (this.filters === undefined) {
+				this.filters = {};
+			}
+			
+			this.filters[filter.name] = filter;
+			
+			var self = this;
+			
+			$(filter.getDomNode()).bind("command", function() {
+				self.observedFilterChanged();
+			})
+		},
+		
 		getFilterOptions: function() {
 			
 			return {};
@@ -287,10 +302,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			
 			self.setupObserves();
 		
-			$(Bxs.eventsPublisher).one("schemaLoaded."+self.attrs.id,function() {
-				self.view.boot(self.schema);
-			});
-		
 			if (self.attrs.observing === undefined && self.attrs.suppressList === undefined) {
 				$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
 					self.loadData();
@@ -302,38 +313,30 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 					self.setState(state);
 				});
 			}
+			
+			$(Bxs.eventsPublisher).one("schemaLoaded."+self.attrs.id,function() {
+				self.view.boot(self.schema);
+			});
 		
 			$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
 				$(self.view.domNode).bind("select",function() {
 
 					var colType = self.view.columnType;
 				
-					if ($(self.broadcaster).attr("selectedId") !== $(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
+					if ($(self.broadcaster).attr("selectedId") !==
+						$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
 						&& !!$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")) 
-					{
-						$(self.broadcaster).attr("selectedId",$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value"));
+					{										
+						$(self.broadcaster).attr(
+							"selectedId",
+							$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
+						);
 						$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id,[self]);
 					}
 				});
 			});
 		
 			this.loadSchema();
-
-		},
-		
-		addFilter: function(filter) {
-			
-			if (this.filters === undefined) {
-				this.filters = {};
-			}
-			
-			this.filters[filter.name] = filter;
-			
-			var self = this;
-			
-			$(filter.getDomNode()).bind("command", function() {
-				self.observedFilterChanged();
-			})
 		}
 	}
 );

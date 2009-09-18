@@ -59,7 +59,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		
 		observedSelectionChanged: function() {
 			
-			this.loadData();
+			this.loadDataDelayed();
 		},
 		
 		observedContentChanged: function() {
@@ -71,14 +71,27 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		observedFilterChanged: function() {
 			
 			if (this.defaultValues !== undefined) {
-				this.loadData();
+				this.loadDataDelayed();
 			}
 		},
 		
+		addFilter: function(filter) {
+			
+			if (this.filters === undefined) {
+				this.filters = {};
+			}
+			
+			this.filters[filter.name] = filter;
+			
+			var self = this;
+			
+			$(filter.getDomNode()).bind("command", function() {
+				self.observedFilterChanged();
+			})
+		},
+		
 		setDefaultValues: function(values) {
-			
 			values = values || {};
-			
 			if (this.defaultValues === undefined) {
 				this.defaultValues = {};
 			}
@@ -88,7 +101,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 					values[key] = $("#"+this.attrs.observing+"_broadcaster").attr("selectedId");
 				}
 			}
-			
+			console.debug("set default values for "+this.attrs.id,values.toSource());
 			this.defaultValues = values;
 		},
 		
@@ -108,42 +121,65 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			
 			return options;
 		},
+		
+		loadDataDelayed: function() {
+			
+			var self = this;
+			
+			if (self.selectionTimer !== undefined) {
+				clearTimeout(self.selectionTimer);
+			}
+			self.selectionTimer = setTimeout(function() { self.loadData(); },500);
+		},
 	
 		loadData: function() {
-						
-			var self = this,
-				url = self.parseUrl(),
-				options = self.getFilterOptions(),
-				loadFunc = function() {
-					
-					if (!self.view.isVisible()) {
-						self.view.onVisibility(loadFunc);
-						return;
-					}
-			
-					self.setState("busy");
-		
-					$(Bxs.eventsPublisher).one("dataLoaded."+self.attrs.id,function(e,data) {
-						self.view.setContent(data);
-					});
-					$(Bxs.eventsPublisher).one("viewReady."+self.attrs.id,function() {
-						self.setState("ready");
-					});
-			
-					Bxs.Ajax.get(
-						url,
-						function(data) {
-							$(Bxs.eventsPublisher).trigger("dataLoaded."+self.attrs.id,[data]);	
-						},
-						options
-					);
-					self.setDefaultValues();
-				};
 
-			if (this.selectionTimer !== undefined) {
-				clearTimeout(this.selectionTimer);
+			var self = this;
+
+			if (!self.view.isVisible()) {
+				self.view.onVisibility(function() { self.loadData(); });
+				return;
 			}
-			self.selectionTimer = setTimeout(loadFunc,250);
+			
+			self.setState("busy");
+
+			var url = self.parseUrl(),
+			options = self.getFilterOptions();
+			
+			$(Bxs.eventsPublisher).one("dataLoaded."+self.attrs.id,function(e,data) {
+				self.view.setContent(data);
+			});
+			$(Bxs.eventsPublisher).one("viewReady."+self.attrs.id,function() {
+				self.setState("ready");
+			});
+
+			Bxs.Ajax.get(
+				url,
+				function(data) {
+					$(Bxs.eventsPublisher).trigger("dataLoaded."+self.attrs.id,[data]);	
+				},
+				options
+			);
+			self.setDefaultValues();			
+		},
+		
+		parseUrl: function(shortUrl) {
+			if (shortUrl === true) {
+				return "/"+this.attrs.rootUrl.split("/").reverse().shift();
+			}
+			
+			var url = this.attrs.rootUrl;
+			// This replaces any occurence of ^:\w* with the selected id of the single observed box.
+			// Do we need to account for multiple observeds? In which case it should replace specific matches
+			// with the relevant property.
+			if (this.attrs.observing !== undefined) {
+				url = this.attrs.rootUrl.replace(
+					/:\w*/g,
+					$(Bxs.Boxes.getById(this.attrs.observing).controller.broadcaster).attr("selectedId")
+				);
+			}
+			
+			return url;
 		},
 		
 		getLabelForAssociatedField: function(fieldName,id) {
@@ -155,29 +191,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				});
 				
 			});
-		},
-		
-		parseUrl: function(shortUrl) {
-			// TODO Bxs.Url should take this over
-			if (shortUrl === true) {
-				return "/"+this.attrs.rootUrl.split("/").reverse().shift();
-			}
-			
-			var self = this,
-				split = self.attrs.rootUrl.split('/');
-				
-			if (split.length == 2) {
-				return self.attrs.rootUrl;
-			}
-			
-			$.each(split,function(idx) {
-				var str = this.toString();
-				if ($.string(str).startsWith(":")) {
-					split[idx] = $(Bxs.Boxes.getById(self.attrs.observing).controller.broadcaster).attr("selectedId");
-				}
-			});
-			
-			return split.join("/");
 		},
 	
 		commands: {
@@ -320,55 +333,39 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			Bxs.Ajax.post(url,data,function(response) { self.handleData(response,"insert"); });
 		},
 		
+		
 		handleData: function(response,action) {
 			
 			var self = this;
-
-			switch (action) {
-				
-				case "delete":
-				if (response.status !== 204) {
-					self.recoverError(response);
-					return;
-				}
-				self.handleDelete(response);
-				break;
-				
-				case "insert":
-				if (response.status !== 201) {
-					self.recoverError(response);
-					return;
-				}
-				self.handleInsert(response);
-				break;
-				
-				case "update":
-				if (response.status !== 200) {
-					self.recoverError(response);
-					return;
-				}
-				self.handleUpdate(response);
-				break;
-			}
-
-			var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
 			
-			$(Bxs.eventsPublisher).trigger("dataChanged",[{ box: self.attrs.name, action: action, data: newData }]);
+			if (Bxs.Response.success(action,response.status)) {
+				self.handleAction(action,response);
+				var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
+				$(Bxs.eventsPublisher).trigger("dataChanged",[{ box: self.attrs.name, action: action, data: newData }]);
+			}
+			else {
+				self.recoverError(response);
+				return;
+			}
 		},
 		
-		handleDelete: function(response) {
-			this.view.completeDeletion();
-			this.setState("ready");
+		handleAction: function(action,response) {
+			return this.handlers[action](this,response);
 		},
 		
-		handleInsert: function(response) {
-			this.handleUpdate(response);
-		},
-		
-		handleUpdate: function(response) {
-			var newData = Bxs.Json.parse(response.text);
-			this.view.updateEditedRow(newData);
-			this.editClose({ state: "complete" });
+		handlers: {
+			insert: function(self,response) {
+				self.handleAction(update,response);
+			},
+			update: function(self,response) {
+				var newData = Bxs.Json.parse(response.text);
+				self.view.updateEditedRow(newData);
+				self.editClose({ state: "complete" });
+			},
+			delete: function(self,response) {
+				self.view.completeDeletion();
+				self.setState("ready");
+			}
 		},
 		
 		recoverError: function(response) {
@@ -401,10 +398,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			
 			self.setupObserves();
 		
-			$(Bxs.eventsPublisher).one("schemaLoaded."+self.attrs.id,function() {
-				self.view.boot(self.schema);
-			});
-		
 			if (self.attrs.observing === undefined && self.attrs.suppressList === undefined) {
 				$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
 					self.loadData();
@@ -416,38 +409,30 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 					self.setState(state);
 				});
 			}
+			
+			$(Bxs.eventsPublisher).one("schemaLoaded."+self.attrs.id,function() {
+				self.view.boot(self.schema);
+			});
 		
 			$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
 				$(self.view.domNode).bind("select",function() {
-
+					
 					var colType = self.view.columnType;
 				
-					if ($(self.broadcaster).attr("selectedId") !== $(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
+					if ($(self.broadcaster).attr("selectedId") !==
+						$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
 						&& !!$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")) 
 					{
-						$(self.broadcaster).attr("selectedId",$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value"));
+						$(self.broadcaster).attr(
+							"selectedId",
+							$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
+						);
 						$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id,[self]);
 					}
 				});
 			});
 		
 			this.loadSchema();
-
-		},
-		
-		addFilter: function(filter) {
-			
-			if (this.filters === undefined) {
-				this.filters = {};
-			}
-			
-			this.filters[filter.name] = filter;
-			
-			var self = this;
-			
-			$(filter.getDomNode()).bind("command", function() {
-				self.observedFilterChanged();
-			})
 		}
 	}
 );

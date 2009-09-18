@@ -31,20 +31,11 @@ Bxs.Ajax = {
 	},
 	
 	get: function(url,callback,options) {
-		
+
 		var queryString = (typeof options === "object" && options.__count__ > 0) ? $.param(options) : null,
 			parts = (queryString === null) ? [url] : [url,queryString],
 			url = Bxs.Url.construct(parts.join("?")),
 			data;
-		
-		if (Bxs.Cache.get(["inProgress",url])) {
-			$(Bxs.eventsPublisher).one("ajaxGetSuccess."+url,function(e,data,notModified) {
-				if (typeof callback === "function") {
-					callback(data,notModified);
-				}
-			});
-			return;
-		}
 
 		var ajaxGet = $.getJSON(url,null,function(data) {
 
@@ -64,13 +55,7 @@ Bxs.Ajax = {
 			if (typeof callback === "function") {
 				callback(data,notModified);
 			}
-
-			$(Bxs.eventsPublisher).trigger("ajaxGetSuccess."+url,[ data, notModified ]);
-
-			Bxs.Cache.clear(["inProgress",url]);
 		});
-		
-		Bxs.Cache.set(["inProgress",url],ajaxGet);
 	},
 	
 	getMetadata: function(name,callback) {

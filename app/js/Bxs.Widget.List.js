@@ -71,8 +71,9 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 						associateKeys = [],
 						sharedKey,
 						requestList = function() {
+
 							$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
-						
+								
 								self.list = list;
 			
 								$(self.popup).append(self.list.getDomNode());
@@ -148,12 +149,10 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 		},
 		
 		enterNewRow: function() {
+			
 			this.newEntry = {
-				
 				panel: new Bxs.Panel(this.domNode),
-				
 				boxNode: document.createElement("listbox")
-				
 			};
 			
 			var self = this;
