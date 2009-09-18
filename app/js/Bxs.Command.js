@@ -19,14 +19,14 @@ Bxs.Command = {
 		var target = document.commandDispatcher.focusedElement,
 			t = null;
 		
-		if ($(target).attr("view") === "table") return ["table",target];
+		if ($(target).attr("view") === "box") return ["box",target];
 		
-		if ((t = $(target).parents("[view='table']").get(0))) {
-			return ["table",t];
+		if ((t = $(target).parents("[view='box']").get(0))) {
+			return ["box",t];
 		}
 		
 		if ((t = $(target).attr("targetId"))) {
-			return ["table",$("#"+t).get(0)];
+			return ["box",$("#"+t).get(0)];
 		}
 		
 		return ["unknown",null];
@@ -48,50 +48,50 @@ Bxs.Command = {
 			
 		},
 			
-		table: {
+		box: {
 			edit: function(target) {
 		
-				if (Bxs.Tables.getById(target.id) === undefined) {
+				if (Bxs.Boxes.getById(target.id) === undefined) {
 					return;
 				}
 		
-				Bxs.Tables.getById(target.id).controller.doCommand("edit");
+				Bxs.Boxes.getById(target.id).controller.doCommand("edit");
 			},
 
 			confirm: function(target) {
 		
-				if (Bxs.Tables.getById(target.id) === undefined) {
+				if (Bxs.Boxes.getById(target.id) === undefined) {
 					return;
 				}
 		
-				Bxs.Tables.getById(target.id).controller.doCommand("confirm");
+				Bxs.Boxes.getById(target.id).controller.doCommand("confirm");
 			},
 
 			cancel: function(target) {
 		
-				if (Bxs.Tables.getById(target.id) === undefined) {
+				if (Bxs.Boxes.getById(target.id) === undefined) {
 					return;
 				}
 		
-				Bxs.Tables.getById(target.id).controller.doCommand("cancel");
+				Bxs.Boxes.getById(target.id).controller.doCommand("cancel");
 			},
 	
 			newRow: function(target) {
 		
-				if (Bxs.Tables.getById(target.id) === undefined) {
+				if (Bxs.Boxes.getById(target.id) === undefined) {
 					return;
 				}
 		
-				Bxs.Tables.getById(target.id).controller.doCommand("newRow");
+				Bxs.Boxes.getById(target.id).controller.doCommand("newRow");
 			},
 	
 			deleteRow: function(target) {
 		
-				if (Bxs.Tables.getById(target.id) === undefined) {
+				if (Bxs.Boxes.getById(target.id) === undefined) {
 					return;
 				}
 		
-				Bxs.Tables.getById(target.id).controller.doCommand("deleteRow");
+				Bxs.Boxes.getById(target.id).controller.doCommand("deleteRow");
 			},
 			
 			tools: function(target) {

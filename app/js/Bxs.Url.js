@@ -32,6 +32,7 @@ Bxs.Url = {
 		if (Bxs.Url.hasQueryString(path) && options.includeFormat === true) {
 			path += "&format=json";
 		}
+		// TODO use http accept instead of format=json
 		else if (options.includeFormat === true) {
 			path += "?format=json";
 		}

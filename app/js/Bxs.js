@@ -124,8 +124,8 @@ Bxs = {
 		controls: {
 			scriptsStatus:     $('#scriptsStatus'),
 			scriptsProgress:   $('#scriptsProgress'),
-			tablesStatus:      $('#tablesStatus'),
-			tablesProgress:    $('#tablesProgress'),
+			boxesStatus:      $('#boxesStatus'),
+			boxesProgress:    $('#boxesProgress'),
 		},
 		setState: function(state) {
 			return this.states[state]();
@@ -134,15 +134,15 @@ Bxs = {
 			start: function() {
 				Bxs.boot.controls.scriptsStatus.get(0).hide();
 				Bxs.boot.controls.scriptsProgress.val(0);
-				Bxs.boot.controls.tablesStatus.get(0).hide();
-				Bxs.boot.controls.tablesProgress.val(0);
+				Bxs.boot.controls.boxesStatus.get(0).hide();
+				Bxs.boot.controls.boxesProgress.val(0);
 				Bxs.login.controls.deck.get(0).selectedIndex = 1;
 			},
 			loadingScripts: function() {
 				Bxs.boot.controls.scriptsStatus.get(0).show();
 			},
 			buildingTables: function() {
-				Bxs.boot.controls.tablesStatus.get(0).show();
+				Bxs.boot.controls.boxesStatus.get(0).show();
 			},
 			complete: function() {
 				Bxs.mainDeck.get(0).selectedIndex = 1;
@@ -153,7 +153,7 @@ Bxs = {
 			Bxs.boot.setState("loadingScripts");
 			Bxs.Scripts.load();
 			Bxs.boot.setState("buildingTables");
-			Bxs.Factory.Table.init();
+			Bxs.Factory.Box.init();
 			Bxs.boot.setState("complete");
 		}
 	},

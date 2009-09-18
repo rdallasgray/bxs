@@ -25,12 +25,12 @@ Bxs.Scripts = {
 		"Bxs.Xpath",
 		"Bxs.Comparator",
 
-		"Bxs.Tables",
+		"Bxs.Boxes",
 		"Bxs.Panel",
 		"Bxs.List",
 		"Bxs.String",
 
-		"Bxs.Factory.Table",
+		"Bxs.Factory.Box",
 		"Bxs.Factory.Filter",
 		"Bxs.Factory.List",
 		"Bxs.Factory.Widget",
@@ -40,16 +40,16 @@ Bxs.Scripts = {
 
 		"Bxs.View.Abstract",
 		
-		"Bxs.View.Table.Abstract",
-		"Bxs.View.Table.Listbox",
-		"Bxs.View.Table.Listbox.Image",
+		"Bxs.View.Collection.Abstract",
+		"Bxs.View.Collection.Listbox",
+		"Bxs.View.Collection.Listbox.Image",
 
 		"Bxs.View.Row.Abstract",
 		"Bxs.View.Row.Listitem",
 
 		"Bxs.Controller.Abstract",
-		"Bxs.Controller.Table.General",
-		"Bxs.Controller.Table.Media",
+		"Bxs.Controller.Collection.General",
+		"Bxs.Controller.Collection.Media",
 
 		"Bxs.Widget.Abstract",
 //		"Bxs.Widget.Integer",

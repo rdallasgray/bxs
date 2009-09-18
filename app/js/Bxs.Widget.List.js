@@ -152,22 +152,22 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				
 				panel: new Bxs.Panel(this.domNode),
 				
-				tableNode: document.createElement("listbox")
+				boxNode: document.createElement("listbox")
 				
 			};
 			
 			var self = this;
 				
-			self.newEntry.tableNode.width = document.documentElement.boxObject.width*0.75;
+			self.newEntry.boxNode.width = document.documentElement.boxObject.width*0.75;
 
-			$(Bxs.eventsPublisher).one("ready.temp-table",function(e,controller) {
+			$(Bxs.eventsPublisher).one("ready.temp-box",function(e,controller) {
 				$(self.newEntry.panel.domNode).one("popupshown",function() {
 					controller.doCommand("newRow");
 				});
 				self.newEntry.panel.open();
 			});
 		
-			$(Bxs.eventsPublisher).one("actionCancel.temp-table",function() {
+			$(Bxs.eventsPublisher).one("actionCancel.temp-box",function() {
 				self.cleanUpPanel();
 				self.setValue(self.defaultValue);
 			});
@@ -185,18 +185,18 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 
 			Bxs.Ajax.getMetadata(this.fieldName,function(metadata) {
 			
-				var tableName = metadata.name,
+				var boxName = metadata.name,
 					hide = [];
 				
 				$.each(self.getNewRowDefaults(), function(key) {
 					hide.push(key);
 				});
 				
-				$(self.newEntry.tableNode)
+				$(self.newEntry.boxNode)
 					.attr({ 
-						view: "table", 
-						id: "temp-table", 
-						name:  tableName, 
+						view: "box", 
+						id: "temp-box", 
+						name:  boxName, 
 						rootUrl: "/"+self.url, 
 						hide: hide.toSource(), 
 						rows: "1" ,
@@ -204,9 +204,9 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 					})
 					.addClass("singleRow");
 	
-				$(self.newEntry.panel.domNode).append(self.newEntry.tableNode);
+				$(self.newEntry.panel.domNode).append(self.newEntry.boxNode);
 
-				var table = Bxs.Factory.Table.build(self.newEntry.tableNode);
+				var box = Bxs.Factory.Box.build(self.newEntry.boxNode);
 				
 			});
 		},
@@ -218,7 +218,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			}
 			
 			this.newEntry.panel.cleanUp();
-			Bxs.Tables.remove("temp-table");
+			Bxs.Boxes.remove("temp-box");
 			delete this.newEntry;
 		},
 		

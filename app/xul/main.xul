@@ -52,9 +52,9 @@ You should have received a copy of the GNU General Public License along with Box
 										<caption label="Loading JavaScript ... "/>
 										<progressmeter mode="determined" value="0" id="scriptsProgress" observes="scriptsProgressBroadcaster"/>
 									</row>
-									<row id="tablesStatus">
-										<caption label="Building Tables ... "/>
-										<progressmeter mode="determined" value="0" id="tablesProgress" observes="tablesProgressBroadcaster"/>
+									<row id="boxesStatus">
+										<caption label="Building Boxes ... "/>
+										<progressmeter mode="determined" value="0" id="boxesProgress" observes="boxesProgressBroadcaster"/>
 									</row>
 								</rows>
 							</grid>
@@ -91,7 +91,7 @@ You should have received a copy of the GNU General Public License along with Box
 			
 			<broadcasterset id="mainBroadcasterSet">
 				<broadcaster id="scriptsProgressBroadcaster"/>
-				<broadcaster id="tablesProgressBroadcaster"/>
+				<broadcaster id="boxesProgressBroadcaster"/>
 				<broadcaster id="eventsPublisher"/>
 			</broadcasterset>
 

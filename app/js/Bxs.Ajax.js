@@ -125,7 +125,6 @@ Bxs.Ajax = {
 	_authenticatedRequest: function(url,method,data,callback) {
 		
 		data = (data !== null) ? Bxs.Json.stringify(data) : null;
-		// TODO use http accept instead of format=json
 		var req = {
 			service: "authenticatedRequest",
 			options: {
