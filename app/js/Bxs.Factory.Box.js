@@ -24,11 +24,7 @@ Bxs.Factory.Box = {
 		
 		var nodeType = $.string(node.nodeName).capitalize().str,
 			box = {};
-		
-		var broadcaster = document.createElement('broadcaster');
-		broadcaster.id = node.id+"_broadcaster";
-		$('#mainBroadcasterSet').append(broadcaster);
-		
+				
 		var defaultAttrs = {
 			"hide" : "[]", 
 			"ignore": "[]"
@@ -52,11 +48,9 @@ Bxs.Factory.Box = {
 			box.view = new Bxs.View.Collection[nodeType](node);
 		}
 		box.view.setController(box.controller);
-		box.view.setBroadcaster(broadcaster);
 		box.view.setAttributes(node.attributes);
 		
 		box.controller.setView(box.view);
-		box.controller.setBroadcaster(broadcaster);
 		
 		var filters = $("[target='"+node.id+"']");
 		$.each(filters, function() {

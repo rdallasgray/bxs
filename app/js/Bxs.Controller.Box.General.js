@@ -53,11 +53,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			this.setState("inactive");
 		},
 		
-		setDefaultValues: function(values) {
-			
-			this.defaultValues = {};
-		},
-		
 		addFilter: function(filter) {
 			
 			if (this.filters === undefined) {
@@ -106,7 +101,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 						},
 						options
 					);
-					self.setDefaultValues();
 				};
 
 			if (this.selectionTimer !== undefined) {
@@ -125,9 +119,9 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			// Do we need to account for multiple observeds? In which case it should replace specific matches
 			// with the relevant property.
 			if (this.attrs.observing !== undefined) {
-				url = self.this.rootUrl.replace(
+				url = this.rootUrl.replace(
 					/^:\w*/,
-					Bxs.Boxes.getById(this.attrs.observing).controller.broadcaster).attr("selectedId")
+					this.getObservedBox().controller.getSelectedId()
 				);
 			}
 			
@@ -323,14 +317,10 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 
 					var colType = self.view.columnType;
 				
-					if ($(self.broadcaster).attr("selectedId") !==
+					if (self.getSelectedId() !==
 						$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
 						&& !!$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")) 
 					{										
-						$(self.broadcaster).attr(
-							"selectedId",
-							$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
-						);
 						$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id,[self]);
 					}
 				});

@@ -341,10 +341,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		setController: function(controller) {
 			this.controller = controller;
 		},
-
-		setBroadcaster: function(broadcaster) {
-			this.broadcaster = broadcaster;
-		},
 		
 		isVisible: function() {
 			return true;

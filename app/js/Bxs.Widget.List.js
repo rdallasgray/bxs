@@ -82,7 +82,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 						
 								$(Bxs.eventsPublisher).trigger("widgetReady."+self.fieldName+"_id",[self]);
 							});
-					
+
 							Bxs.Factory.List.build(self.url,self.fieldName);
 						}; 
 					// could optimize by creating array from columnSchema and filtering with regex /_id$/
@@ -90,7 +90,12 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 					$.each(columnSchema, function(key) { if (/_id$/.test(key)) associateKeys.push(key) });
 					
 					if (!!(sharedKey = associateKeys.filter(function(el) el in parentSchema)[0])) {
-						var selectedId = $(self.parentNode).siblings("[name='"+sharedKey+"']").attr("value");
+						if (self.parentView.controller.attrs.observing !== undefined) {
+							var selectedId = self.parentView.controller.getObservedBox().controller.getSelectedId();
+						}
+						else {
+							var selectedId = $(self.parentNode).siblings("[name='"+sharedKey+"']").attr("value");
+						}
 						self.setNewRowDefault(sharedKey,selectedId);
 						Bxs.Ajax.getMetadata(sharedKey.substr(0,sharedKey.search(/_id$/)), function(keyMetadata) {
 							self.url = keyMetadata.name+"/"+selectedId+"/"+self.url;
@@ -100,29 +105,6 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 					else {
 						requestList();
 					}
-/*yagni?					
-					$.each(columnSchema,function(key) {
-						
-						if (/_id$/.test(key)) {
-
-							var fieldName = key.slice(0,key.search(/_id$/));
-
-							Bxs.Ajax.getMetadata(fieldName, function(keyMetadata) {
-								
-								if (observedId !== undefined) {
-									var observed = $("#"+observedId).get(0);
-									
-									if (observed.getAttribute("name") === keyMetadata.name) {
-										var selectedId = $("#"+observedId+"_broadcaster").attr("selectedId");
-										self.url = keyMetadata.name+"/"+selectedId+"/"+self.url;
-									}
-									self.setNewRowDefault(key,selectedId);
-								}
-
-							});
-						}
-					});
-*/					
 				});
 			});
 		},

@@ -57,6 +57,15 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			}
 		},
 		
+		getObservedBox: function() {
+			return Bxs.Boxes.getById(this.attrs.observing);
+		},
+		
+		getSelectedId: function() {
+			this._selectedId = $(this.view.getSelectedRow()).children(this.view.columnType+"[name='id']").attr("value");
+			return this._selectedId;
+		},
+		
 		observedSelectionChanged: function() {
 			
 			this.loadDataDelayed();
@@ -90,21 +99,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			})
 		},
 		
-		setDefaultValues: function(values) {
-			values = values || {};
-			if (this.defaultValues === undefined) {
-				this.defaultValues = {};
-			}
-			if (this.attrs.observing !== undefined) {
-				var key = /:\w*/.exec(this.attrs.rootUrl)[0].substr(1);
-				if (values[key] === undefined) {
-					values[key] = $("#"+this.attrs.observing+"_broadcaster").attr("selectedId");
-				}
-			}
-			console.debug("set default values for "+this.attrs.id,values.toSource());
-			this.defaultValues = values;
-		},
-		
 		getFilterOptions: function() {
 			
 			if (this.filters === undefined) {
@@ -120,6 +114,21 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			});
 			
 			return options;
+		},
+		
+		setDefaultValues: function(values) {
+			values = values || {};
+			if (this.defaultValues === undefined) {
+				this.defaultValues = {};
+			}
+			if (this.attrs.observing !== undefined) {
+				var key = /:\w*/.exec(this.attrs.rootUrl)[0].substr(1);
+				if (values[key] === undefined) {
+					values[key] = $("#"+this.attrs.observing+"_broadcaster").attr("selectedId");
+				}
+			}
+			console.debug("set default values for "+this.attrs.id,values.toSource());
+			this.defaultValues = values;
 		},
 		
 		loadDataDelayed: function() {
@@ -175,7 +184,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			if (this.attrs.observing !== undefined) {
 				url = this.attrs.rootUrl.replace(
 					/:\w*/g,
-					$(Bxs.Boxes.getById(this.attrs.observing).controller.broadcaster).attr("selectedId")
+					this.getObservedBox().controller.getSelectedId()
 				);
 			}
 			
@@ -278,7 +287,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				
 				this.setState("deleting");
 			
-				var url = this.parseUrl()+"/"+$(this.broadcaster).attr("selectedId"),
+				var url = this.parseUrl()+"/"+this.getSelectedId(),
 					self = this;
 			
 				Bxs.Ajax.deleteRow(url,function(response) { self.handleData(response,"delete"); });
@@ -355,7 +364,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		
 		handlers: {
 			insert: function(self,response) {
-				self.handleAction(update,response);
+				self.handleAction("update",response);
 			},
 			update: function(self,response) {
 				var newData = Bxs.Json.parse(response.text);
@@ -415,18 +424,11 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			});
 		
 			$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
-				$(self.view.domNode).bind("select",function() {
-					
-					var colType = self.view.columnType;
 				
-					if ($(self.broadcaster).attr("selectedId") !==
-						$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
-						&& !!$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")) 
-					{
-						$(self.broadcaster).attr(
-							"selectedId",
-							$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
-						);
+				$(self.view.domNode).bind("select",function() {
+					var s = self._selectedId;
+					var g = self.getSelectedId();
+					if (s !== g) {
 						$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id,[self]);
 					}
 				});

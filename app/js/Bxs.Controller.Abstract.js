@@ -31,10 +31,6 @@ Bxs.Controller.Abstract.prototype = $.extend(true,{},
 			this.view = v;
 		},
 	
-		setBroadcaster: function(b) {
-			this.broadcaster = b;
-		},
-	
 		init: function() {
 		
 		}
