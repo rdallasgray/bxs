@@ -36,7 +36,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 		setSelectedRow: function(row) {
 			this.domNode.selectItem(row);
 		},
-		
+
 		clearSelection: function() {
 			this.domNode.clearSelection();
 		},
@@ -156,14 +156,6 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			hbox.appendChild(this.editToolbar.getDomNode());
 			
 			$(this.domNode).after(hbox);
-			
-			this.forwardState(this.editToolbar);
-			
-			$(self.domNode).bind("select", function() {
-				if (self.getState() === "ready") self.setState("active");
-			});
-			
-			$(Bxs.eventsPublisher).trigger("viewBooted."+self.attrs.id,self);
 		}
 	}
 );

@@ -18,13 +18,14 @@ Bxs.Scripts = {
 	
 		"jquery.string.1.0",
 		
-		"Bxs.Mixin.Attributeable",
 		"Bxs.Mixin.Commandable",
 		"Bxs.Mixin.Stateable",
 		
 		"Bxs.Xpath",
 		"Bxs.Comparator",
 		
+		"Bxs.Url",
+		"Bxs.Parser",
 		"Bxs.Response",
 		"Bxs.Boxes",
 		"Bxs.Panel",
@@ -41,6 +42,8 @@ Bxs.Scripts = {
 
 		"Bxs.View.Abstract",
 		
+		"Bxs.View.Box.Abstract",
+		"Bxs.View.Box.Textbox",
 		"Bxs.View.Collection.Abstract",
 		"Bxs.View.Collection.Listbox",
 		"Bxs.View.Collection.Listbox.Image",
@@ -49,6 +52,7 @@ Bxs.Scripts = {
 		"Bxs.View.Row.Listitem",
 
 		"Bxs.Controller.Abstract",
+		"Bxs.Controller.Box.General",
 		"Bxs.Controller.Collection.General",
 		"Bxs.Controller.Collection.Media",
 

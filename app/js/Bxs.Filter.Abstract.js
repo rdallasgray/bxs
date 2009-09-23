@@ -33,7 +33,17 @@ Bxs.Filter.Abstract.prototype = $.extend(true,{},
 			this.name = $(this.domNode).attr("filterName");
 			
 			this.build();
+			this.activate();
 			
+		},
+		
+		activate: function() {
+			
+			var self = this;
+			
+			$(self.domNode).bind("command",function() {
+				$(Bxs.eventsPublisher).trigger("filterChanged."+$(self.domNode).attr("target"));
+			});
 		}
 		
 	}

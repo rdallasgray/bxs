@@ -27,20 +27,20 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 			
 			this.setState("ready");
 			
-			var url = this.parseUrl();
+			var url = Bxs.Url.construct(this.parseUrl());
 			
 			var self = this,
 				req = {
 					service: "fileUpload",
 					options: {
 						method: "POST",
-						url: url+"?format=json",
+						url: url,
 						username: Bxs.auth.username,
 						password: Bxs.auth.password,
-						contentType: this.attrs.media.type
+						contentType: this.view.attrs.media.type
 					},
 					callback: function() {
-						if (self.parseUrl() === url) {
+						if (Bxs.Url.construct(self.parseUrl()) === url) {
 							self.handleData(req.response, "insert");
 						}
 					}
@@ -54,7 +54,6 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 			var row = this.view.buildRow(data);
 			this.view.appendRowAtHead(row);
 		},
-
 		
 	}
 );

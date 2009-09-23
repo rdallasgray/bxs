@@ -16,7 +16,7 @@ Bxs.Boxes = {
 	
 	getById: function(id) {
 		
-		var match = Bxs.Boxes.collection.filter(function(el) el.controller.attrs.id === id);
+		var match = Bxs.Boxes.collection.filter(function(el) el.view.attrs.id === id);
 		return match.length > 0 ? match[0] : false;
 	},
 /*	
@@ -28,7 +28,7 @@ Bxs.Boxes = {
 */	
 	getByName: function(name) {
 		
-		var match = Bxs.Boxes.collection.filter(function(el) el.controller.attrs.name === name);
+		var match = Bxs.Boxes.collection.filter(function(el) el.view.attrs.name === name);
 		return match.length > 0 ? match : false;
 	},
 	
@@ -39,7 +39,7 @@ Bxs.Boxes = {
 	
 	remove: function(id) {
 		
-		var newCollection = Bxs.Boxes.collection.filter(function(el) el.controller.attrs.id !== id);		
+		var newCollection = Bxs.Boxes.collection.filter(function(el) el.view.attrs.id !== id);		
 		
 		Bxs.Boxes.collection = newCollection;
 	},

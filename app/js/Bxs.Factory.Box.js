@@ -20,16 +20,14 @@ Bxs.Factory.Box = {
 	
 	build: function(node,temp) {
 		
-		temp = temp || false;
-		
-		var nodeType = $.string(node.nodeName).capitalize().str,
-			box = {};
-				
-		var defaultAttrs = {
-			"hide" : "[]", 
-			"ignore": "[]"
-		};
-		
+		var temp = temp || false,
+			nodeType = $.string(node.nodeName).capitalize().str,
+			boxType = $.string(node.getAttribute("bxs")).capitalize().str,
+			box = {},
+			defaultAttrs = {
+				"hide" : "[]", 
+				"ignore": "[]"
+			};
 		
 		$.each(defaultAttrs, function(attr,value) {
 			if ($(node).attr(attr) === "") {
@@ -37,27 +35,30 @@ Bxs.Factory.Box = {
 			}
 		});
 		
-		box.controller = node.hasAttribute("media") ? new Bxs.Controller.Collection.Media : new Bxs.Controller.Collection.General;
+		var parsedAttrs = Bxs.Parser.attributes(node.attributes);
+
+		box.controller = node.hasAttribute("media") ? new Bxs.Controller[boxType].Media : new Bxs.Controller[boxType].General;
 		
-		box.controller.setAttributes(node.attributes);
-		
-		if (box.controller.hasAttribute("media")) {
-			var mediaType = $.string(/^\w*/.exec(box.controller.attrs.media.type)[0]).capitalize().str;
-			box.view = new Bxs.View.Collection[nodeType][mediaType](node);
+		if (node.hasAttribute("media")) {
+			var mediaType = $.string(/^\w*/.exec(parsedAttrs.media.type)[0]).capitalize().str;
+			box.view = new Bxs.View[boxType][nodeType][mediaType](node);
 		}
 		else {
-			box.view = new Bxs.View.Collection[nodeType](node);
+			box.view = new Bxs.View[boxType][nodeType](node);
 		}
+
 		box.view.setController(box.controller);
-		box.view.setAttributes(node.attributes);
+		box.view.attrs = parsedAttrs;
 		
 		box.controller.setView(box.view);
 		
-		var filters = $("[target='"+node.id+"']");
-		$.each(filters, function() {
-			var f = Bxs.Factory.Filter.build(this);
-			box.controller.addFilter(f);
-		});
+		var filterNodes = $("[bxs='filter'][target='"+box.view.attrs.id+"']");
+		if (filterNodes.length > 0) {
+			$(filterNodes).each(function() {
+				var filter = Bxs.Factory.Filter.build(this);
+				box.view.addFilter(filter);
+			});
+		}
 		
 		box.controller.init();
 		
@@ -66,16 +67,15 @@ Bxs.Factory.Box = {
 		}
 		
 		return box;
-
 	},
 	
 	init: function() {
 		 
-		$("[view='box']").each(function(node) {
-			Bxs.Factory.Box.build(this);
+		$("[bxs]").each(function(node) {
+			if (this.getAttribute("bxs") === "box" || this.getAttribute("bxs") === "collection") {
+				Bxs.Factory.Box.build(this);
+			}
 		});
-		
-//		Bxs.Boxes.collection[0].view.domNode.focus();
 	}
 	
 };

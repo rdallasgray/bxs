@@ -19,9 +19,9 @@ Bxs.Command = {
 		var target = document.commandDispatcher.focusedElement,
 			t = null;
 		
-		if ($(target).attr("view") === "box") return ["box",target];
+		if ($(target).attr("bxs") === "box") return ["box",target];
 		
-		if ((t = $(target).parents("[view='box']").get(0))) {
+		if ((t = $(target).parents("[bxs='box']").get(0))) {
 			return ["box",t];
 		}
 		

@@ -90,8 +90,8 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 					$.each(columnSchema, function(key) { if (/_id$/.test(key)) associateKeys.push(key) });
 					
 					if (!!(sharedKey = associateKeys.filter(function(el) el in parentSchema)[0])) {
-						if (self.parentView.controller.attrs.observing !== undefined) {
-							var selectedId = self.parentView.controller.getObservedBox().controller.getSelectedId();
+						if (self.parentView.attrs.observing !== undefined) {
+							var selectedId = self.parentView.getObservedBox().view.getSelectedId();
 						}
 						else {
 							var selectedId = $(self.parentNode).siblings("[name='"+sharedKey+"']").attr("value");
@@ -181,7 +181,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 						rootUrl: "/"+self.url, 
 						hide: hide.toSource(), 
 						rows: "1" ,
-						suppressList: "true"
+						suppressContentLoading: "true"
 					})
 					.addClass("singleRow");
 	

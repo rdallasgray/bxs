@@ -27,22 +27,34 @@ Bxs.View.Collection.Abstract = function(node) {
 
 Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 	
-	Bxs.View.Abstract,
-	Bxs.Mixin.Attributeable,
-	Bxs.Mixin.Stateable,
+	Bxs.View.Box.Abstract.prototype,
 	
 	{	
-		setContent: function(data) {
+		getObservedBox: function() {
+			return Bxs.Boxes.getById(this.attrs.observing);
+		},
+				
+		getSelectedId: function() {
+			this._selectedId = $(this.getSelectedRow()).children(this.columnType+"[name='id']").attr("value");
+			return this._selectedId;
+		},
 
-			var self = this;
-			
-			$(Bxs.eventsPublisher).trigger("contentChanged."+self.attrs.id);
-			self.clearContent();
-			self.buildContent(data);
+		addFilter: function(filter) {
+			if (this.filters === undefined) {
+				this.filters = [];
+			}
+			this.filters.push(filter);
 		},
 		
-		clearContent: function() {
-			this.removeAllRows();
+		getFilterOptions: function() {
+			
+			var options = {};
+			console.debug(this.filters);
+			$(this.filters).each(function() {
+				options[this.name] = this.getValue();
+			});
+			
+			return options;
 		},
 		
 		buildContent: function(data) {
@@ -243,10 +255,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			return this.editView.getData();
 		},
 		
-		updateEditedRow: function(data) {
-			this.editView.updateData(data);
-		},
-		
 		editClose: function(options) {
 			
 			var options = options || {state: "default"};
@@ -306,14 +314,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 		},
 		
-		states: {
-			
-			inactive: function() {
-				this.disable();
-			},
-			busy: function() {
-				$(this.domNode).addClass("busy");
-			},
+		states: $.extend(true, {}, Bxs.View.Box.Abstract.prototype.states, {
 			ready: function() {
 				$(this.domNode).removeClass("busy");
 				$(this.domNode).removeClass("deleting");
@@ -326,37 +327,12 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			active: function() {
 				$(this.domNode).removeClass("deleting");
 			},
-			communicating: function() {
-			},
-			editing: function() {
-			},
 			creating: function() {
 			},
 			deleting: function() {
 				$(this.domNode).addClass("deleting");
 			}
-			
-		},
-		
-		disable: function() {
-			this.domNode.disable();
-		},
-		
-		enable: function() {
-			this.domNode.enable();
-		},
-
-		setController: function(controller) {
-			this.controller = controller;
-		},
-		
-		isVisible: function() {
-			return true;
-		},
-		
-		onVisibility: function(callback) {
-			callback();
-		},
+		}),
 		
 		sortRowArray: function(rows,field,direction) {
 						
@@ -407,8 +383,30 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			
 			this.sortedBy = { field: field, direction: direction };
 		},
+		
+		activate: function() {
+			
+			var self = this;
+						
+			this.forwardState(this.editToolbar);
+			
+			$(self.domNode).bind("select", function() {
+				var s = self._selectedId,
+					g = self.getSelectedId();
+				console.debug(s,g);
+				if ((s !== g) && (g !== "")) {
+					$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id);
+					if (self.getState() === "ready") self.setState("active");
+				}
+			});
 
-		boot: function(schema) {
-		}	
+			if (self.attrs.observing === undefined && self.attrs.suppressContentLoading === undefined) {
+				self.requestData();
+			}
+			else {
+				var state = (self.attrs.observing !== undefined) ? "inactive" : "ready";
+				self.setState(state);
+			}
+		}
 	}
 );

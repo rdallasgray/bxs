@@ -22,9 +22,7 @@ Bxs.Controller.Abstract = function () {
 
 Bxs.Controller.Abstract.prototype = $.extend(true,{},
 	
-	Bxs.Mixin.Attributeable,
 	Bxs.Mixin.Commandable,
-	Bxs.Mixin.Stateable,
 	
 	{	
 		setView: function(v) {

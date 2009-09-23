@@ -24,14 +24,14 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 	
 	Bxs.Controller.Abstract.prototype, 
 	
-	{
-		
+	{		
 		setupObserves: function() {
 			
 			var self = this;
 			
-			if (self.attrs.observing !== undefined) {
-				var observedId = self.attrs.observing;
+			if (self.view.attrs.observing !== undefined) {
+
+				var observedId = self.view.attrs.observing;
 
 				$(Bxs.eventsPublisher).bind("selectionChanged."+observedId,function() {
 					self.observedSelectionChanged();
@@ -40,88 +40,80 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 					self.observedContentChanged();
 				});
 			}
+			$(Bxs.eventsPublisher).bind("dataRequested."+self.view.attrs.id,function() {
+				self.observedDataRequested();
+			});
 		},
 		
 		observedSelectionChanged: function() {
-			
-			this.loadData();
+
+			this.loadDataDelayed();
 		},
 		
 		observedContentChanged: function() {
 			
 			this.view.clearContent();
-			this.setState("inactive");
+			this.view.setState("inactive");
 		},
 		
-		addFilter: function(filter) {
+		observedDataRequested: function() {
 			
-			if (this.filters === undefined) {
-				this.filters = {};
-			}
-			
-			this.filters[filter.name] = filter;
+			this.loadDataDelayed();
+		},
+		
+		loadDataDelayed: function() {
 			
 			var self = this;
 			
-			$(filter.getDomNode()).bind("command", function() {
-				self.observedFilterChanged();
-			})
-		},
-		
-		getFilterOptions: function() {
-			
-			return {};
-		},
-		
-		loadData: function() {
-						
-			var self = this,
-				url = self.parseUrl(),
-				options = self.getFilterOptions(),
-				loadFunc = function() {
-					
-					if (!self.view.isVisible()) {
-						self.view.onVisibility(loadFunc);
-						return;
-					}
-			
-					self.setState("busy");
-		
-					$(Bxs.eventsPublisher).one("dataLoaded."+self.attrs.id,function(e,data) {
-						self.view.setContent(data);
-					});
-					$(Bxs.eventsPublisher).one("viewReady."+self.attrs.id,function() {
-						self.setState("ready");
-					});
-			
-					Bxs.Ajax.get(
-						url,
-						function(data) {
-							$(Bxs.eventsPublisher).trigger("dataLoaded."+self.attrs.id,[data]);	
-						},
-						options
-					);
-				};
-
-			if (this.selectionTimer !== undefined) {
-				clearTimeout(this.selectionTimer);
+			if (self.selectionTimer !== undefined) {
+				clearTimeout(self.selectionTimer);
 			}
-			self.selectionTimer = setTimeout(loadFunc,250);
+			self.selectionTimer = setTimeout(function() { self.loadData(); },500);
+		},
+	
+		loadData: function() {
+
+			var self = this;
+
+			if (!self.view.isVisible()) {
+				self.view.onVisibility(function() { self.loadData(); });
+				return;
+			}
+			
+			self.view.setState("busy");
+
+			var url = self.parseUrl(),
+				options = self.view.hasFilters() ? self.view.getFilterOptions() : {};
+			
+			$(Bxs.eventsPublisher).one("dataLoaded."+self.view.attrs.id,function(e,data) {
+				self.view.render(data);
+			});
+			$(Bxs.eventsPublisher).one("viewReady."+self.view.attrs.id,function() {
+				self.view.setState("ready");
+			});
+
+			Bxs.Ajax.get(
+				url,
+				function(data) {
+					$(Bxs.eventsPublisher).trigger("dataLoaded."+self.view.attrs.id,[data]);	
+				},
+				options
+			);
 		},
 		
 		parseUrl: function(shortUrl) {
 			if (shortUrl === true) {
-				return "/"+this.attrs.rootUrl.split("/").reverse().shift();
+				return "/"+this.view.attrs.rootUrl.split("/").reverse().shift();
 			}
 			
-			var url = this.attrs.rootUrl;
+			var url = this.view.attrs.rootUrl;
 			// This replaces any occurence of ^:\w* with the selected id of the single observed box.
 			// Do we need to account for multiple observeds? In which case it should replace specific matches
 			// with the relevant property.
-			if (this.attrs.observing !== undefined) {
-				url = this.rootUrl.replace(
-					/^:\w*/,
-					this.getObservedBox().controller.getSelectedId()
+			if (this.view.attrs.observing !== undefined) {
+				url = this.view.attrs.rootUrl.replace(
+					/:\w*/g,
+					this.view.getObservedBox().view.getSelectedId()
 				);
 			}
 			
@@ -131,13 +123,13 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		commands: {
 		
 			edit: function() {
-				
+
 				if (this.view.getSelectedRow() === null) {
 					return;
 				}
 			
-				switch (this.getState()) {
-					case "ready":
+				switch (this.view.getState()) {
+					case "active":
 					this.editOpen();
 					break;
 				
@@ -157,7 +149,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 					return;
 				}
 			
-				switch (this.getState()) {
+				switch (this.view.getState()) {
 				
 					case "editing":
 					case "creating":
@@ -175,41 +167,41 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 					return;
 				}
 				
-				switch (this.getState()) {
+				switch (this.view.getState()) {
 					
 					case "editing":
 					case "creating":
 					this.editClose({ state: "cancel" });
 					var self = this;
-					$(Bxs.eventsPublisher).trigger("actionCancel."+self.attrs.id);
+					$(Bxs.eventsPublisher).trigger("actionCancel."+self.view.attrs.id);
 					break;
 				
 					default:
 					return;
 				}
-			}
+			},
 		},
 	
 		editOpen: function() {
 			Bxs.Boxes.disable();
 			this.view.editOpen();
-			this.setState("editing");
+			this.view.setState("editing");
 		},
 	
 		editClose: function(options) {
 			Bxs.Boxes.enable();
 			this.view.editClose(options);
-			this.setState("ready");
+			this.view.setState("ready");
 		},
 		
 		transmitData: function() {
 			
-			this.setState("communicating");
+			this.view.setState("communicating");
 			
 			var data = this.view.getEditedData(),
 				transmitType = "update";
 				
-			if (this.getPreviousState() === "creating") {
+			if (this.view.getPreviousState() === "creating") {
 				transmitType = "insert";
 			}
 			
@@ -224,13 +216,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			Bxs.Ajax.put(url,data,function(response) { self.handleData(response,"update"); });
 		},
 		
-		insert: function(data) {
-			
-			var url = this.parseUrl(),
-				self = this;
-				
-			Bxs.Ajax.post(url,data,function(response) { self.handleData(response,"insert"); });
-		},
 		
 		handleData: function(response,action) {
 			
@@ -239,7 +224,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			if (Bxs.Response.success(action,response.status)) {
 				self.handleAction(action,response);
 				var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
-				$(Bxs.eventsPublisher).trigger("dataChanged",[{ box: self.attrs.name, action: action, data: newData }]);
+				$(Bxs.eventsPublisher).trigger("dataChanged",[{ box: self.view.attrs.name, action: action, data: newData }]);
 			}
 			else {
 				self.recoverError(response);
@@ -252,81 +237,25 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 		
 		handlers: {
-			insert: function(self,response) {
-				self.handleAction(update,response);
-			},
 			update: function(self,response) {
 				var newData = Bxs.Json.parse(response.text);
-				self.view.updateEditedRow(newData);
+				self.view.updateEditView(newData);
 				self.editClose({ state: "complete" });
-			},
-			delete: function(self,response) {
-				self.view.completeDeletion();
-				self.setState("ready");
 			}
 		},
 		
 		recoverError: function(response) {
 			Bxs.serverError(response);
-			self.setState(self.getPreviousState());
-		},
-
-		states: {
-			busy: function() {
-			},
-			ready: function() {
-				var self = this;
-				$(Bxs.eventsPublisher).trigger("ready."+this.attrs.id,[self]);
-			},
-			editing: function() {
-			},
-			creating: function() {
-			},
-			communicating: function() {
-			},
-			deleting: function() {
-			}
+			self.view.setState(self.view.getPreviousState());
 		},
 	
 		init: function() {
 		
 			var self = this;
 			
-			self.forwardState(self.view);
-			
 			self.setupObserves();
-		
-			if (self.attrs.observing === undefined && self.attrs.suppressList === undefined) {
-				$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
-					self.loadData();
-				});
-			}
-			else {
-				$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
-					var state = (self.attrs.observing !== undefined) ? "inactive" : "ready";
-					self.setState(state);
-				});
-			}
-			
-			$(Bxs.eventsPublisher).one("schemaLoaded."+self.attrs.id,function() {
-				self.view.boot(self.schema);
-			});
-		
-			$(Bxs.eventsPublisher).one("viewBooted."+self.attrs.id,function() {
-				$(self.view.domNode).bind("select",function() {
-
-					var colType = self.view.columnType;
-				
-					if (self.getSelectedId() !==
-						$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")
-						&& !!$(self.view.getSelectedRow()).children(colType+"[name='id']").attr("value")) 
-					{										
-						$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id,[self]);
-					}
-				});
-			});
-		
-			this.loadSchema();
+			self.view.boot();
+			self.view.activate();
 		}
 	}
 );

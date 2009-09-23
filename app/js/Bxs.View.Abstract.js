@@ -21,5 +21,9 @@ Bxs.View.Abstract = function() {
 };
 
 Bxs.View.Abstract.prototype = {
-	
+		
+	hasAttribute: function(attr) {
+		return this.attrs[attr] !== undefined;
+	},
+
 };

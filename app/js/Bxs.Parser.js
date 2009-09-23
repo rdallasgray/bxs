@@ -12,30 +12,21 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-if (Bxs.Mixin === undefined) {
-	Bxs.Mixin = {};
-}
-
-Bxs.Mixin.Attributeable = {
+Bxs.Parser = {
 		
-	setAttributes: function(attrs) {
-
-		var self = this;
-
-		if (self.attrs === undefined) {
-			self.attrs = {};
-		}
+	attributes: function(attrs) {
+		
+		var attrObj = {},
+			self = this;
 
 		$.each(attrs, function(key,attr) {
-			self.parseAttribute(self.attrs,attr.nodeName,attr.nodeValue);
+			self.attribute(attrObj,attr.nodeName,attr.nodeValue);
 		});
+		
+		return attrObj;
 	},
 	
-	hasAttribute: function(attr) {
-		return this.attrs[attr] !== undefined;
-	},
-	
-	parseAttribute: function(object,attr,val) {
+	attribute: function(object,attr,val) {
 		try {
 			var testVal = function() { return eval("("+val+")"); }();
 		}

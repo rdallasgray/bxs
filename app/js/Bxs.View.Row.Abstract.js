@@ -116,13 +116,12 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 					var fieldName = name.slice(0,name.search(/_id$/));
 
 					if (data[name] !== "") {
-						$(Bxs.eventsPublisher).one("loadedLabelFor."+fieldName+"-"+data[name],function(e,labelData) {
-							Bxs.Ajax.getMetadata(fieldName,function(metadata) {
-								$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,labelData));
+						Bxs.Ajax.getMetadata(fieldName,function(metadata) {
+							$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+data[name],function(e,rowData) {
+								$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
 							});
-						});
-						
-						self.parentView.controller.getLabelForAssociatedField(fieldName,data[name]);
+							self.parentView.controller.loadRowData(metadata.url+"/"+data[name]);
+						})
 					}
 					else {
 						$(column).attr("label","");
