@@ -116,21 +116,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			return options;
 		},
 		
-		setDefaultValues: function(values) {
-			values = values || {};
-			if (this.defaultValues === undefined) {
-				this.defaultValues = {};
-			}
-			if (this.attrs.observing !== undefined) {
-				var key = /:\w*/.exec(this.attrs.rootUrl)[0].substr(1);
-				if (values[key] === undefined) {
-					values[key] = $("#"+this.attrs.observing+"_broadcaster").attr("selectedId");
-				}
-			}
-			console.debug("set default values for "+this.attrs.id,values.toSource());
-			this.defaultValues = values;
-		},
-		
 		loadDataDelayed: function() {
 			
 			var self = this;
@@ -169,7 +154,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				},
 				options
 			);
-			self.setDefaultValues();			
 		},
 		
 		parseUrl: function(shortUrl) {

@@ -171,11 +171,19 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		hidesColumn: function(columnName) {
-			return (this.attrs.hide.some(function(el) el === columnName)) || (this.autoHideColumns.some(function(el) el === columnName));
+			return (
+				this.attrs.hide.some(function(el) el === columnName)) 
+				|| (this.autoHideColumns.some(function(el) el === columnName)
+			);
 		},
 		
 		ignoresColumn: function(columnName) {
-			return this.attrs.ignore.some(function(el) el === columnName);
+			var ignores = this.attrs.ignore;
+			if (this.attrs.observing !== undefined) {
+				var parentColumn = this.attrs.rootUrl.match(/:\w*/g)[0].substr(1);
+				ignores.push(parentColumn);
+			}
+			return ignores.some(function(el) el === columnName);
 		},
 		
 		getArrayOfRows: function() {

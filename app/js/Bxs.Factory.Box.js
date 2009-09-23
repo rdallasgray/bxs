@@ -30,6 +30,7 @@ Bxs.Factory.Box = {
 			"ignore": "[]"
 		};
 		
+		
 		$.each(defaultAttrs, function(attr,value) {
 			if ($(node).attr(attr) === "") {
 				$(node).attr(attr,value);
@@ -62,7 +63,6 @@ Bxs.Factory.Box = {
 		
 		if (!temp) {
 			Bxs.Boxes.add(box);
-			$(Bxs.eventsPublisher).trigger("newTable."+$(node).attr("name"));
 		}
 		
 		return box;
