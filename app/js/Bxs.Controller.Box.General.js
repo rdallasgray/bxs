@@ -88,9 +88,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			$(Bxs.eventsPublisher).one("dataLoaded."+self.view.attrs.id,function(e,data) {
 				self.view.render(data);
 			});
-			$(Bxs.eventsPublisher).one("viewReady."+self.view.attrs.id,function() {
-				self.view.setState("ready");
-			});
 
 			Bxs.Ajax.get(
 				url,
@@ -124,7 +121,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		
 			edit: function() {
 
-				if (this.view.getSelectedRow() === null) {
+				if (!this.view.editable()) {
 					return;
 				}
 			
@@ -145,7 +142,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		
 			confirm: function() {
 				
-				if (this.view.getSelectedRow() === null) {
+				if (!this.view.editable()) {
 					return;
 				}
 			
@@ -163,7 +160,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			
 			cancel: function() {
 			
-				if (this.view.getSelectedRow() === null) {
+				if (!this.view.editable()) {
 					return;
 				}
 				
@@ -210,12 +207,11 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		
 		update: function(data) {
 			
-			var url = this.parseUrl(true)+"/"+data.id,
+			var url = this.parseUrl(),
 				self = this;
-			
+
 			Bxs.Ajax.put(url,data,function(response) { self.handleData(response,"update"); });
 		},
-		
 		
 		handleData: function(response,action) {
 			
@@ -246,7 +242,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		
 		recoverError: function(response) {
 			Bxs.serverError(response);
-			self.view.setState(self.view.getPreviousState());
+			this.view.setState(this.view.getPreviousState());
 		},
 	
 		init: function() {

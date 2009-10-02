@@ -112,6 +112,14 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			Bxs.Ajax.post(url,data,function(response) { self.handleData(response,"insert"); });
 		},
 		
+		update: function(data) {
+			
+			var url = this.parseUrl(true)+"/"+data.id,
+				self = this;
+			
+			Bxs.Ajax.put(url,data,function(response) { self.handleData(response,"update"); });
+		},
+		
 		handlers: $.extend(true, {}, Bxs.Controller.Box.General.prototype.handlers, {
 			insert: function(self,response) {
 				self.handleAction("update",response);

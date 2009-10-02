@@ -151,7 +151,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			var hbox = document.createElement("hbox");
 			hbox.setAttribute("flex",0);
 			
-			this.editToolbar = new Bxs.Toolbar.Edit(self.attrs.id);
+			this.editToolbar = new Bxs.Toolbar.Collection(self.attrs.id);
 			
 			hbox.appendChild(this.editToolbar.getDomNode());
 			

@@ -43,7 +43,7 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		render: function(data) {
 
 			var self = this;
-			
+						
 			$(Bxs.eventsPublisher).trigger("contentChanged."+self.attrs.id);
 			self.clearContent();
 			self.buildContent(data);
@@ -55,6 +55,10 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		
 		buildContent: function(data) {
 
+		},
+		
+		editable: function() {
+			return true;
 		},
 	
 		editOpen: function() {

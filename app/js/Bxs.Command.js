@@ -17,11 +17,14 @@ Bxs.Command = {
 	_getContext: function() {
 		
 		var target = document.commandDispatcher.focusedElement,
-			t = null;
+			t = null,
+			boxTargets = ["box","collection"];
+
+		if (boxTargets.some(function(el) el === $(target).attr("bxs"))) {
+			return ["box",target];
+		};
 		
-		if ($(target).attr("bxs") === "box") return ["box",target];
-		
-		if ((t = $(target).parents("[bxs='box']").get(0))) {
+		if ((t = $(target).parents("[bxs='box']").get(0)) || (t = $(target).parents("[bxs='collection']").get(0))) {
 			return ["box",t];
 		}
 		
@@ -34,9 +37,9 @@ Bxs.Command = {
 	},
 	
 	dispatch: function(command) {
-		
+
 		var [context, target] = this._getContext();
-		
+
 		if (this._contexts[context][command] !== undefined) {
 			return this._contexts[context][command](target);
 		}
