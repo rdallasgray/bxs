@@ -77,7 +77,7 @@ jQuery.url = function()
      */		
 	var parseUri = function()
 	{
-		str = decodeURI( options.url );
+		var str = decodeURI( options.url );
 		
 		var m = options.parser[ options.strictMode ? "strict" : "loose" ].exec( str );
 		var uri = {};
@@ -153,7 +153,7 @@ jQuery.url = function()
      */
 	var getSegments = function()
 	{
-		var p = parsed.path;
+		var p = parsed.path, path;
 		segments = []; // clear out segments array
 		segments = parsed.path.length == 1 ? {} : ( p.charAt( p.length - 1 ) == "/" ? p.substring( 1, p.length - 1 ) : path = p.substring( 1 ) ).split("/");
 	};
