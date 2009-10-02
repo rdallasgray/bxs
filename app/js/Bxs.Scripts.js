@@ -15,62 +15,6 @@ You should have received a copy of the GNU General Public License along with Box
 Bxs.Scripts = {
 	
 	files: [
-	
-		"jquery.string.1.0",
-		
-		"Bxs.Mixin.Commandable",
-		"Bxs.Mixin.Stateable",
-		
-		"Bxs.Xpath",
-		"Bxs.Comparator",
-		
-		"Bxs.Url",
-		"Bxs.Parser",
-		"Bxs.Response",
-		"Bxs.Boxes",
-		"Bxs.Panel",
-		"Bxs.List",
-		"Bxs.String",
-
-		"Bxs.Factory.Box",
-		"Bxs.Factory.Filter",
-		"Bxs.Factory.List",
-		"Bxs.Factory.Widget",
-
-		"Bxs.Media.Abstract",
-		"Bxs.Media.Image",
-
-		"Bxs.View.Abstract",
-		
-		"Bxs.View.Box.Abstract",
-		"Bxs.View.Box.Textbox",
-		"Bxs.View.Collection.Abstract",
-		"Bxs.View.Collection.Listbox",
-		"Bxs.View.Collection.Listbox.Image",
-
-		"Bxs.View.Row.Abstract",
-		"Bxs.View.Row.Listitem",
-
-		"Bxs.Controller.Abstract",
-		"Bxs.Controller.Box.General",
-		"Bxs.Controller.Collection.General",
-		"Bxs.Controller.Collection.Media",
-
-		"Bxs.Widget.Abstract",
-//		"Bxs.Widget.Integer",
-		"Bxs.Widget.String",
-//		"Bxs.Widget.Date",
-//		"Bxs.Widget.Datetime",
-		"Bxs.Widget.Boolean",
-		"Bxs.Widget.List",
-		
-		"Bxs.Filter.Abstract",
-		"Bxs.Filter.Year",
-		
-		"Bxs.Toolbar.Abstract",
-		"Bxs.Toolbar.Edit",
-		
-		"Bxs.Cache"
 		
 	],
 	
