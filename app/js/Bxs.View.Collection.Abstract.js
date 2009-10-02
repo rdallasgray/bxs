@@ -35,8 +35,11 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 				
 		getSelectedId: function() {
-			this._selectedId = $(this.getSelectedRow()).children(this.columnType+"[name='id']").attr("value");
-			return this._selectedId;
+			var sel = $(this.getSelectedRow()).children(this.columnType+"[name='id']").attr("value");
+			if ((sel !== undefined) && (sel !== "")) {
+				this._selectedId = sel;
+			}
+			return sel;
 		},
 
 		addFilter: function(filter) {
@@ -49,12 +52,16 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		getFilterOptions: function() {
 			
 			var options = {};
-			console.debug(this.filters);
+
 			$(this.filters).each(function() {
 				options[this.name] = this.getValue();
 			});
 			
 			return options;
+		},
+		
+		clearContent: function() {
+			this.removeAllRows();
 		},
 		
 		buildContent: function(data) {
@@ -78,11 +85,11 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			self.domNode.appendChild(frag);
 			
 			if (self.associatedColumns.__count__ === 0) {
-				$(Bxs.eventsPublisher).trigger("viewReady."+self.attrs.id,self);
+				self.setState("ready");
 			}
 			else {
 				$(Bxs.eventsPublisher).one("associatedColumnsLabelled."+self.attrs.id, function() {
-					$(Bxs.eventsPublisher).trigger("viewReady."+self.attrs.id,self);
+					self.setState("ready");
 				});
 				self.labelAssociatedColumns();
 			}
@@ -205,6 +212,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		removeAllRows: function() {
 			$(this.domNode).children(this.rowType).remove();
 		},
+		
+		editable: function() {
+			return this.getSelectedRow() !== null;
+		},
 	
 		editOpen: function(options) {
 			
@@ -253,6 +264,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		
 		getEditedData: function() {
 			return this.editView.getData();
+		},
+		
+		updateEditView: function(data) {
+			this.editView.updateData(data);
 		},
 		
 		editClose: function(options) {
@@ -393,8 +408,8 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			$(self.domNode).bind("select", function() {
 				var s = self._selectedId,
 					g = self.getSelectedId();
-				console.debug(s,g);
-				if ((s !== g) && (g !== "")) {
+
+				if ((s !== g) && (g !== "") && (g !== undefined)) {
 					$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id);
 					if (self.getState() === "ready") self.setState("active");
 				}
