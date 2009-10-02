@@ -28,7 +28,10 @@ Bxs.Mixin.Stateable = {
 	},
 
 	setState: function(state) {
-		
+		if (this.attrs !== undefined) {
+			console.debug(this.attrs.id+" setting "+state);
+//			console.trace();
+		}
 		if (this.stack === undefined) {
 			this.stack = [];
 		}
