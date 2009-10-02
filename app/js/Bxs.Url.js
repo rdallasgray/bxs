@@ -8,12 +8,18 @@ Bxs.Url = {
 		return $.url.setUrl(url).attr("query") !== null;
 	},
 	
-	root: function() {
-		return $.url.setUrl().attr("protocol")+"://"+$.url.attr("host");
+	root: function(path) {
+		var path = path || "";
+		return $.url.setUrl().attr("protocol")+"://"+$.url.attr("host")+path;
+	},
+	
+	app: function(path) {
+		var path = path || "";
+		return Bxs.Url.root("/Bxs/app"+path);
 	},
 	
 	auth: function() {
-		return Bxs.Url.root()+"/admin/auth/login";
+		return Bxs.Url.root("/admin/auth/login");
 	},
 	
 	metadata: function() {
@@ -21,13 +27,12 @@ Bxs.Url = {
 	},
 	
 	construct: function(path,options) {
-		var options = options || { includeFormat: true };
 		
-		path = path.replace(/^\//,"");
-		path = path.replace(/^:[a-zA-Z]*/,function(str) { return Bxs.Url[str.substr(1)](); });
+		var options = options || { includeFormat: true },
+			path = path.replace(/^\//,"").replace(/^:[a-zA-Z]*/,function(str) { return Bxs.Url[str.substr(1)](); });
 				
 		if (!Bxs.Url.hasProtocol(path)) {
-			path = Bxs.Url.root()+"/"+path;
+			path = Bxs.Url.root("/"+path);
 		}
 		if (Bxs.Url.hasQueryString(path) && options.includeFormat === true) {
 			path += "&format=json";
