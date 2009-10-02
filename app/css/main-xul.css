@@ -12,32 +12,16 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-.test {
-	-moz-appearance: none;
-	background-color: red;
-}
-
-hbox,vbox,tabbox,tabpanels,tabpanel,listbox,deck {
+hbox, vbox, tabbox, tabpanels, tabpanel, listbox, deck, iframe {
 	-moz-box-flex: 1;
-}
-
-.report {
-	background-color: white;
-	-moz-box-flex: 1;
-	-moz-box-orient: vertical;
-	border: solid rgb(120,120,120) 1px;
-	margin: 2px;
-	padding: 4px;
-	overflow: auto;
-	height: 200px;
 }
 
 .editBar {
 	-moz-appearance: none;
-	min-height: 0 !important;
-	border: 0;
-	border-left: solid rgb(180,180,180) 1px;
-	margin: -8px 0 0 8px;
+	min-height: 0 !important; /* prevents icons being stretched */
+	border: solid rgb(180,180,180) 1px;
+	border-right-width: 0;
+	border-top-width: 0;
 }
 
 .editBar[targetNode="temp-box"] {
@@ -50,7 +34,6 @@ hbox,vbox,tabbox,tabpanels,tabpanel,listbox,deck {
 	-moz-box-pack: center;
 	-moz-box-align: center;
 	border-right: solid rgb(180,180,180) 1px;
-	border-bottom: solid rgb(160,160,160) 1px;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
@@ -99,11 +82,22 @@ hbox,vbox,tabbox,tabpanels,tabpanel,listbox,deck {
 
 .editBar toolbarbutton[label="Tools"] {
 	border-right: solid rgb(160,160,160) 1px;
-	list-style-image: url(/Bxs/app/img/edit_button_extra.png);
+	list-style-image: url(/Bxs/app/img/edit_button_tools.png);
 }
 
 .hidden {
 	visibility: collapse;
+}
+
+iframe {
+	background-color: rgb(250,250,250);
+	border: solid rgb(195,195,195) 1px;
+	margin-right: 1px;
+	margin-bottom: 1px;
+}
+
+iframe.editing {
+	border-width: 0 0 1px 0;
 }
 
 listcell[media="image"] {
@@ -129,10 +123,6 @@ listcell[media="image"].listcell-label {
 	background-image: url(/Bxs/app/img/imageNotFound.png);
 }
 
-html,body {
-	background-color:white;
-}
-
 #loading {
 	-moz-box-align: center;
 	-moz-box-pack: center;
@@ -143,12 +133,13 @@ html,body {
 	margin-left: 3px;
 }
 
-#loadingScript,#dbStatus,#getConfig,#buildingTables,#tableCounter,#failure {
-	visibility: hidden;
-}
-
 #tempBox {
 	visibility: collapse;
+}
+
+listbox {
+	margin: 0;
+	border-bottom: solid rgb(180,180,180) 1px;
 }
 
 listboxbody {
@@ -173,13 +164,12 @@ listbox[disabled="true"] {
 	color: rgb(120,120,120);
 }
 
-listbox {
-	margin: 8px;
-	border-bottom: solid rgb(180,180,180) 1px;
+*[bxs="box"],*[bxs="collection"] {
+	margin-top: 8px;
 }
 
-listbox:focus {
-	-moz-box-shadow: rgb(70,100,140) 0 0 8px;
+*[bxs="box"]:focus, *[bxs="collection"]:focus {
+	-moz-box-shadow: rgba(70,100,140,0.8) 0 0 8px;
 }
 
 listitem {
@@ -248,43 +238,13 @@ panel listbox {
 	margin: 0;
 }
 
-.small, caption.small label {
-	font-size: 10px;
-}
-
-.strong {
-	font-weight: bold;
-}
-
 listcol {
 	min-width: 40px;
 	-moz-box-flex: 1;
 }
 
-listcol[type="year"] {
-	min-width: 50px;
-}
-
-listcol[type="date"] {
-	min-width: 85px;
-}
-
-listcol[type="image"] {
-	min-width: 90px;
-}
-
-listcol[type="datetime"] {
-	min-width: 135px;
-}
-
 listcell {
-	-moz-box-flex: 1;
-/*	display: -moz-stack;*/
-	padding: 0;
-	margin: 0;
 	border-right: 1px solid rgb(230,231,236);
-	background-color: inherit;
-	color: inherit;
 }
 
 listcell[hidden="true"] {
@@ -292,13 +252,7 @@ listcell[hidden="true"] {
 }
 
 listcell label {
-	-moz-appearance: none;
 	padding: 3px 0px 1px 7px;
-	margin: 0px;
-}
-
-textbox {
-	-moz-user-focus: normal;
 }
 
 listcell textbox {
@@ -307,39 +261,13 @@ listcell textbox {
 	-moz-box-flex: 1;
 	background-color: inherit;
 	color: inherit;
-	margin: 0;
 	border: 0;
 	padding: 3px 4px 1px 7px;
-}
-/*
-listcell textbox .textbox-input-box {
-	-moz-appearance: none;
-	background-color: rgb(255,255,240);
-	border: 0;
-	padding: 0;
 	margin: 0;
-}
-*/
-listcell textbox .textbox-input {
-	-moz-appearance: none;
-	border: 0;
-	padding: 0;
-	margin: 0;
-}
-
-listcell textbox .popup-internal-box {
-	-moz-appearance: none;
-	display: none;
 }
 
 .newItem {
 	font-weight: bold;
-}
-
-menulist {
-	border: 0;
-	padding: 0;
-	margin: 0;
 }
 
 .menu-iconic-text, .menu-text {
@@ -353,12 +281,6 @@ menulist * {
 listcell menulist {
 	border: 0;
 	padding: 0;
-	margin: 0 0 1px 0;
-}
-
-listcell menulist menuitem {
-	border: 0;
-	padding: 0 12px 0 0;
 	margin: 0;
 }
 
@@ -367,35 +289,8 @@ listcell .menulist-label {
 	margin: 0;
 }
 
-listcell .menulist-label-box {
-	padding: 0;
-	margin: 0;
-/*	background-color: rgb(255,255,240);*/
-	display: -moz-box;
-	-moz-box-align: start;
-	-moz-box-direction: reverse !important;
-}
-
-listcell .menulist-dropmarker {
-	border: 0;
-}
-
-.listcell-iconic {
-	display: -moz-box;
-	-moz-box-align: start;
-	-moz-box-direction: reverse !important;
-}
-
 .caption-text {
 	font-size: 11px;
-}
-
-listcols {
-	background-color: rgb(240,240,240);
-}
-
-listhead {
-	background-color: rgb(200,200,200);
 }
 
 listbox splitter {
@@ -410,14 +305,9 @@ splitter + listcol {
 	margin-left: -10px;
 }
 
-input[type="file"] {
-	margin-right: 4px;
-}
-
-.uploadhbox {
-	-moz-box-orient: horizontal;
-	-moz-box-pack: start;
-	-moz-box-align: start;
+tabbox {
+	margin: 4px 0 0 0;
+	padding: 0;
 }
 
 tabpanel {
@@ -426,17 +316,11 @@ tabpanel {
 
 tabpanels {
 	-moz-appearance: none;
-	padding: 14px 0 0 0;
+	padding: 14px 8px 0 8px;
 	border: 0;
-/*	background-color: rgb(220,220,220);*/
 	border-top: solid rgb(160,160,160) 1px;
 	background-image: url(/Bxs/app/img/tabbox_grad.png);
 	background-repeat: repeat-x;
-}
-
-tabbox {
-	margin: 4px 0 0 0;
-	padding: 0;
 }
 
 tab {
@@ -453,28 +337,11 @@ checkbox {
 	margin: 1px;
 }
 
-datepicker {
-	-moz-appearance: none;
-	border: 0;
-	margin: 0;
-	padding: 0;
-}
-
-input.datetimepicker-input {
-	-moz-appearance: none;
-	border: 0;
-	margin: 0;
-	padding: 0;
-}
-
 window {
 	padding: 8px;
 }
 
-.uploadForm {
-	margin: 4px;
-}
-
+/* .controlBox is used to contain filter menulists etc. */
 .controlBox {
 	-moz-box-flex: 0;
 	-moz-box-align: center;
@@ -487,8 +354,4 @@ window {
 
 .controlBox caption {
 	margin: 8px 3px 8px 0;
-}
-
-#userBox {
-	margin-top: 10px;
 }
