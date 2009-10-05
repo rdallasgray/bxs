@@ -15,26 +15,71 @@ You should have received a copy of the GNU General Public License along with Box
 Bxs.Scripts = {
 	
 	files: [
+		"Bxs.Editor.js",
+		"Bxs.Parser.js",
+		"Bxs.Response.js",
 		
+		"Bxs.Mixin.Commandable.js",
+		"Bxs.Mixin.Stateable.js",
+		
+		"Bxs.Xpath.js",
+		"Bxs.Comparator.js",
+		
+		"Bxs.Boxes.js",
+		"Bxs.Panel.js",
+		"Bxs.List.js",
+		"Bxs.String.js",
+		
+		"Bxs.Factory.Box.js",
+		"Bxs.Factory.Filter.js",
+		"Bxs.Factory.List.js",
+		"Bxs.Factory.Widget.js",
+		
+		"Bxs.Media.Abstract.js",
+		"Bxs.Media.Image.js",
+		
+		"Bxs.View.Abstract.js",
+		"Bxs.View.Box.Abstract.js",
+		"Bxs.View.Box.Textbox.js",
+		"Bxs.View.Collection.Abstract.js",
+		"Bxs.View.Collection.Listbox.js",
+		"Bxs.View.Collection.Listbox.Image.js",
+		
+		"Bxs.View.Row.Abstract.js",
+		"Bxs.View.Row.Listitem.js",
+		
+		"Bxs.Controller.Abstract.js",
+		"Bxs.Controller.Box.General.js",
+		"Bxs.Controller.Collection.General.js",
+		"Bxs.Controller.Collection.Media.js",
+		
+		"Bxs.Widget.Abstract.js",
+		"Bxs.Widget.String.js",
+		"Bxs.Widget.Boolean.js",
+		"Bxs.Widget.List.js",
+		
+		"Bxs.Filter.Abstract.js",
+		"Bxs.Filter.Year.js",
+		
+		"Bxs.Toolbar.Abstract.js",
+		"Bxs.Toolbar.Box.js",
+		"Bxs.Toolbar.Collection.js",
+		
+		"Bxs.Cache.js",
 	],
 	
-	//why is $.getScript not working? OK --it works with $.get and eval() ...
-	// oh, it's because of the HEAD thing. Not meant for XUL.
 	load: function() {
 		
-		// DEBUG
-		return;
+		Bxs.Scripts.count = Bxs.Scripts.files.length;
 		
 		$.ajaxSetup({async: false});
 		
-		var	fileTotal = Bxs.Scripts.files.length,
-		    fileCount = fileTotal,
-			progress = 0,
-			progressBroadcaster = $('#scriptsProgressBroadcaster');
+		var	filesLoaded = 0;
 		
 		Bxs.Scripts.files.forEach(function(file) {
-			$.get([Bxs.Url.root(),"/Bxs/app/js/",file,".js"].join(''),function(data) {
+			$.get(Bxs.Url.app("/js/"+file),function(data) {
 				try {
+					data = data+"\n\n//@ sourceURL="+file;
 					eval(data);
 				}
 				catch (e) {
@@ -42,10 +87,8 @@ Bxs.Scripts = {
 				}
 			});
 			
-			fileCount--;
-			progress = Math.round((100/fileTotal) * (fileTotal - fileCount));
-			
-			progressBroadcaster.attr("value",progress);
+			filesLoaded++;
+			$(Bxs.eventsPublisher).trigger("scriptLoaded",[filesLoaded]);
 		});
 		
 		$.ajaxSetup({async: true});
