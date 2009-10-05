@@ -19,18 +19,6 @@ Bxs.Boxes = {
 		var match = Bxs.Boxes.collection.filter(function(el) el.view.attrs.id === id);
 		return match.length > 0 ? match[0] : false;
 	},
-/*	
-	getByUrl: function(url) {
-		
-		var match = Bxs.Boxes.collection.filter(function(el) $(el.view.domNode).attr("url") === url);
-		return match.length > 0 ? match[0] : false;
-	},
-*/	
-	getByName: function(name) {
-		
-		var match = Bxs.Boxes.collection.filter(function(el) el.view.attrs.name === name);
-		return match.length > 0 ? match : false;
-	},
 	
 	add: function(box) {
 		
@@ -50,6 +38,12 @@ Bxs.Boxes = {
 	
 	enable: function() {
 		Bxs.Boxes.collection.forEach(function(el) el.view.enable());
+	},
+	
+	reset: function() {
+		$.each(Bxs.Boxes.collection, function() {
+			this.view.clearContent();
+		});
 	},
 	
 	collection: []
