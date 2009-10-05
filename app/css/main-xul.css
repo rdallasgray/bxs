@@ -355,3 +355,7 @@ window {
 .controlBox caption {
 	margin: 8px 3px 8px 0;
 }
+
+#userBox {
+	margin-top: 8px;
+}
