@@ -98,6 +98,10 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			);
 		},
 		
+		refresh: function() {
+			this.view.activate();
+		},
+		
 		parseUrl: function(shortUrl) {
 			if (shortUrl === true) {
 				return "/"+this.view.attrs.rootUrl.split("/").reverse().shift();
