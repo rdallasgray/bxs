@@ -19,7 +19,7 @@ Bxs.String = {
 		
 		default_pattern = default_pattern || "(no %match)";
 		
-		var string = pattern.replace(/%\w*/g,function(match) {
+		var string = pattern.replace(/:\w*/g,function(match) {
 			var property = match.substr(1),
 				stringPart = object[property];
 				
