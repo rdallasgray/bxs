@@ -14,18 +14,32 @@ You should have received a copy of the GNU General Public License along with Box
 
 Bxs.Ajax = {
 	
-	auth: function(username,password) {
+	login: function(username,password) {
 		var req = {
 			service: "authenticatedRequest",
 			options: {
 				method: "GET",
-				url: Bxs.Url.construct(":auth"),
+				url: Bxs.Url.construct(":login"),
 				username: username,
 				password: password
 			},
 			callback: function() {
 				Bxs.login.handleResponse(req.response);
 			}
+		};
+		Bxs.service.get(req);
+	},
+	
+	logout: function(callback) {
+		var req = {
+			service: "authenticatedRequest",
+			options: {
+				method: "GET",
+				url: Bxs.Url.construct(":logout"),
+				username: Bxs.auth.username,
+				password: Bxs.auth.password
+			},
+			callback: callback
 		};
 		Bxs.service.get(req);
 	},
