@@ -129,7 +129,7 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		},
 		
 		boot: function() {
-			
+			$(Bxs.eventsPublisher).trigger("boxBooted."+this.attrs.id);
 		},
 		
 		activate: function() {
@@ -143,6 +143,7 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 				var state = (self.attrs.observing !== undefined) ? "inactive" : "ready";
 				self.setState(state);
 			}
-		}
+		},
+		
 	}
 );

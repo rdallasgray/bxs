@@ -125,21 +125,15 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 			hbox.appendChild(this.editToolbar.getDomNode());
 			
 			$(this.domNode).after(hbox);
+						
+			this.forwardState(this.editToolbar);
+			
+			Bxs.View.Box.Abstract.prototype.boot.apply(this);
 		},
 		
 		activate: function() {
 			
-			var self = this;
-						
-			this.forwardState(this.editToolbar);
-			
-			if (self.attrs.observing === undefined && self.attrs.suppressContentLoading === undefined) {
-				self.requestData();
-			}
-			else {
-				var state = (self.attrs.observing !== undefined) ? "inactive" : "ready";
-				self.setState(state);
-			}
+			Bxs.View.Box.Abstract.prototype.activate.apply(this);
 		}
 
 	}

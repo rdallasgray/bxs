@@ -158,6 +158,8 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			hbox.appendChild(this.editToolbar.getDomNode());
 			
 			$(this.domNode).after(hbox);
+			
+			Bxs.View.Collection.Abstract.prototype.boot.apply(this);
 		}
 	}
 );

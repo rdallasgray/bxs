@@ -89,7 +89,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 			else {
 				$(Bxs.eventsPublisher).one("associatedColumnsLabelled."+self.attrs.id, function() {
-					console.debug("setting ready after labelling associated columns -- LOOP?");
 					self.setState("ready");
 				});
 				self.labelAssociatedColumns();
@@ -400,7 +399,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			this.sortedBy = { field: field, direction: direction };
 		},
 		
-		activate: function() {
+		boot: function() {
 			
 			var self = this;
 						
@@ -415,14 +414,8 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 					if (self.getState() === "ready") self.setState("active");
 				}
 			});
-
-			if (self.attrs.observing === undefined && self.attrs.suppressContentLoading === undefined) {
-				self.requestData();
-			}
-			else {
-				var state = (self.attrs.observing !== undefined) ? "inactive" : "ready";
-				self.setState(state);
-			}
+			
+			Bxs.View.Box.Abstract.prototype.boot.apply(this);
 		}
 	}
 );
