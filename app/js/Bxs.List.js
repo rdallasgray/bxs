@@ -75,34 +75,9 @@ Bxs.List.prototype = {
 
 	},
 	
-	handleData: function(dataObject) {
-
-		if (dataObject.table !== this.metadata.name) {
-			return;
-		}
-	
-		this[dataObject.action](dataObject.data);
-	},
-	
 	getDomNode: function() {
 		
 		return this.domNode.cloneNode(true);
-	},
-	
-	insert: function(data) {
-		
-		var row = this.createNode(data);
-		
-		$(Bxs.eventsPublisher).trigger("listRowAdded."+this.fieldName,[row]);
-		// after this will have to re-sort? or just reload?++
-	},
-	
-	update: function(data) {
-		
-	},
-	
-	delete: function(data) {
-		
 	}
 	
 }
