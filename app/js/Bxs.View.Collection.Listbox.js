@@ -65,8 +65,10 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 		
 		onVisibility: function(callback) {
 			if (this.parentTab == undefined) {
-				this.parentTab = $(this.domNode).parents("tabpanels").prev("tabs").children("[linkedpanel='"+this.attrs.id+"_panel']").get(0);
+				this.parentTab = $(this.domNode).parents("tabpanels").prev("tabs")
+					.children("[linkedpanel='"+this.attrs.id+"_panel']").get(0);
 			}
+			$(this.parentTab).unbind("command");
 			$(this.parentTab).one("command",callback);
 		},
 

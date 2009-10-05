@@ -89,6 +89,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 			else {
 				$(Bxs.eventsPublisher).one("associatedColumnsLabelled."+self.attrs.id, function() {
+					console.debug("setting ready after labelling associated columns -- LOOP?");
 					self.setState("ready");
 				});
 				self.labelAssociatedColumns();
