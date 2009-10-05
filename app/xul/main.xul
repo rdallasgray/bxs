@@ -49,17 +49,17 @@ You should have received a copy of the GNU General Public License along with Box
 								<columns><column flex="1"/><column flex="1"/></columns>
 								<rows>
 									<row id="scriptsStatus">
-										<caption label="Loading JavaScript ... "/>
-										<progressmeter mode="determined" value="0" id="scriptsProgress" observes="scriptsProgressBroadcaster"/>
+										<caption label="Loading Scripts ... "/>
+										<progressmeter mode="determined" value="0" id="scriptsProgress"/>
 									</row>
 									<row id="boxesStatus">
 										<caption label="Building Boxes ... "/>
-										<progressmeter mode="determined" value="0" id="boxesProgress" observes="boxesProgressBroadcaster"/>
+										<progressmeter mode="determined" value="0" id="boxesProgress"/>
 									</row>
 								</rows>
 							</grid>
-							<description id="failure">
-								To try again, refresh this page, or contact your system administrator.
+							<description id="failure" hidden="true">
+								Failed starting Boxes. To try again, refresh this page, or contact your system administrator.
 							</description>
 						</vbox>
 					</vbox>
@@ -91,7 +91,6 @@ You should have received a copy of the GNU General Public License along with Box
 			
 			<broadcasterset id="mainBroadcasterSet">
 				<broadcaster id="scriptsProgressBroadcaster"/>
-				<broadcaster id="boxesProgressBroadcaster"/>
 				<broadcaster id="eventsPublisher"/>
 			</broadcasterset>
 
@@ -101,7 +100,7 @@ You should have received a copy of the GNU General Public License along with Box
 			</tabbox>
 
 			<hbox align="center" flex="0" id="userBox">
-				<button id="logOutButton" label="Log Out"/>
+				<button id="logoutButton" label="Log Out"/>
 				<caption id="userMessage"/>
 			</hbox>
 			
