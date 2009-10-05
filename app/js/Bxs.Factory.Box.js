@@ -70,10 +70,29 @@ Bxs.Factory.Box = {
 	},
 	
 	init: function() {
-		 
-		$("[bxs]").each(function(node) {
-			if (this.getAttribute("bxs") === "box" || this.getAttribute("bxs") === "collection") {
-				Bxs.Factory.Box.build(this);
+		
+		var bxs = $("[bxs='box'],[bxs='collection']");
+		
+		Bxs.Boxes.count = bxs.length;
+		
+		var boxesBuilt = 0;
+				
+		bxs.each(function(node) {
+			
+			var node = this, box;
+			
+			if (box = Bxs.Boxes.getById(node.id)) {
+				box.controller.refresh();
+				boxesBuilt++;
+				$(Bxs.eventsPublisher).trigger("boxBuilt",[boxesBuilt]);
+				return true;
+			}
+			else {
+				$(Bxs.eventsPublisher).one("boxBooted."+node.id, function() {
+					boxesBuilt++;
+					$(Bxs.eventsPublisher).trigger("boxBuilt",[boxesBuilt]);
+				});
+				Bxs.Factory.Box.build(node);
 			}
 		});
 	}
