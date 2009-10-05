@@ -18,8 +18,12 @@ Bxs.Url = {
 		return Bxs.Url.root("/Bxs/app"+path);
 	},
 	
-	auth: function() {
+	login: function() {
 		return Bxs.Url.root("/admin/auth/login");
+	},
+	
+	logout: function() {
+		return Bxs.Url.root("/admin/auth/logout");
 	},
 	
 	metadata: function() {
