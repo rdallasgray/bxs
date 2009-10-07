@@ -168,6 +168,10 @@ listbox[disabled="true"] {
 	margin-top: 8px;
 }
 
+panel *[bxs="box"], panel *[bxs="collection"] {
+	margin: 0;
+}
+
 *[bxs="box"]:focus, *[bxs="collection"]:focus {
 	-moz-box-shadow: rgba(70,100,140,0.8) 0 0 8px;
 }
@@ -234,10 +238,6 @@ panel {
 	-moz-appearance: none;
 }
 
-panel listbox {
-	margin: 0;
-}
-
 listcol {
 	min-width: 40px;
 	-moz-box-flex: 1;
@@ -266,7 +266,8 @@ listcell textbox {
 	margin: 0;
 }
 
-.newItem {
+.strong {
+	/* used in menulists for 'New' item */
 	font-weight: bold;
 }
 
