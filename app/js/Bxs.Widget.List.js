@@ -65,7 +65,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			Bxs.Ajax.getMetadata(this.fieldName, function(metadata) {
 				self.url = metadata.url;
 				
-				Bxs.Ajax.getSchema("/"+metadata.url, function(columnSchema) {
+				Bxs.Ajax.getSchema(metadata.url, function(columnSchema) {
 					var parentSchema = self.parentView.controller.schema,
 						observedId = self.parentView.attrs.observing,
 						associateKeys = [],
@@ -98,7 +98,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 						}
 						self.setNewRowDefault(sharedKey,selectedId);
 						Bxs.Ajax.getMetadata(sharedKey.substr(0,sharedKey.search(/_id$/)), function(keyMetadata) {
-							self.url = keyMetadata.name+"/"+selectedId+"/"+self.url;
+							self.url = keyMetadata.name+"/"+selectedId+"/"+metadata.name;
 							requestList();
 						});
 					}
@@ -141,9 +141,9 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				
 			self.newEntry.boxNode.width = document.documentElement.boxObject.width*0.75;
 
-			$(Bxs.eventsPublisher).one("ready.temp-box",function(e,controller) {
+			$(Bxs.eventsPublisher).one("boxBooted.temp-box",function(e,view) {
 				$(self.newEntry.panel.domNode).one("popupshown",function() {
-					controller.doCommand("newRow");
+					view.controller.doCommand("newRow");
 				});
 				self.newEntry.panel.open();
 			});
@@ -175,7 +175,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				
 				$(self.newEntry.boxNode)
 					.attr({ 
-						view: "box", 
+						bxs: "collection", 
 						id: "temp-box", 
 						name:  boxName, 
 						rootUrl: "/"+self.url, 

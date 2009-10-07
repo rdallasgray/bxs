@@ -34,7 +34,7 @@ Bxs.Filter.Year.prototype = $.extend(true,{},
 			this.domNode.appendChild(this.menupopup);
 			
 			var allItem = document.createElement('menuitem');
-			$(allItem).attr({ label: "All", value: "null", class: "newItem" });
+			$(allItem).attr({ label: "All", value: "null", class: "strong" });
 			this.menupopup.appendChild(allItem);
 			
 			var sep = document.createElement("menuseparator");

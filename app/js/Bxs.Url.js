@@ -19,15 +19,15 @@ Bxs.Url = {
 	},
 	
 	login: function() {
-		return Bxs.Url.root("/admin/auth/login");
+		return Bxs.Url.root(Bxs.Conf.auth.loginUrl);
 	},
 	
 	logout: function() {
-		return Bxs.Url.root("/admin/auth/logout");
+		return Bxs.Url.root(Bxs.Conf.auth.logoutUrl);
 	},
 	
 	metadata: function() {
-		return Bxs.Url.root()+"/admin/metadata";
+		return Bxs.Url.root()+Bxs.Conf.metadataUrl;
 	},
 	
 	construct: function(path,options) {
@@ -37,13 +37,6 @@ Bxs.Url = {
 				
 		if (!Bxs.Url.hasProtocol(path)) {
 			path = Bxs.Url.root("/"+path);
-		}
-		if (Bxs.Url.hasQueryString(path) && options.includeFormat === true) {
-			path += "&format=json";
-		}
-		// TODO use http accept instead of format=json
-		else if (options.includeFormat === true) {
-			path += "?format=json";
 		}
 		return path;
 	}

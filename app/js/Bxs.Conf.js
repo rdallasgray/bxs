@@ -17,6 +17,15 @@ Bxs.Conf = {
 		basic: Bxs.Url.app("/css/basic-html.css"),
 		main: Bxs.Url.root("/css/main.css"),
 		default: Bxs.Url.app("/css/basic-html.css"),
-	}
+	},
+	
+	activityTimeout: 1800000,
+	
+	auth: {
+		loginUrl: "/admin/auth/login",
+		logoutUrl: "/admin/auth/logout"
+	},
+	
+	metadataUrl: "/admin/metadata",
 	
 };

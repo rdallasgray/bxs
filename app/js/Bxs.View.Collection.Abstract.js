@@ -54,7 +54,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			var options = {};
 
 			$(this.filters).each(function() {
-				options[this.name] = this.getValue();
+				var value = this.getValue();
+				if (value !== "null") {
+					options[this.name] = value;
+				}
 			});
 			
 			return options;

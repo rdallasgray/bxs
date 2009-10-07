@@ -129,7 +129,8 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		},
 		
 		boot: function() {
-			$(Bxs.eventsPublisher).trigger("boxBooted."+this.attrs.id);
+			$(Bxs.eventsPublisher).trigger("boxBooted."+this.attrs.id,[this]);
+			// need to pass [this] so can get view when creating box on the fly, e.g. for adding new item in menulist
 		},
 		
 		activate: function() {

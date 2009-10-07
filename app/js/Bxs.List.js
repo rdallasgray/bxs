@@ -54,11 +54,11 @@ Bxs.List.prototype = {
 			
 			});
 		});
-		
+
 		$(Bxs.eventsPublisher).bind("dataChanged",function(e,dataObject) {
 			self.handleData(dataObject);
 		});
-		
+
 	},
 	
 	createNode: function(data) {
@@ -72,12 +72,27 @@ Bxs.List.prototype = {
 		this.domNode.appendChild(menuitem);
 		
 		return menuitem;
+	},
 
+	handleData: function(dataObject) {
+
+		if (dataObject.name !== this.metadata.name) {
+			return;
+		}
+	
+		this[dataObject.action](dataObject.data);
 	},
 	
+	insert: function(data) {
+		
+		var row = this.createNode(data);
+		
+		$(Bxs.eventsPublisher).trigger("listRowAdded."+this.fieldName,[row]);
+		// only using this to add an item from a panel (New ...)
+	},
+
 	getDomNode: function() {
 		
 		return this.domNode.cloneNode(true);
 	}
-	
 }

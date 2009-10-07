@@ -18,8 +18,11 @@ Bxs.Ajax = {
 		var req = {
 			service: "authenticatedRequest",
 			options: {
-				method: "GET",
+				method: "POST",
 				url: Bxs.Url.construct(":login"),
+				headers: {
+					Accept: "application/json, text/javascript, */*"
+				},
 				username: username,
 				password: password
 			},
@@ -34,8 +37,11 @@ Bxs.Ajax = {
 		var req = {
 			service: "authenticatedRequest",
 			options: {
-				method: "GET",
+				method: "POST",
 				url: Bxs.Url.construct(":logout"),
+				headers: {
+					Accept: "application/json, text/javascript, */*"
+				},
 				username: Bxs.auth.username,
 				password: Bxs.auth.password
 			},
@@ -124,17 +130,22 @@ Bxs.Ajax = {
 	_authenticatedRequest: function(url,method,data,callback) {
 		
 		data = (data !== null) ? Bxs.Json.stringify(data) : null;
+		
 		var req = {
 			service: "authenticatedRequest",
 			options: {
 				method: method,
 				url: url,
+				headers: {
+					Accept: "application/json, text/javascript, */*"
+				},
 				username: Bxs.auth.username,
 				password: Bxs.auth.password
 			},
 			data: data,
 			callback: callback
 		};
+		
 		Bxs.service.get(req);
 	}
 	

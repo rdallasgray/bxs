@@ -19,7 +19,7 @@ Bxs = {
 		root: "http://"+window.location.hostname
 	},
 	
-	reqBxtVersion: "1.0.1.8",
+	reqBxtVersion: "1.0.4.0",
 	
 	mainDeck: $("#bxs-deck-main"),
 
@@ -60,6 +60,7 @@ Bxs = {
 		},
 		states: {
 			start: function() {
+				delete Bxs.auth;
 				$(window).unbind("keydown",Bxs.activity);
 				$(window).unbind("click",Bxs.activity);
 				$(window).unbind("unload",Bxs.logoutOnUnload);
@@ -73,7 +74,6 @@ Bxs = {
 				Bxs.login.controls.username.val("");
 				Bxs.login.controls.password.val("");
 				Bxs.login.controls.status.get(0).label = "";
-				delete Bxs.auth;
 				Bxs.login.controls.username.get(0).focus();
 			},
 			submit: function() {
@@ -92,19 +92,27 @@ Bxs = {
 				Bxs.boot.start();
 			}
 		},
-		reset: function() {
-			Bxs.login.setState("start");
-		},
 		start: function() {
-			Bxs.login.reset();
+			Bxs.login.setState("start");
 		},
 		submit: function() {
 			Bxs.login.setState("submit");
 			var request = Bxs.Ajax.login(Bxs.login.controls.username.val(),Bxs.login.controls.password.val());
 		},
-		submitOnEnter: function(e) {
-			if (e.keyCode === KeyEvent.DOM_VK_RETURN) {
+		passwordKeyPress: function(e) {
+			
+			switch (e.keyCode) {
+				
+				case KeyEvent.DOM_VK_RETURN:
 				Bxs.login.submit();
+				break;
+				
+				// fix tab behavour
+				case KeyEvent.DOM_VK_TAB:
+				if (e.shiftKey) {
+					Bxs.login.controls.username.get(0).focus();
+				}
+				break;
 			}
 		},
 		handleResponse: function(response) {
@@ -126,6 +134,34 @@ Bxs = {
 			Bxs.login.setState("failure");
 		}
 
+	},
+		
+	logout: function() {
+		Bxs.Ajax.logout(function() {
+			var req = {
+				service: "clearHttpAuth",
+				callback: function() {
+					Bxs.Boxes.reset();
+					Bxs.login.setState("start");
+				}
+			};
+			Bxs.service.get(req);
+		});
+	},
+	
+	activity: function() {
+		clearTimeout(Bxs.activityTimeout);
+		Bxs.activityTimeout = setTimeout(Bxs.noActivity,Bxs.Conf.activityTimeout);
+	},
+	
+	noActivity: function() {
+		Bxs.login.controls.status.get(0).label = "Session timed out";
+		Bxs.logout();
+	},
+	
+	logoutOnUnload: function() {
+		Bxs.logout();
+		alert('Logging out ...');
 	},
 	
 	boot: {
@@ -162,8 +198,11 @@ Bxs = {
 				Bxs.boot.controls.boxesStatus.get(0).show();
 			},
 			complete: function() {
+				$(window).bind("keydown",Bxs.activity);
+				$(window).bind("click",Bxs.activity);
+				$(window).bind("unload",Bxs.logoutOnUnload);
 				Bxs.logoutButton.bind("command",Bxs.logout);
-				Bxs.activityTimeout = setTimeout(Bxs.noActivity,1800000);
+				Bxs.activityTimeout = setTimeout(Bxs.noActivity,Bxs.Conf.activityTimeout);
 				Bxs.mainDeck.get(0).selectedIndex = 1;
 			}
 		},
@@ -188,39 +227,6 @@ Bxs = {
 		alert("Error "+response.status+": "+response.text);
 	},
 	
-	init: function() {
-		
-		document.title = "Boxes: "+window.location.hostname;
-		
-		if (document.documentElement.getAttribute("bxt-version") === "") {
-			Bxs.promptForBxtDownload();
-		}
-		else if (document.documentElement.getAttribute("bxt-version").toString().replace(".","") < 
-			Bxs.reqBxtVersion.replace(".","")) {
-			Bxs.promptForBxtUpdate();	
-		}
-		else {
-			Bxs.login.controls.submit.bind("command",Bxs.login.submit);
-			Bxs.login.controls.password.bind("keypress",Bxs.login.submitOnEnter);
-			Bxs.eventsPublisher = $("#eventsPublisher").get(0);
-			Bxs.login.start();
-		}
-	},
-	
-	logout: function() {
-		Bxs.Ajax.logout(function() {
-			var req = {
-				service: "clearHttpAuth",
-				callback: function() {
-					Bxs.Boxes.reset();
-					delete Bxs.auth;
-					Bxs.login.setState("start");
-				}
-			};
-			Bxs.service.get(req);
-		});
-	},
-	
 	promptForBxtDownload: function() {
 		var ok = confirm("Boxes needs to download an extension called Bxtension to help with some of its functions. Is this OK with you?");
 		if (ok) {
@@ -242,20 +248,24 @@ Bxs = {
 		}
 	},
 	
-	activity: function() {
-		clearTimeout(Bxs.activityTimeout);
-		Bxs.activityTimeout = setTimeout(Bxs.noActivity,1800000);
-	},
-	
-	noActivity: function() {
-		Bxs.logout();
-	},
-	
-	logoutOnUnload: function() {
-		Bxs.logout();
-		alert('Logging out ...');
+	init: function() {
+		
+		document.title = "Boxes: "+window.location.hostname;
+		
+		if (document.documentElement.getAttribute("bxt-version") === "") {
+			Bxs.promptForBxtDownload();
+		}
+		else if (document.documentElement.getAttribute("bxt-version").toString().replace(".","") < 
+			Bxs.reqBxtVersion.replace(".","")) {
+			Bxs.promptForBxtUpdate();	
+		}
+		else {
+			Bxs.login.controls.submit.bind("command",Bxs.login.submit);
+			Bxs.login.controls.password.bind("keypress",Bxs.login.passwordKeyPress);
+			Bxs.eventsPublisher = $("#eventsPublisher").get(0);
+			Bxs.login.start();
+		}
 	}
-
 };
 
 $(window).one("load",Bxs.init);

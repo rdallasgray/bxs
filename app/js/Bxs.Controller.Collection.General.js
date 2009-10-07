@@ -69,6 +69,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			newRow: function() {
 
 				switch (this.view.getState()) {
+					case "ready":
 					case "active":
 					this.createRow();
 					break;

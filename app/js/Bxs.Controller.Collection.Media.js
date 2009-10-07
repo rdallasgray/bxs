@@ -22,19 +22,18 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 	Bxs.Controller.Collection.General.prototype, 
 	
 	{
-		
 		createRow: function() {
 			
-			this.setState("ready");
-			
-			var url = Bxs.Url.construct(this.parseUrl());
-			
-			var self = this,
+			var url = Bxs.Url.construct(this.parseUrl()),
+				self = this,
 				req = {
 					service: "fileUpload",
 					options: {
 						method: "POST",
 						url: url,
+						headers: {
+							Accept: "application/json, text/javascript, */*"
+						},
 						username: Bxs.auth.username,
 						password: Bxs.auth.password,
 						contentType: this.view.attrs.media.type
@@ -45,15 +44,20 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 						}
 					}
 				};
-				
+			
+//			this.view.setState("ready");
+			
 			Bxs.service.get(req);
 		},
 		
-		handleInsert: function (response) {
-			var data = Bxs.Json.parse(response.text);
-			var row = this.view.buildRow(data);
-			this.view.appendRowAtHead(row);
-		},
-		
+		handlers: $.extend(true, {}, Bxs.Controller.Collection.General.prototype.handlers, {
+			insert: function(self,response) {
+
+				var data = Bxs.Json.parse(response.text),
+					row = self.view.buildRow(data);
+					
+				self.view.appendRowAtHead(row);
+			}
+		})
 	}
 );

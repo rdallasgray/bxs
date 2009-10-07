@@ -17,7 +17,7 @@ Bxs.String = {
 	
 	fromPattern: function(pattern,object,default_pattern) {
 		
-		default_pattern = default_pattern || "(no %match)";
+		default_pattern = default_pattern || "(no :match)";
 		
 		var string = pattern.replace(/:\w*/g,function(match) {
 			var property = match.substr(1),

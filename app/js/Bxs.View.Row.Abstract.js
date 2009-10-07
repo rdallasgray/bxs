@@ -35,29 +35,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 
 	Bxs.Mixin.Stateable,
 
-	{
-		boot: function() {
-
-			var self = this;
-			
-			$.each(self.schema, function(fieldName) {
-				if (self.parentView.ignoresColumn(fieldName)) delete self.schema[fieldName];
-			}); 
-			
-			self.widgetCount = self.schema.__count__;
-			
-			self.setState("communicating");
-			
-			$(Bxs.eventsPublisher).one("allWidgetsAppended", function() {
-				self.setState("open");
-			});
-			
-			$.each(self.schema,function(field,schema) {
-				self.buildWidget(field,schema);
-			});
-
-		},
-		
+	{		
 		getDomNode: function() {
 			
 			return this.domNode;
@@ -201,6 +179,28 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				this.getDomNode().enable();
 			});
 		},
+		
+		boot: function() {
+
+			var self = this;
+			
+			$.each(self.schema, function(fieldName) {
+				if (self.parentView.ignoresColumn(fieldName)) delete self.schema[fieldName];
+			}); 
+			
+			self.widgetCount = self.schema.__count__;
+			
+			self.setState("communicating");
+			
+			$(Bxs.eventsPublisher).one("allWidgetsAppended", function() {
+				self.setState("open");
+			});
+			
+			$.each(self.schema,function(field,schema) {
+				self.buildWidget(field,schema);
+			});
+
+		}
 
 	}
 

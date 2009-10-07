@@ -70,6 +70,10 @@ Bxs.Scripts = {
 	
 	load: function() {
 		
+		if (Bxs.Scripts.loaded) {
+			return;
+		}
+		
 		Bxs.Scripts.count = Bxs.Scripts.files.length;
 		
 		$.ajaxSetup({async: false});
@@ -90,6 +94,8 @@ Bxs.Scripts = {
 			filesLoaded++;
 			$(Bxs.eventsPublisher).trigger("scriptLoaded",[filesLoaded]);
 		});
+		
+		Bxs.Scripts.loaded = true;
 		
 		$.ajaxSetup({async: true});
 	}
