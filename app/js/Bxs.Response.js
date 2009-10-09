@@ -1,9 +1,9 @@
 Bxs.Response = {
 	
 	success: function(action,status) {
-	
-		switch(action) {
-		
+
+ 		switch(action) {
+
 			case "insert":
 			if (status === 201) {
 				return true;

@@ -124,7 +124,7 @@ Bxs = {
 				Bxs.login.failure();
 				break;
 				default:
-				Bxs.serverError(response);
+				Bxs.error.recoverable(response);
 			}
 		},
 		success: function() {
@@ -220,6 +220,9 @@ Bxs = {
 			// TODO make sure all errors are notified (by POSTING to server://base/errors ?), flash just one alert, and shut down
 			Bxs = null;
 			alert("Fatal error: \n"+msg+"\n\nPlease reload Boxes and try again. If errors continue please contact support.");
+		},
+		recoverable: function(response) {			
+			alert("Error: "+response.status+"\n"+response.text);
 		}
 	},
 	

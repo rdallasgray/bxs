@@ -245,7 +245,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 		
 		recoverError: function(response) {
-			Bxs.serverError(response);
+			Bxs.error.recoverable(response);
 			this.view.setState(this.view.getPreviousState());
 		},
 	
