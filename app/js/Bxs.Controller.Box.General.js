@@ -72,7 +72,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 	
 		loadData: function() {
-
 			var self = this;
 
 			if (!self.view.isVisible()) {
