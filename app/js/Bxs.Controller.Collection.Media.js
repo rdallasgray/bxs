@@ -45,7 +45,7 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 					}
 				};
 			
-//			this.view.setState("ready");
+			this.view.setState("ready"); // on error box will set previous state
 			
 			Bxs.service.get(req);
 		},
