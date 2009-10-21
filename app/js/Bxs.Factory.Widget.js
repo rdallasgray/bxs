@@ -52,7 +52,7 @@ Bxs.Factory.Widget = {
 			widget.setValue(value); 
 		});
 		
-		widget.build();
+		widget.boot();
 		
 		return widget;
 				
