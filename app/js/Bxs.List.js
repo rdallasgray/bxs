@@ -12,20 +12,21 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-Bxs.List = function(url,columnName) {
+Bxs.List = function(url,listName) {
 	
 	this.url = url;
-	this.columnName = columnName;
+	this.listName = listName;
 }
 
 Bxs.List.prototype = {
 	
 	boot: function() {
 		
-		this.domNode = document.createDocumentFragment();
 		var self = this;
 		
-		Bxs.Ajax.getMetadata(self.columnName,function(metadata) {
+		this.domNode = document.createDocumentFragment();
+
+		Bxs.Ajax.getMetadata(self.listName,function(metadata) {
 			
 			self.metadata = metadata;
 			
@@ -87,7 +88,7 @@ Bxs.List.prototype = {
 		
 		var row = this.createNode(data);
 		
-		$(Bxs.eventsPublisher).trigger("listRowAdded."+this.columnName,[row]);
+		$(Bxs.eventsPublisher).trigger("listRowAdded."+this.listName,[row]);
 		// only using this to add an item from a panel (New ...)
 	},
 	// delete and update only to prevent exceptions
