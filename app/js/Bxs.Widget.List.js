@@ -14,19 +14,24 @@ You should have received a copy of the GNU General Public License along with Box
 
 
 Bxs.Widget.List = function(schema,parentNode,parentView) {
-
-	Bxs.Widget.Abstract.apply(this,arguments);
-	this.fieldName = $(parentNode).attr("name").slice(0,$(parentNode).attr("name").search(/_id$/));
 	
+	Bxs.Widget.Abstract.apply(this,arguments);
+	
+	this.columnName = $(parentNode).attr("name");	
 };
 
 Bxs.Widget.List.prototype = $.extend(true,{},
 	
 	Bxs.Widget.Abstract.prototype,
 
-	{
-		build: function() {
-
+	{		
+		boot: function() {
+			
+			this.listName = Bxs.Association.get(
+				this.parentView,
+				this.columnName
+			);
+			
 			this.domNode = document.createElement("menulist");
 
 			$(this.domNode).attr({
@@ -49,7 +54,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				$(this.popup).append(sep);
 			}
 			var newItem = document.createElement("menuitem");
-			$(newItem).attr({ label: "New "+this.fieldName, value: "" });
+			$(newItem).attr({ label: "New "+this.listName, value: "" });
 			$(newItem).addClass("strong");
 			$(this.popup).append(newItem);
 			
@@ -62,7 +67,8 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			var sep = document.createElement("menuseparator");
 			$(self.popup).append(sep);
 			
-			Bxs.Ajax.getMetadata(this.fieldName, function(metadata) {
+			Bxs.Ajax.getMetadata(this.listName, function(metadata) {
+				
 				self.url = metadata.url;
 				
 				Bxs.Ajax.getSchema(metadata.url, function(columnSchema) {
@@ -73,17 +79,17 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 						requestList = function() {
 
 							$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
-								
+
 								self.list = list;
 			
 								$(self.popup).append(self.list.getDomNode());
 								
 								self.fixFocusBehaviour();
-						
-								$(Bxs.eventsPublisher).trigger("widgetReady."+self.fieldName+"_id",[self]);
+								
+								$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
 							});
 
-							Bxs.Factory.List.build(self.url,self.fieldName);
+							Bxs.Factory.List.build(self.url,self.columnName);
 						}; 
 					// could optimize by creating array from columnSchema and filtering with regex /_id$/
 					
@@ -158,13 +164,13 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				self.setValue(self.defaultValue);
 			});
 			
-			$(Bxs.eventsPublisher).one("listRowAdded."+self.fieldName,function(e,row) {
+			$(Bxs.eventsPublisher).one("listRowAdded."+self.columnName,function(e,row) {
 				$(self.popup).append(row);
 				self.defaultValue = $(row).attr("value");
 				self.cleanUpPanel();
 			});
 
-			Bxs.Ajax.getMetadata(this.fieldName,function(metadata) {
+			Bxs.Ajax.getMetadata(this.columnName,function(metadata) {
 			
 				var boxName = metadata.name,
 					hide = [];
@@ -207,7 +213,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			
 			var self = this;
 
-			$(Bxs.eventsPublisher).one("listRowAdded."+self.fieldName,function(e,item) {
+			$(Bxs.eventsPublisher).one("listRowAdded."+self.columnName,function(e,item) {
 				$(self.popup).append(item);
 				self.cleanUpPanel();
 				self.setValue($(item).attr("value"));
