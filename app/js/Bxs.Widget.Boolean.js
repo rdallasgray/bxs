@@ -24,7 +24,7 @@ Bxs.Widget.Boolean.prototype = $.extend(true,{},
 
 	{
 
-		build: function() {
+		boot: function() {
 			this.domNode = document.createElement("checkbox");
 			
 			this.fixFocusBehaviour();
