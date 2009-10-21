@@ -25,7 +25,7 @@ Bxs.Widget.Abstract = function(schema,parentNode,parentView) {
 
 Bxs.Widget.Abstract.prototype = {
 	
-	build: function() {
+	boot: function() {
 	},
 	
 	fixFocusBehaviour: function() {
