@@ -60,13 +60,13 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			if (self.defaultValues !== null && (value = self.defaultValues[columnName])) {
 				$(domNode).attr("value",value);
 			}
-			
+
 			$(Bxs.eventsPublisher).one("widgetReady."+columnName, function(e,widget) {
 				
 				domNode.append(widget.getDomNode());
 				
 				widget.getDomNode().disable();
-				
+
 				$(Bxs.eventsPublisher).trigger("widgetAppended."+columnName);
 
 				self.widgetCount--;
@@ -90,7 +90,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 					label = "";
 				
 				if (/_id$/.test(columnName)) {
-					this.labelAssociatedColumn(columnName,data[columnName],column);
+					self.labelAssociatedColumn(columnName,data[columnName],column);
 				}
 				else {
 					$(column).attr("label",data[columnName]);
@@ -115,8 +115,6 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 		labelAssociatedColumn: function(columnName,value,column) {
 			
 			var self = this;
-			
-			console.debug([columnName,data,column]);
 			
 			if (value !== "") {
 				var realName = Bxs.Association.getName(columnName,self.parentView.attrs);
