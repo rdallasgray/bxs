@@ -27,9 +27,9 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 	{		
 		boot: function() {
 			
-			this.listName = Bxs.Association.get(
-				this.parentView,
-				this.columnName
+			this.listName = Bxs.Association.getName(
+				this.columnName,
+				this.parentView.attrs
 			);
 			
 			this.domNode = document.createElement("menulist");
@@ -89,7 +89,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 								$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
 							});
 
-							Bxs.Factory.List.build(self.url,self.columnName);
+							Bxs.Factory.List.build(self.url,self.listName);
 						}; 
 					// could optimize by creating array from columnSchema and filtering with regex /_id$/
 					
@@ -163,14 +163,14 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				self.cleanUpPanel();
 				self.setValue(self.defaultValue);
 			});
-			
-			$(Bxs.eventsPublisher).one("listRowAdded."+self.columnName,function(e,row) {
+
+			$(Bxs.eventsPublisher).one("listRowAdded."+self.listName,function(e,row) {
 				$(self.popup).append(row);
 				self.defaultValue = $(row).attr("value");
 				self.cleanUpPanel();
 			});
 
-			Bxs.Ajax.getMetadata(this.columnName,function(metadata) {
+			Bxs.Ajax.getMetadata(this.listName,function(metadata) {
 			
 				var boxName = metadata.name,
 					hide = [];
@@ -213,7 +213,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			
 			var self = this;
 
-			$(Bxs.eventsPublisher).one("listRowAdded."+self.columnName,function(e,item) {
+			$(Bxs.eventsPublisher).one("listRowAdded."+self.listName,function(e,item) {
 				$(self.popup).append(item);
 				self.cleanUpPanel();
 				self.setValue($(item).attr("value"));
