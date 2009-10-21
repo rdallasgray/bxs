@@ -24,7 +24,7 @@ Bxs.String = {
 				stringPart = object[property];
 				
 			if (stringPart == "") {
-				return default_pattern.replace(/%match/,property);
+				return default_pattern.replace(/:match/,property);
 			}
 				
 			return stringPart;
