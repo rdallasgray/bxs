@@ -28,7 +28,6 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 	Bxs.View.Collection.Abstract.prototype,
 	
 	{
-		
 		getSelectedRow: function() {
 			return this.domNode.selectedItem;
 		},
@@ -89,13 +88,13 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			
 			
 			// some of below could be extracted out to Bxs.View.Collection.Abstract
-			$.each(schema, function(field,values) {
+			$.each(schema, function(columnName,values) {
 				
-				if (self.ignoresColumn(field)) return;
+				if (self.ignoresColumn(columnName)) return;
 				
 				// deal with *_id, i.e. belongs_to relationships
-				if (/_id$/.test(field)) {
-					var label = field.slice(0,field.search(/_id$/));
+				if (/_id$/.test(columnName)) {
+					var label = Bxs.Association.getName(columnName,self.attrs);
 					// preload the box data
 					Bxs.Ajax.getMetadata(label,function(metadata) {
 						Bxs.Ajax.get(metadata.url);
@@ -103,8 +102,8 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				}
 				
 				var header = document.createElement('listheader');
-				header.label = label === undefined ? field : label;
-				header.setAttribute("fieldName",field);
+				header.label = label === undefined ? columnName : label;
+				header.setAttribute("columnName",columnName);
 				
 				$(header).bind("click", function() {
 			
@@ -116,14 +115,14 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 					
 					$(header).attr("sortDirection",dir);
 					
-					self.sortRows($(header).attr("fieldName"),dir);
+					self.sortRows($(header).attr("columnName"),dir);
 				});
 			
 				var col = document.createElement('listcol');
-				var fieldLength = values.length ? parseInt(values.length) : 4;
-				col.setAttribute('width',Math.min(Math.round(Math.sqrt(fieldLength) * 16),200));
+				var columnLength = values.length ? parseInt(values.length) : 4;
+				col.setAttribute('width',Math.min(Math.round(Math.sqrt(columnLength) * 16),200));
 			
-				if (self.hidesColumn(field)) {
+				if (self.hidesColumn(columnName)) {
 					header.hide();
 					col.hide();
 				}
