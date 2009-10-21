@@ -40,6 +40,20 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 			return this.filters !== undefined && this.filters.length > 0;
 		},
 		
+		hasForeignFilters: function() {
+			if (this.filters === undefined || this.filters.length === 0) {
+				return false;
+			}
+			var hff = false;
+			$.each(this.filters, function() {
+				if (this.attrs.filterType === 'foreign') {
+					hff = true;
+					return false;
+				}
+			});
+			return hff;
+		},
+		
 		render: function(data) {
 
 			var self = this;
