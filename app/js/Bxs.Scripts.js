@@ -29,6 +29,7 @@ Bxs.Scripts = {
 		"Bxs.Panel.js",
 		"Bxs.List.js",
 		"Bxs.String.js",
+		"Bxs.Association.js",
 		
 		"Bxs.Factory.Box.js",
 		"Bxs.Factory.Filter.js",
@@ -60,6 +61,7 @@ Bxs.Scripts = {
 		
 		"Bxs.Filter.Abstract.js",
 		"Bxs.Filter.Year.js",
+		"Bxs.Filter.Foreign.js",
 		
 		"Bxs.Toolbar.Abstract.js",
 		"Bxs.Toolbar.Box.js",
@@ -81,13 +83,14 @@ Bxs.Scripts = {
 		var	filesLoaded = 0;
 		
 		Bxs.Scripts.files.forEach(function(file) {
-			$.get(Bxs.Url.app("/js/"+file),function(data) {
+			var nocache = new Date().getTime();
+			$.get(Bxs.Url.app("/js/"+file+"?nocache="+nocache),function(data) {
 				try {
 					data = data+"\n\n//@ sourceURL="+file;
 					eval(data);
 				}
 				catch (e) {
-					console.warn("failed to eval "+file+".js");
+					Bxs.error.fatal("failed to eval "+file);
 				}
 			});
 			
