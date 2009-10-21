@@ -54,6 +54,9 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		
 		observedFilterChanged: function() {
 			
+			if (this.view.getState() === "inactive") {
+				return;
+			}
 			this.loadDataDelayed();
 		},
 		
