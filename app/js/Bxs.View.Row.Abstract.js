@@ -45,29 +45,29 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 
 			var data = {};
 
-			$.each(this.widgets, function(field, widget) {
-				data[field] = widget.getValue();
+			$.each(this.widgets, function(columnName, widget) {
+				data[columnName] = widget.getValue();
 			});
 
 			return data;
 		},
 
-		buildWidget: function(field,schema) {
-
-			var domNode = $(this.domNode).children(this.parentView.columnType+"[name='"+field+"']"),
+		buildWidget: function(columnName,schema) {
+			
+			var domNode = $(this.domNode).children(this.parentView.columnType+"[name='"+columnName+"']"),
 				self = this;
 			
-			if (self.defaultValues !== null && (value = self.defaultValues[field])) {
+			if (self.defaultValues !== null && (value = self.defaultValues[columnName])) {
 				$(domNode).attr("value",value);
 			}
 			
-			$(Bxs.eventsPublisher).one("widgetReady."+field, function(e,widget) {
+			$(Bxs.eventsPublisher).one("widgetReady."+columnName, function(e,widget) {
 				
 				domNode.append(widget.getDomNode());
 				
 				widget.getDomNode().disable();
 				
-				$(Bxs.eventsPublisher).trigger("widgetAppended."+field);
+				$(Bxs.eventsPublisher).trigger("widgetAppended."+columnName);
 
 				self.widgetCount--;
 				
@@ -76,7 +76,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				}
 			});
 			
-			self.widgets[field] = Bxs.Factory.Widget.build(schema,$(domNode).attr("value"),domNode.get(0),self.parentView);
+			self.widgets[columnName] = Bxs.Factory.Widget.build(schema,$(domNode).attr("value"),domNode.get(0),self.parentView);
 
 		},
 
@@ -84,45 +84,52 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			
 			var self = this;
 
-			$.each(self.schema, function(name,values) {
+			$.each(self.schema, function(columnName,values) {
 				
-				var column = $(self.domNode).children(self.parentView.columnType+"[name='"+name+"']"),
+				var column = $(self.domNode).children(self.parentView.columnType+"[name='"+columnName+"']"),
 					label = "";
 				
-				if (/_id$/.test(name)) {
-					
-					var fieldName = name.slice(0,name.search(/_id$/));
-
-					if (data[name] !== "") {
-						Bxs.Ajax.getMetadata(fieldName,function(metadata) {
-							$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+data[name],function(e,rowData) {
-								$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
-							});
-							self.parentView.controller.loadRowData(metadata.url+"/"+data[name]);
-						})
-					}
-					else {
-						$(column).attr("label","");
-					}
+				if (/_id$/.test(columnName)) {
+					this.labelAssociatedColumn(columnName,data[columnName],column);
 				}
 				else {
-					$(column).attr("label",data[name]);
+					$(column).attr("label",data[columnName]);
 				}
 				
-				if (self.schema[name].type === "boolean") {
+				if (self.schema[columnName].type === "boolean") {
 					$(column)
 						.attr({
 							type: "checkbox",
-							value: data[name],
-							checked: data[name]
+							value: data[columnName],
+							checked: data[columnName]
 						})
 						.removeAttr("label");
 				}
 				
 				else {
-					$(column).attr({ value: data[name] });
+					$(column).attr({ value: data[columnName] });
 				}
 			});
+		},
+		
+		labelAssociatedColumn: function(columnName,value,column) {
+			
+			var self = this;
+			
+			console.debug([columnName,data,column]);
+			
+			if (value !== "") {
+				var realName = Bxs.Association.getName(columnName,self.parentView.attrs);
+				Bxs.Ajax.getMetadata(realName,function(metadata) {
+					$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
+						$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
+					});
+					self.parentView.controller.loadRowData(metadata.url+"/"+value);
+				})
+			}
+			else {
+				$(column).attr("label","");
+			}
 		},
 		
 		focusFirstWidget: function() {
@@ -184,8 +191,8 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 
 			var self = this;
 			
-			$.each(self.schema, function(fieldName) {
-				if (self.parentView.ignoresColumn(fieldName)) delete self.schema[fieldName];
+			$.each(self.schema, function(col) {
+				if (self.parentView.ignoresColumn(col)) delete self.schema[col];
 			}); 
 			
 			self.widgetCount = self.schema.__count__;
@@ -196,8 +203,8 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				self.setState("open");
 			});
 			
-			$.each(self.schema,function(field,schema) {
-				self.buildWidget(field,schema);
+			$.each(self.schema,function(columnName,schema) {
+				self.buildWidget(columnName,schema);
 			});
 
 		}
