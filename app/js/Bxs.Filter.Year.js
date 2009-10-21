@@ -23,7 +23,6 @@ Bxs.Filter.Year.prototype = $.extend(true,{},
 	Bxs.Filter.Abstract.prototype,
 
 	{
-		
 		build: function() {
 			
 			var thisYear = new Date().getFullYear(),
