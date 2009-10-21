@@ -19,7 +19,7 @@ if (Bxs.Filter === undefined) {
 Bxs.Filter.Abstract = function(node) {
 
 	this.domNode = node;
-
+	this.attrs = Bxs.Parser.attributes(node.attributes);
 };
 
 Bxs.Filter.Abstract.prototype = $.extend(true,{},

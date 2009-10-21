@@ -23,8 +23,6 @@ Bxs.Factory.Filter = {
 		var filterType = $.string($(node).attr("filterType")).capitalize().str,
 			filter = new Bxs.Filter[filterType](node);
 		
-		filter.attrs = Bxs.Parser.attributes(node.attributes);
-		
 		filter.init();
 		
 		return filter;
