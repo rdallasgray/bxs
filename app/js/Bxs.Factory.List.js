@@ -18,9 +18,9 @@ if (Bxs.Factory === undefined) {
 
 Bxs.Factory.List = {
 
-	build: function(url,columnName) {
-
-		var list = new Bxs.List(url,columnName);
+	build: function(url,listName) {
+		
+		var list = new Bxs.List(url,listName);
 
 		list.boot();
 
