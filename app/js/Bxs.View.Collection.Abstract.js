@@ -54,13 +54,31 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			var options = {};
 
 			$(this.filters).each(function() {
-				var value = this.getValue();
-				if (value !== "null") {
-					options[this.name] = value;
+				if (this.attrs.filterType !== "foreign") {
+					var value = this.getValue();
+					if (value !== "null") {
+						options[this.name] = value;
+					}
 				}
 			});
 			
 			return options;
+		},
+		
+		getForeignFilters: function() {
+			
+			var url = null;
+
+			$(this.filters).each(function() {
+				if (this.attrs.filterType === "foreign") {
+					var value = this.getValue();
+					if (value !== "null") {
+						url = value;
+					}
+				}
+			});
+			
+			return url;
 		},
 		
 		clearContent: function() {
@@ -78,12 +96,12 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			});
 			
 			if (this.sortedBy !== undefined) {
-				this.sortRowArray(rows,this.sortedBy.field,this.sortedBy.direction);
+				this.sortRowArray(rows,this.sortedBy.columnName,this.sortedBy.direction);
 			}
 			
 			rows.forEach(function(row) {
 				frag.appendChild(row);
-			})
+			});
 			
 			self.domNode.appendChild(frag);
 			
@@ -100,10 +118,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		
 		buildRowTemplate: function() {
 			
-			var row = document.createElement(this.rowType)
+			var row = document.createElement(this.rowType),
 				self = this;
 			
-			self.associatedColumns = {};
+			self.associatedColumns = [];
 			
 			$.each(self.controller.schema, function(columnName,values) {
 				
@@ -112,9 +130,9 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				$(column).attr({ "name": columnName });
 				
 				if (/_id$/.test(columnName) && !self.ignoresColumn(columnName)) {
-					// it's an association field
+					// it's an association column
 					$(column).attr({ "association": "true" });
-					self.associatedColumns[columnName] = columnName.slice(0,columnName.search(/_id$/));
+					self.associatedColumns.push(columnName);
 				}
 				
 				if (values["type"] === "boolean") {
@@ -156,9 +174,9 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			var self = this,
 				columnCount = 0;
 
-			$.each(self.associatedColumns, function(name,fieldName) {
+			self.associatedColumns.forEach(function(columnName) {
 				//Xpath for speed
-				var associatedColumns = Bxs.Xpath.getArray(self.domNode,"descendant::xul:"+self.columnType+"[@name='"+name+"']");
+				var associatedColumns = Bxs.Xpath.getArray(self.domNode,"descendant::xul:"+self.columnType+"[@name='"+columnName+"']");
 
 				if (associatedColumns.snapshotLength === 0) {
 					columnCount++;
@@ -167,12 +185,14 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 					}
 					return;
 				}
-
-				Bxs.Ajax.getMetadata(fieldName, function(metadata) {
+				
+				var realName = Bxs.Association.getName(columnName,self.attrs);
+				
+				Bxs.Ajax.getMetadata(realName, function(metadata) {
 					Bxs.Ajax.get(metadata.url, function(labelData) {
 						var labelDataById = {};
 						labelData.forEach(function(el) labelDataById[el.id] = el);
-						
+					
 						setTimeout(function() {
 							associatedColumns.forEach(function(el) {
 								var column = el;
@@ -224,8 +244,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			
 			var options = options || { state: "default" };
 			
-			var rowType = $.string(this.rowType).capitalize().str,
-				selectedRow = null,
+			var selectedRow = null,
 				state = "editing",
 				values = options.values || null;
 			
@@ -237,7 +256,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				selectedRow = this.getSelectedRow();
 			}
 			
-			this.editView = new Bxs.View.Row[rowType](this,selectedRow,values);
+			this.editView = this.buildEditView(selectedRow,values);
 			
 			if (options.state === "creating") {
 				this.newestRow = this.editView.getDomNode();
@@ -252,6 +271,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 
 			this.editView.boot();
 			this.setState(state);
+		},
+		
+		buildEditView: function(selectedRow,values) {
+			return new Bxs.View.Row[$.string(this.rowType).capitalize().str](this,selectedRow,values);
 		},
 		
 		appendRowAtHead: function(row) {
@@ -352,12 +375,14 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 		}),
 		
-		sortRowArray: function(rows,field,direction) {
-						
+		sortRowArray: function(rows,column,direction) {
+			
+			var self = this; //used in sort function
+			
 			rows.sort(function(a,b) {
 				
-				var columnA = $(a).children(self.columnType+"[name='"+field+"']").get(0);
-				var columnB = $(b).children(self.columnType+"[name='"+field+"']").get(0);
+				var columnA = $(a).children(self.columnType+"[name='"+column+"']").get(0);
+				var columnB = $(b).children(self.columnType+"[name='"+column+"']").get(0);
 				
 				var labelA = columnA.hasAttribute("label") ? columnA.getAttribute("label") : columnA.getAttribute("value");
 				var labelB = columnB.hasAttribute("label") ? columnB.getAttribute("label") : columnB.getAttribute("value");
@@ -371,7 +396,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 
 		},
 		
-		sortRows: function(field,direction) {
+		sortRows: function(columnName,direction) {
 			var rows = this.getArrayOfRows(),
 			s = this.getSelectedRow(),
 			selectedRow = (s === null) ? null : s.cloneNode(true),
@@ -380,7 +405,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			this.clearSelection();
 			this.removeAllRows();
 			
-			var rows = this.sortRowArray(rows,field,direction);
+			var rows = this.sortRowArray(rows,columnName,direction);
 			
 			var frag = document.createDocumentFragment();
 			
@@ -399,7 +424,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				this.setSelectedRow(row);
 			}
 			
-			this.sortedBy = { field: field, direction: direction };
+			this.sortedBy = { columnName: columnName, direction: direction };
 		},
 		
 		boot: function() {
