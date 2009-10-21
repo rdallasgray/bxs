@@ -22,16 +22,8 @@ Bxs.View.Collection.Listbox.Image = function(node) {
 Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 	
 	Bxs.View.Collection.Listbox.prototype,
-	Bxs.Mixin.Mediable,
 	
 	{
-		
-		list: function(data) {
-			
-			var self = this;
-			
-			Bxs.View.Collection.Listbox.prototype.list.apply(this,[data]);
-		},
 		
 		buildRow: function(data) {
 			
