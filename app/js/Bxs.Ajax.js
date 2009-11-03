@@ -80,7 +80,8 @@ Bxs.Ajax = {
 	
 	getMetadata: function(name,callback) {
 		
-		var cached = Bxs.Cache.get(["metadata",name]);
+		var cached = Bxs.Cache.get(["metadata",name]),
+			callback = callback || function() { return true; };
 		
 		if (cached) {
 			callback(cached);
