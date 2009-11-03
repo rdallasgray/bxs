@@ -34,6 +34,22 @@ Bxs.Parser = {
 			var testVal = val;
 		}
 		object[attr] = testVal;
+	},
+	
+	queryString: function(q) {
+		var q = q.split("?"),
+			q = q.length > 1 ? q[1] : q[0],
+			pairs = q.split("&"),
+			obj = {};
+			
+		pairs.forEach(function(pair) {
+			
+			var keyVal = pair.split("=");
+			
+			obj[keyVal[0]] = keyVal[1];
+		});
+		
+		return obj;
 	}
 
 };
