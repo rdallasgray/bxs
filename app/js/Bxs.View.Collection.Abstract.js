@@ -270,11 +270,13 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 
 			this.editView.boot();
+			this.ensureRowIsVisible(this.editView.getDomNode());
 			this.setState(state);
 		},
 		
 		buildEditView: function(selectedRow,values) {
-			return new Bxs.View.Row[$.string(this.rowType).capitalize().str](this,selectedRow,values);
+			var row = new Bxs.View.Row[$.string(this.rowType).capitalize().str](this,selectedRow,values);
+			return row;
 		},
 		
 		appendRowAtHead: function(row) {
@@ -298,7 +300,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		
 		editClose: function(options) {
 			
-			var options = options || {state: "default"};
+			var options = options || { state: "default" };
 			
 			this.editView.close();
 			
