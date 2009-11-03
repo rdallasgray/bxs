@@ -25,6 +25,7 @@ Bxs = {
 
 	service: {
 		get: function(serviceRequest) {
+			serviceRequest.mode = Bxs.mode;
 			var requesterElement = document.createElement("serviceRequester");
 			document.documentElement.appendChild(requesterElement);
 			requesterElement.serviceRequest = serviceRequest;
@@ -254,6 +255,7 @@ Bxs = {
 	init: function() {
 		
 		document.title = "Boxes: "+window.location.hostname;
+		Bxs.mode = Bxs.Parser.queryString(document.location.search)["debug"] === "true" ? "debug" : "production";
 		
 		if (document.documentElement.getAttribute("bxt-version") === "") {
 			Bxs.promptForBxtDownload();
