@@ -81,11 +81,8 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 							$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
 
 								self.list = list;
-			
 								$(self.popup).append(self.list.getDomNode());
-								
 								self.fixFocusBehaviour();
-								
 								$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
 							});
 
