@@ -44,7 +44,8 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 		},
 		
 		getEditedData: function() {
-			return { text: this.textNode.innerHTML };
+			return { text: this.getEditorContent() };
+//			return { text: this.textNode.innerHTML };
 		},
 				
 		updateEditView: function(data) {
@@ -97,6 +98,9 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 				self.deactivateEditor = function() {
 					Bxs.Editor.deactivate(cw);
 					cd.body.style.overflow = "auto";
+				}
+				self.getEditorContent = function() {
+					return Bxs.Editor.getContent(cw);
 				}
 				self.updateContent = function() {
 					self.textNode.innerHTML = Bxs.Editor.getContent(cw);
