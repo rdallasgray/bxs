@@ -21,21 +21,21 @@ Bxs.List = function(url,listName) {
 Bxs.List.prototype = {
 	
 	boot: function() {
-		
 		var self = this;
 		
 		this.domNode = document.createDocumentFragment();
-
+	
 		Bxs.Ajax.getMetadata(self.listName,function(metadata) {
 			
 			self.metadata = metadata;
 			
 			Bxs.Ajax.get(self.url,function(dataSet,notModified) {
-
 				var validCachedNode = false;
 				
 				if (notModified) {
+					
 					var cachedNode = Bxs.Cache.get(["Lists",self.url]);
+
 					if (cachedNode !== false) {
 						validCachedNode = true;
 						self.domNode = cachedNode;
@@ -44,6 +44,7 @@ Bxs.List.prototype = {
 				}
 				
 				if (!validCachedNode) {
+					
 					dataSet.forEach(function(row) {
 						self.createNode(row);
 					});
@@ -52,14 +53,12 @@ Bxs.List.prototype = {
 			
 					$(Bxs.eventsPublisher).trigger("listReady."+self.url,[self]);
 				}
-			
 			});
 		});
 
 		$(Bxs.eventsPublisher).bind("dataChanged",function(e,dataObject) {
 			self.handleData(dataObject);
 		});
-
 	},
 	
 	createNode: function(data) {
@@ -67,9 +66,7 @@ Bxs.List.prototype = {
 		var menuitem = document.createElement("menuitem");
 		
 		menuitem.setAttribute("value",data.id);
-		
 		menuitem.setAttribute("label",Bxs.String.fromPattern(this.metadata.to_string_pattern,data));
-		
 		this.domNode.appendChild(menuitem);
 		
 		return menuitem;
@@ -80,7 +77,6 @@ Bxs.List.prototype = {
 		if (dataObject.name !== this.metadata.name) {
 			return;
 		}
-	
 		this[dataObject.action](dataObject.data);
 	},
 	
@@ -101,7 +97,7 @@ Bxs.List.prototype = {
 	},
 
 	getDomNode: function() {
-		
-		return this.domNode.cloneNode(true);
+		var node = this.domNode.cloneNode(true);
+		return node;
 	}
 }
