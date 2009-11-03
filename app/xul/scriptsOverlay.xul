@@ -23,6 +23,7 @@ You should have received a copy of the GNU General Public License along with Box
 		<script type="application/javascript" src="/Bxs/app/js/vendor/jquery/jquery.string.1.0.js"/>
 		<script type="application/javascript" src="/Bxs/app/js/vendor/jquery/jquery.url.js"/>
 		<script type="application/javascript" src="/Bxs/app/js/Bxs.js"/>
+		<script type="application/javascript" src="/Bxs/app/js/Bxs.Parser.js"/>
 		<script type="application/javascript" src="/Bxs/app/js/Bxs.Url.js"/>
 		<script type="application/javascript" src="/Bxs/app/js/Bxs.Conf.js"/>
 		<script type="application/javascript" src="/Bxs/app/js/Bxs.Json.js"/>
