@@ -212,6 +212,10 @@ listitem.communicating {
 	-moz-user-select: none;
 }
 
+listitem.communicating * {
+	visibility: hidden;
+}
+
 listitem.open listcell[type="checkbox"] .listcell-check {
 	visibility: collapse;
 }
