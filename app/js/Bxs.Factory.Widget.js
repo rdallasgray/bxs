@@ -43,6 +43,9 @@ Bxs.Factory.Widget = {
 				widgetType = "Boolean";
 				break;
 				
+				default:
+				widgetType = "String";
+				break;
 			}
 		}
 		
