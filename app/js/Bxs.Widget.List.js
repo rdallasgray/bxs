@@ -82,6 +82,8 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 
 								self.list = list;
 								$(self.popup).append(self.list.getDomNode());
+								// TODO trigger widgetReady while waiting for list, but defer setting
+								// default value from Factory.build(). Label with e.g. 'Loading ...' until list ready
 								self.fixFocusBehaviour();
 								$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
 							});
