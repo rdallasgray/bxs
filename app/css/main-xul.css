@@ -91,7 +91,7 @@ hbox, vbox, tabbox, tabpanels, tabpanel, listbox, deck, iframe {
 
 iframe {
 	background-color: rgb(250,250,250);
-	border: solid rgb(195,195,195) 1px;
+	border: solid rgb(180,180,180) 1px;
 	margin-right: 1px;
 	margin-bottom: 1px;
 }
