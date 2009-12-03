@@ -123,11 +123,11 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		},
 		
 		disable: function() {
-			this.domNode.disable();
+			$(this.domNode).attr("disabled","true");
 		},
 		
 		enable: function() {
-			this.domNode.enable();
+			$(this.domNode).removeAttr("disabled");
 		},
 
 		setController: function(controller) {

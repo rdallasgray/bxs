@@ -50,7 +50,6 @@ Bxs.List.prototype = {
 					});
 				
 					Bxs.Cache.set(["Lists",self.url],self.domNode);
-			
 					$(Bxs.eventsPublisher).trigger("listReady."+self.url,[self]);
 				}
 			});

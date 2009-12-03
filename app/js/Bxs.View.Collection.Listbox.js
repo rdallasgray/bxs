@@ -101,8 +101,10 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 					});
 				}
 				
-				var header = document.createElement('listheader');
-				header.label = label === undefined ? columnName : label;
+				var header = document.createElement('listheader'),
+					headerLabel = label === undefined ? columnName : label;
+					
+				header.setAttribute("label",headerLabel);
 				header.setAttribute("columnName",columnName);
 				
 				$(header).bind("click", function() {
@@ -123,8 +125,8 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				col.setAttribute('width',Math.min(Math.round(Math.sqrt(columnLength) * 16),200));
 			
 				if (self.hidesColumn(columnName)) {
-					header.hide();
-					col.hide();
+					$(header).attr("hidden","true");
+					$(col).attr("hidden","true");
 				}
 				else {
 					visibleCols.push(col);

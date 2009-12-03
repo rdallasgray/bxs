@@ -64,8 +64,8 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			$(Bxs.eventsPublisher).one("widgetReady."+columnName, function(e,widget) {
 				
 				domNode.append(widget.getDomNode());
-				
-				widget.getDomNode().disable();
+// TODO check if this has side effects				
+//				$(widget.getDomNode()).attr("disabled","true");
 
 				$(Bxs.eventsPublisher).trigger("widgetAppended."+columnName);
 
@@ -175,13 +175,13 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 
 		disable: function() {
 			$.each(this.widgets,function() {
-				this.getDomNode().disable();
+				$(this.getDomNode()).attr("disabled","true");
 			});
 		},
 
 		enable: function() {
 			$.each(this.widgets,function() {
-				this.getDomNode().enable();
+				$(this.getDomNode()).removeAttr("disabled");
 			});
 		},
 		

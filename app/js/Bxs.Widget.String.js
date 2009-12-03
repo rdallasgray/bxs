@@ -27,10 +27,12 @@ Bxs.Widget.String.prototype = $.extend(true,{},
 		boot: function() {
 
 			this.domNode = document.createElement("textbox");
-
-			$(this.domNode).attr({
-				"maxlength": this.schema.length
-			});
+			
+			if (this.schema.length !== null) {
+				$(this.domNode).attr({
+					"maxlength": this.schema.length
+				});
+			}
 						
 			this.fixFocusBehaviour();
 

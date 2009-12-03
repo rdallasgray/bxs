@@ -69,26 +69,26 @@ Bxs = {
 				Bxs.logoutButton.unbind("command");
 				Bxs.mainDeck.get(0).selectedIndex = 0;
 				Bxs.login.controls.deck.get(0).selectedIndex = 0;
-				Bxs.login.controls.username.get(0).enable();
-				Bxs.login.controls.password.get(0).enable();
-				Bxs.login.controls.submit.get(0).enable();
+				Bxs.login.controls.username.removeAttr("disabled");
+				Bxs.login.controls.password.removeAttr("disabled");
+				Bxs.login.controls.submit.removeAttr("disabled");
 				Bxs.login.controls.username.val("");
 				Bxs.login.controls.password.val("");
-				Bxs.login.controls.status.get(0).label = "";
+				Bxs.login.controls.status.attr("label","");
 				Bxs.login.controls.username.get(0).focus();
 			},
 			submit: function() {
-				Bxs.login.controls.username.get(0).disable();
-				Bxs.login.controls.password.get(0).disable();
-				Bxs.login.controls.submit.get(0).disable();
-				Bxs.login.controls.status.get(0).label = "Checking ...";
+				Bxs.login.controls.username.attr("disabled","true");
+				Bxs.login.controls.password.attr("disabled","true");
+				Bxs.login.controls.submit.attr("disabled","true");
+				Bxs.login.controls.status.attr("label","Checking ...");
 			},
 			failure: function() {
 				Bxs.login.setState("start");
-				Bxs.login.controls.status.get(0).label = "Incorrect username or password";
+				Bxs.login.controls.status.attr("label","Incorrect username or password");
 			},
 			success: function() {
-				Bxs.login.controls.status.get(0).label = "OK";
+				Bxs.login.controls.status.attr("label","OK");
 				Bxs.auth = { username: Bxs.login.controls.username.val(), password: Bxs.login.controls.password.val() };
 				Bxs.boot.start();
 			}
@@ -156,7 +156,7 @@ Bxs = {
 	},
 	
 	noActivity: function() {
-		Bxs.login.controls.status.get(0).label = "Session timed out";
+		Bxs.login.controls.status.attr("label","Session timed out");
 		Bxs.logout();
 	},
 	
@@ -177,9 +177,9 @@ Bxs = {
 		},
 		states: {
 			start: function() {
-				Bxs.boot.controls.scriptsStatus.get(0).hide();
+				Bxs.boot.controls.scriptsStatus.attr("hidden","true");
 				Bxs.boot.controls.scriptsProgress.val(0);
-				Bxs.boot.controls.boxesStatus.get(0).hide();
+				Bxs.boot.controls.boxesStatus.attr("hidden","true");
 				Bxs.boot.controls.boxesProgress.val(0);
 				Bxs.login.controls.deck.get(0).selectedIndex = 1;
 				$(Bxs.eventsPublisher).bind("scriptLoaded",function(e,data) {
@@ -193,10 +193,10 @@ Bxs = {
 				});
 			},
 			loadingScripts: function() {
-				Bxs.boot.controls.scriptsStatus.get(0).show();
+				Bxs.boot.controls.scriptsStatus.removeAttr("hidden");
 			},
 			buildingBoxes: function() {
-				Bxs.boot.controls.boxesStatus.get(0).show();
+				Bxs.boot.controls.boxesStatus.removeAttr("hidden");
 			},
 			complete: function() {
 				$(window).bind("keydown",Bxs.activity);
