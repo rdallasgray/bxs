@@ -58,7 +58,11 @@ Bxs.Ajax = {
 			data;
 
 		var ajaxGet = $.getJSON(url,null,function(data) {
-
+			
+			if (ajaxGet.status === 401) {
+				return Bxs.Ajax._authenticatedRequest(url,"GET",data,callback);
+			}
+						
 			var notModified = false,
 				etag = ajaxGet.getResponseHeader("Etag"),
 				cachedEtag = Bxs.Cache.get(["Etags",url]);
@@ -71,7 +75,7 @@ Bxs.Ajax = {
 					Bxs.Cache.set(["Etags",url],etag);
 				}
 			}
-			
+						
 			if (typeof callback === "function") {
 				callback(data,notModified);
 			}
