@@ -23,7 +23,9 @@ Bxs.Factory.Widget = {
 		if (/_id$/.test(name)) {
 			widgetType = "List";
 		}
-
+/*		else if (name === "password") {
+			widgetType = "Password";
+		}*/
 		else {
 			switch(schema.type) {
 			
