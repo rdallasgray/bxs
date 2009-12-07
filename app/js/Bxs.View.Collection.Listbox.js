@@ -149,7 +149,11 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			
 			self.buildRowTemplate();
 			
-			$(self.domNode).bind("dblclick",function() { Bxs.Command.dispatch('edit'); });
+			$(self.domNode).bind("dblclick",function() {
+				if (self.editView === undefined) {
+					Bxs.Command.dispatch('edit'); 
+				}
+			});
 			
 			var hbox = document.createElement("hbox");
 			hbox.setAttribute("flex",0);
