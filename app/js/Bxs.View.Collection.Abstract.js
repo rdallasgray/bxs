@@ -30,6 +30,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 	Bxs.View.Box.Abstract.prototype,
 	
 	{	
+		getRowCount: function() {
+			
+		},
+		
 		getObservedBox: function() {
 			return Bxs.Boxes.getById(this.attrs.observing);
 		},

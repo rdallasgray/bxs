@@ -26,6 +26,10 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 	Bxs.View.Box.Abstract.prototype,
 	
 	{	
+		isEmpty: function() {
+			return this.textNode.innerHTML === "";
+		},
+		
 		clearContent: function() {
 			if (this.textNode !== undefined) {
 				this.textNode.innerHTML = "";

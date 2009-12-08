@@ -28,6 +28,14 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 	
 	{	
 		
+		getDomNode: function() {
+			return this.domNode;
+		},
+		
+		isEmpty: function() {
+			return true;
+		},
+		
 		getObservedBox: function() {
 			return Bxs.Boxes.getById(this.attrs.observing);
 		},

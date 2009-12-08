@@ -28,6 +28,14 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 	Bxs.View.Collection.Abstract.prototype,
 	
 	{
+		isEmpty: function() {
+			return this.domNode.getRowCount() === 0;
+		},
+		
+		getRowCount: function() {
+			return this.domNode.getRowCount();
+		},
+		
 		getSelectedRow: function() {
 			return this.domNode.selectedItem;
 		},
