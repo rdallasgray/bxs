@@ -45,6 +45,59 @@ Bxs.Command = {
 		}
 	},
 	
+	manageToolsMenu: function() {
+		
+		var target = Bxs.Boxes.getById($(document.popupNode).attr("targetId")),
+			commands = $("#boxToolsCommandSet").children(),
+			menuitems = $("#boxToolsPopup").children();
+			
+		var state = target.view.getState();
+		
+		if (!(["active","ready"]).some(function(el) el === state)) {
+			return false;
+		}
+		
+		commands.attr("disabled","true");
+		menuitems.addClass("hidden");
+		
+		var showItems = function(i) {
+			$.each(i, function() {
+				$("#"+this+"-menuitem").removeClass("hidden");
+			})
+		}
+		
+		var enableCommands = function(c) {
+			$.each(c, function() {
+				$("#"+this+"-command").removeAttr("disabled");
+			})
+		}
+		
+		if (target.view.mediaType !== undefined) {
+			showItems(["viewMedia","downloadMedia"]);
+			if (state === "active") {
+				enableCommands(["viewMedia","downloadMedia"]);
+			}
+		}
+		
+		if ($(target.view.getDomNode()).attr("bxs") === "collection") {
+			showItems(["openAsPanel","exportToCsv"]);
+			
+			if (!target.view.isEmpty()) {
+				enableCommands(["exportToCsv"]);
+			}
+			
+			if (state === "active") {
+				enableCommands(["openAsPanel"]);
+			}
+		}
+		
+		showItems(["print"]);
+		
+		if (!target.view.isEmpty()) {
+			enableCommands(["print"]);
+		}
+	},
+	
 	_contexts: {
 		
 		unknown: {
@@ -97,8 +150,24 @@ Bxs.Command = {
 				Bxs.Boxes.getById(target.id).controller.doCommand("deleteRow");
 			},
 			
-			tools: function(target) {
-				
+			viewMedia: function(target) {
+				alert("viewMedia");
+			},
+			
+			downloadMedia: function(target) {
+				alert("downloadMedia");
+			},
+			
+			exportToCsv: function(target) {
+				alert("exportToCsv");
+			},
+			
+			openAsPanel: function(target) {
+				alert("openAsPanel");
+			},
+			
+			print: function(target) {
+				alert("print");
 			}
 		}
 	}

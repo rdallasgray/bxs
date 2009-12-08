@@ -39,12 +39,16 @@ Bxs.Toolbar.Box.prototype = $.extend(true,{},
 			
 			self.controlNames.forEach(function(b) {
 				self.controls[b] = document.createElement("toolbarbutton");
-				$(self.controls[b]).attr({ command: b+"-command", targetId: self.target });
+				$(self.controls[b]).attr({ 
+					command: b+"-command", 
+					targetId: self.target,
+					tooltiptext: $("#"+b+"-command").attr("label")
+				});
 				self.domNode.appendChild(self.controls[b]);
 			})
 			
 			self.controls.tools = document.createElement("toolbarbutton");
-			$(self.controls.tools).attr({ label: "Tools", targetId: self.target });
+			$(self.controls.tools).attr({ label: "Tools", targetId: self.target, popup: "boxToolsPopup", disabled: "true" });
 			this.domNode.appendChild(self.controls.tools);
 			
 			this.disable();
@@ -83,6 +87,7 @@ Bxs.Toolbar.Box.prototype = $.extend(true,{},
 				self.controls[c].removeAttribute("disabled");
 			});
 			
+			$(self.controls.tools).attr("popup","boxToolsPopup");
 		},
 		
 		disable: function() {
@@ -92,6 +97,8 @@ Bxs.Toolbar.Box.prototype = $.extend(true,{},
 			$.each(self.controls, function() {
 				this.setAttribute("disabled","true");
 			});
+			
+			$(self.controls.tools).removeAttr("popup");
 		}
 		
 	}
