@@ -69,8 +69,16 @@ You should have received a copy of the GNU General Public License along with Box
 		<vbox id="loaded">
 
 			<popupset id="mainPopupSet">
-				<popup id="">
-				</popup>
+			</popupset>
+
+			<popupset id="boxToolsPopupSet">
+				<menupopup id="boxToolsPopup" onpopupshowing="Bxs.Command.manageToolsMenu();">
+					<menuitem id="viewMedia-menuitem" key="viewMedia-key" command="viewMedia-command"/>
+					<menuitem id="downloadMedia-menuitem" key="downloadMedia-key" command="downloadMedia-command"/>
+					<menuitem id="exportToCsv-menuitem" key="exportToCsv-key" command="exportToCsv-command"/>
+					<menuitem id="openAsPanel-menuitem" key="openAsPanel-key" command="openAsPanel-command"/>
+					<menuitem id="print-menuitem" key="print-key" command="print-command"/>
+				</menupopup>
 			</popupset>
 			
 			<keyset id="mainKeySet">
@@ -80,12 +88,28 @@ You should have received a copy of the GNU General Public License along with Box
 				<key keycode="VK_ESCAPE" id="cancel-key" command="cancel-command"/>
 			</keyset>
 			
+			<keyset id="boxToolsKeySet">
+				<key key="v" modifiers="meta shift" id="viewMedia-key" command="viewMedia-command"/>
+				<key key="d" modifiers="meta shift" id="downloadMedia-key" command="downloadMedia-command"/>
+				<key key="e" modifiers="meta shift" id="exportToCsv-key" command="exportToCsv-command"/>
+				<key key="o" modifiers="meta shift" id="openAsPanel-key" command="openAsPanel-command"/>
+				<key key="p" modifiers="meta shift" id="print-key" command="print-command"/>
+			</keyset>
+			
 			<commandset id="mainCommandSet">
 				<command id="newRow-command" label="New Row" oncommand="Bxs.Command.dispatch('newRow');"/>
 				<command id="deleteRow-command" label="Delete Row" oncommand="Bxs.Command.dispatch('deleteRow');"/>
 				<command id="edit-command" label="Edit Row" oncommand="Bxs.Command.dispatch('edit');"/>
 				<command id="confirm-command" label="Confirm Edit" oncommand="Bxs.Command.dispatch('confirm');"/>
 				<command id="cancel-command" label="Cancel Edit" oncommand="Bxs.Command.dispatch('cancel');"/>
+			</commandset>
+			
+			<commandset id="boxToolsCommandSet">
+				<command id="viewMedia-command" label="View Media" oncommand="Bxs.Command.dispatch('viewMedia');"/>
+				<command id="downloadMedia-command" label="Download Media" oncommand="Bxs.Command.dispatch('downloadMedia');"/>
+				<command id="exportToCsv-command" label="Export to CSV" oncommand="Bxs.Command.dispatch('exportToCsv');"/>
+				<command id="openAsPanel-command" label="Open as Panel" oncommand="Bxs.Command.dispatch('openAsPanel');"/>
+				<command id="print-command" label="Print" oncommand="Bxs.Command.dispatch('print');"/>
 			</commandset>
 			
 			<broadcasterset id="mainBroadcasterSet">
