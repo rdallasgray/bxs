@@ -238,6 +238,10 @@ listitem[disabled="true"] {
 	-moz-user-select: none;
 }
 
+.menu-accel-container {
+	-moz-box-flex: 0;
+}
+
 panel {
 	-moz-appearance: none;
 }
