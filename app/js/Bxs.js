@@ -183,10 +183,12 @@ Bxs = {
 				Bxs.boot.controls.boxesProgress.val(0);
 				Bxs.login.controls.deck.get(0).selectedIndex = 1;
 				$(Bxs.eventsPublisher).bind("scriptLoaded",function(e,data) {
-					Bxs.boot.controls.scriptsProgress.val((Math.round(Bxs.Scripts.count/data)) * 100);
+					var percent = Math.round((data * 100)/Bxs.Scripts.count);
+					Bxs.boot.controls.scriptsProgress.val(percent);
 				});
 				$(Bxs.eventsPublisher).bind("boxBuilt",function(e,data) {
-					Bxs.boot.controls.boxesProgress.val((Math.round(Bxs.Boxes.count/data)) * 100);
+					var percent = Math.round((data * 100)/Bxs.Boxes.count);
+					Bxs.boot.controls.boxesProgress.val(percent);
 					if (data === Bxs.Boxes.count) {
 						Bxs.boot.setState("complete");
 					}

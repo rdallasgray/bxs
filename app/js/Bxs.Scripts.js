@@ -89,14 +89,13 @@ Bxs.Scripts = {
 				try {
 					data = data+"\n\n//@ sourceURL="+file;
 					eval(data);
+					filesLoaded++;
+					$(Bxs.eventsPublisher).trigger("scriptLoaded",[filesLoaded]);
 				}
 				catch (e) {
 					Bxs.error.fatal("failed to eval "+file);
 				}
 			});
-			
-			filesLoaded++;
-			$(Bxs.eventsPublisher).trigger("scriptLoaded",[filesLoaded]);
 		});
 		
 		Bxs.Scripts.loaded = true;
