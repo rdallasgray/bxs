@@ -113,7 +113,6 @@ You should have received a copy of the GNU General Public License along with Box
 			</commandset>
 			
 			<broadcasterset id="mainBroadcasterSet">
-				<broadcaster id="scriptsProgressBroadcaster"/>
 				<broadcaster id="eventsPublisher"/>
 			</broadcasterset>
 
