@@ -62,7 +62,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		
 		loadRowData: function(url) {
 				
-			Bxs.Ajax.get(url, function(data) {
+			Bxs.Ajax.getJSON(url, function(data) {
 				$(Bxs.eventsPublisher).trigger("loadedRowData."+url,[data]);
 			});
 		},
