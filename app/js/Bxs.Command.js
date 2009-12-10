@@ -37,12 +37,19 @@ Bxs.Command = {
 	},
 	
 	dispatch: function(command) {
-
+		
 		var [context, target] = this._getContext();
 
 		if (this._contexts[context][command] !== undefined) {
 			return this._contexts[context][command](target);
 		}
+	},
+	
+	dispatchToolsCommand: function(command) {
+		var context = "box", 
+			target = Bxs.Boxes.getById($(document.popupNode).attr("targetId"));
+		
+		return this._contexts[context][command](target);
 	},
 	
 	manageToolsMenu: function() {
@@ -159,7 +166,7 @@ Bxs.Command = {
 			},
 			
 			exportToCsv: function(target) {
-				alert("exportToCsv");
+				return target.controller.getCsv();
 			},
 			
 			openAsPanel: function(target) {
