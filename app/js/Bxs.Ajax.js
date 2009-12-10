@@ -50,11 +50,9 @@ Bxs.Ajax = {
 		Bxs.service.get(req);
 	},
 	
-	get: function(url,callback,options) {
+	getJSON: function(url,callback,options) {
 
-		var queryString = (typeof options === "object" && options.__count__ > 0) ? $.param(options) : null,
-			parts = (queryString === null) ? [url] : [url,queryString],
-			url = Bxs.Url.construct(parts.join("?")),
+		var url = Bxs.Url.construct(url,options),
 			data;
 
 		var ajaxGet = $.getJSON(url,null,function(data) {
@@ -132,17 +130,17 @@ Bxs.Ajax = {
 		this._authenticatedRequest(Bxs.Url.construct(url),"DELETE",null,callback);
 	},
 		
-	_authenticatedRequest: function(url,method,data,callback) {
+	_authenticatedRequest: function(url,method,data,callback,type) {
 		
-		data = (data !== null) ? Bxs.Json.stringify(data) : null;
-		
-		var req = {
+		var data = (data !== null) ? Bxs.Json.stringify(data) : null,
+			type = type || "application/json, text/javascript, */*",
+			req = {
 			service: "authenticatedRequest",
 			options: {
 				method: method,
 				url: url,
 				headers: {
-					Accept: "application/json, text/javascript, */*"
+					Accept: type
 				},
 				username: Bxs.auth.username,
 				password: Bxs.auth.password
