@@ -32,12 +32,14 @@ Bxs.Url = {
 	
 	construct: function(path,options) {
 		
-		var options = options || { includeFormat: true },
+		var queryString = (typeof options === "object" && options.__count__ > 0) ? $.param(options) : null,
+			path = (queryString === null) ? path : path+"?"+queryString,
 			path = path.replace(/^\//,"").replace(/^:[a-zA-Z]*/,function(str) { return Bxs.Url[str.substr(1)](); });
 				
 		if (!Bxs.Url.hasProtocol(path)) {
 			path = Bxs.Url.root("/"+path);
 		}
+		
 		return path;
 	}
 	
