@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with Box
 Bxs.Scripts = {
 	
 	files: [
+		"Bxs.Downloads.js",
 		"Bxs.Editor.js",
 		"Bxs.Parser.js",
 		"Bxs.Response.js",
