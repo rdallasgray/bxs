@@ -252,7 +252,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			if (Bxs.Response.success(action,response.status)) {
 				self.handleAction(action,response);
 				var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
-				console.debug(self.view.attrs.id+" triggering dataChanged");
 				$(Bxs.eventsPublisher).trigger("dataChanged."+self.view.attrs.name,[{ 
 					source: self.view.attrs.id, 
 					action: action, 
