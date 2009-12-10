@@ -105,11 +105,15 @@ You should have received a copy of the GNU General Public License along with Box
 			</commandset>
 			
 			<commandset id="boxToolsCommandSet">
-				<command id="viewMedia-command" label="View Media" oncommand="Bxs.Command.dispatch('viewMedia');"/>
-				<command id="downloadMedia-command" label="Download Media" oncommand="Bxs.Command.dispatch('downloadMedia');"/>
-				<command id="exportToCsv-command" label="Export to CSV" oncommand="Bxs.Command.dispatch('exportToCsv');"/>
+				<command id="viewMedia-command" label="View Media" 
+					oncommand="Bxs.Command.dispatchToolsCommand('viewMedia');"/>
+				<command id="downloadMedia-command" label="Download Media" 
+					oncommand="Bxs.Command.dispatchToolsCommand('downloadMedia');"/>
+				<command id="exportToCsv-command" label="Export to CSV" 
+					oncommand="Bxs.Command.dispatchToolsCommand('exportToCsv');"/>
 				<command id="openAsPanel-command" label="Open as Panel" oncommand="Bxs.Command.dispatch('openAsPanel');"/>
-				<command id="print-command" label="Print" oncommand="Bxs.Command.dispatch('print');"/>
+				<command id="print-command" label="Print" 
+					oncommand="Bxs.Command.dispatchToolsCommand('print');"/>
 			</commandset>
 			
 			<broadcasterset id="mainBroadcasterSet">
