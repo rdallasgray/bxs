@@ -105,7 +105,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 					var label = Bxs.Association.getName(columnName,self.attrs);
 					// preload the box data
 					Bxs.Ajax.getMetadata(label,function(metadata) {
-						Bxs.Ajax.get(metadata.url);
+						Bxs.Ajax.getJSON(metadata.url);
 					});
 				}
 				
