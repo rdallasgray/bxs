@@ -88,7 +88,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 				self.view.render(data);
 			});
 
-			Bxs.Ajax.get(
+			Bxs.Ajax.getJSON(
 				// TODO error handling
 				url,
 				function(data) {
@@ -96,6 +96,16 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 				},
 				options
 			);
+		},
+		
+		getCsv: function() {
+			var self = this,
+				url = self.parseUrl(),
+				options = self.view.hasFilters() ? self.view.getFilterOptions() : {};
+				
+				options.format = "csv";
+				
+				Bxs.Downloads.create(Bxs.Url.construct(url,options));
 		},
 		
 		refresh: function() {
