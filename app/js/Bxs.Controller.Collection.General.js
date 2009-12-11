@@ -84,7 +84,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				return;
 			}
 			if (dataObject.action === "update") {
-				// do the associationUpdate
+				return this.updateAssociation(columns,dataObject.data);
 			}
 			if (dataObject.action === "delete") {
 				return this.deleteAssociation(columns);
@@ -93,6 +93,11 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		
 		updateAssociation: function(columns,data) {
 			
+			var self =  this;
+			
+			columns.forEach(function(column) {
+				self.view.labelAssociatedColumn(column,column.getAttribute("value"),data);
+			});
 		},
 		
 		deleteAssociation: function(columns) {
@@ -101,7 +106,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			
 			$(columns).each(function() {
 				var row = $(this).parents(self.view.rowType);
-				console.debug(row);
 				row.remove();
 			});
 		},
@@ -176,11 +180,11 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		},
 		
 		remoteUpdate: function(data) {
-			console.debug("remoteUpdate "+self.view.attrs.id);
+			// TODO remoteUpdates
 		},
 		
 		remoteDelete: function(data) {
-			console.debug("remoteDelete "+self.view.attrs.id);
+			// TODO remoteDeletes
 		},
 		
 		handlers: $.extend(true, {}, Bxs.Controller.Box.General.prototype.handlers, {

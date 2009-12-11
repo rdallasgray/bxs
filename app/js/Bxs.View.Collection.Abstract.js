@@ -170,7 +170,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 					}
 				}
 				else {
-					self.labelAssociatedColumn(key,data[key],column);
+					self.labelAssociatedColumn(column,data[key]);
 				}
 				column.setAttribute("value",data[key]);
 			}
@@ -178,17 +178,23 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			return row;
 		},
 		
-		labelAssociatedColumn: function(columnName,value,column) {
+		labelAssociatedColumn: function(column,value,data) {
 			
-			var self = this;
+			var self = this,
+				columnName = column.getAttribute("name");
 			
 			if (value !== "") {
 				var realName = Bxs.Association.getName(columnName,self.attrs);
 				Bxs.Ajax.getMetadata(realName,function(metadata) {
-					$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
-						$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
-					});
-					self.controller.loadRowData(metadata.url+"/"+value);
+					if (data === undefined) {
+						$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
+							$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
+						});
+						self.controller.loadRowData(metadata.url+"/"+value);
+					}
+					else {
+						$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,data));
+					}
 				})
 			}
 			else {

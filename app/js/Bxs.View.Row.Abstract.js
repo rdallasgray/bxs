@@ -90,7 +90,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 					label = "";
 				
 				if (/_id$/.test(columnName)) {
-					self.parentView.labelAssociatedColumn(columnName,data[columnName],column);
+					self.parentView.labelAssociatedColumn(column,data[columnName]);
 				}
 				else {
 					$(column).attr("label",data[columnName]);
