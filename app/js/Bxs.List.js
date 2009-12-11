@@ -55,7 +55,7 @@ Bxs.List.prototype = {
 			});
 		});
 
-		$(Bxs.eventsPublisher).bind("dataChanged."+self.metadata.name,function(e,dataObject) {
+		$(Bxs.eventsPublisher).bind("dataChanged",function(e,dataObject) {
 			self.handleData(dataObject);
 		});
 	},
@@ -72,6 +72,9 @@ Bxs.List.prototype = {
 	},
 
 	handleData: function(dataObject) {
+		if (dataObject.name !== this.metadata.name) {
+			return;
+		}
 		this[dataObject.action](dataObject.data);
 	},
 	
