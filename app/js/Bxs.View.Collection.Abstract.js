@@ -158,8 +158,17 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 
 			var self = this,
 				row = this.rowTemplate.cloneNode(true);
-				
+
 			for (var key in data) {
+				
+				if (!(key in self.controller.schema)) {
+					try {
+						console.debug("key "+key+" not found in schema for "+sel.attrs.id);
+					}
+					catch(e) {}
+					continue;
+				}
+				
 				var column = Bxs.Xpath.getNode(row,"descendant::xul:"+self.columnType+"[@name='"+key+"']");
 				if (self.controller.schema[key].type === "boolean") {
 					column.setAttribute("checked",data[key].toString());
@@ -172,9 +181,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				else if (singleRow === true) {
 					self.labelAssociatedColumn(column,data[key]);
 				}
+				
 				column.setAttribute("value",data[key]);
 			}
-
+			
 			return row;
 		},
 		
