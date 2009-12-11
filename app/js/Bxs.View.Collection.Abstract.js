@@ -193,6 +193,12 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				var realName = Bxs.Association.getName(columnName,self.attrs);
 				
 				Bxs.Ajax.getMetadata(realName, function(metadata) {
+					if (self.associations === undefined) {
+						self.associations = {};
+					}
+					if (self.associations[metadata.name] === undefined) {
+						self.associations[metadata.name] = columnName;
+					}
 					Bxs.Ajax.getJSON(metadata.url, function(labelData) {
 						var labelDataById = {};
 						labelData.forEach(function(el) labelDataById[el.id] = el);
