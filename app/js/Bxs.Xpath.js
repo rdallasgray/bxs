@@ -42,6 +42,7 @@ Bxs.Xpath = {
 		while (node = xResult.iterateNext()) {
 			result.push(node);
 		}
+		
 		return result;
 	},
 	
