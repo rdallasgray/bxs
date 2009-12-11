@@ -179,8 +179,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		labelAssociatedColumn: function(column,value,data) {
-			console.debug("labelling associated column");
-			console.debug([column,value,data]);
 			var self = this,
 				columnName = column.getAttribute("name");
 			

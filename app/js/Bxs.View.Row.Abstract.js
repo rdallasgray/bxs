@@ -85,7 +85,6 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			var self = this;
 
 			$.each(self.schema, function(columnName,values) {
-				console.debug(columnName);
 				var column = $(self.domNode).children(self.parentView.columnType+"[name='"+columnName+"']").get(0),
 					label = "";
 				

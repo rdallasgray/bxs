@@ -160,7 +160,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		},
 		
 		insert: function(data) {
-			console.debug("inserting data");
 			var url = this.parseUrl(),
 				self = this;
 				
