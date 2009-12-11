@@ -18,7 +18,7 @@ Bxs.Downloads = {
 		//do preflight
 		var frame = document.createElement("iframe");
 		$("#tempBox").append(frame);
-		
+// TODO clean up frame after download, and respond to callback
 //		$(frame.contentWindow).one(function() { console.debug("done"); });
 		
 		$(frame).attr("src",url);
