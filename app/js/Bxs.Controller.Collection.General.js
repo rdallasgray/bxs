@@ -60,6 +60,30 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			this.loadDataDelayed();
 		},
 		
+		observedDataChanged: function(dataObject) {
+			if (dataObject.name === this.view.attrs.name) {
+				return this["remote"+$.string(dataObject.action).capitalize().str](dataObject.data);
+			}
+			if (dataObject.action === "insert") {
+				return;
+			}
+			if (this.view.associations !== undefined && this.view.associations[dataObject.name] !== undefined) {
+				this.checkAssociation(dataObject);
+			}
+		},
+		
+		checkAssociation: function(dataObject) {
+			var columnName = this.view.associations[dataObject.name],
+				id = dataObject.data.id,
+				columns = Bxs.Xpath.getArray(
+					this.view.getDomNode(),
+					"descendant::xul:"+this.view.columnType+"[@name='"+columnName+"' and @value='"+id+"']"
+				);
+				
+			console.debug(columns);
+			// then update the column, or delete the row. Inserts don't matter.
+		},
+		
 		loadRowData: function(url) {
 				
 			Bxs.Ajax.getJSON(url, function(data) {
@@ -122,6 +146,18 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				self = this;
 			
 			Bxs.Ajax.put(url,data,function(response) { self.handleData(response,"update"); });
+		},
+		
+		remoteInsert: function(data) {
+			this.view.appendRowAtHead(this.view.buildRow(data));
+		},
+		
+		remoteUpdate: function(data) {
+			console.debug("remoteUpdate "+self.view.attrs.id);
+		},
+		
+		remoteDelete: function(data) {
+			console.debug("remoteDelete "+self.view.attrs.id);
 		},
 		
 		handlers: $.extend(true, {}, Bxs.Controller.Box.General.prototype.handlers, {
