@@ -43,9 +43,9 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			$(Bxs.eventsPublisher).bind("dataRequested."+self.view.attrs.id,function() {
 				self.observedDataRequested();
 			});
-			$(Bxs.eventsPublisher).bind("dataChanged."+self.view.attrs.name,function(e,data) {
-				if (data.source !== self.view.attrs.id) {
-					self.observedDataChanged(data);
+			$(Bxs.eventsPublisher).bind("dataChanged",function(e,dataObject) {
+				if (dataObject.source !== self.view.attrs.id) {
+					self.observedDataChanged(dataObject);
 				}
 			});
 		},
@@ -66,9 +66,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			this.loadDataDelayed();
 		},
 		
-		observedDataChanged: function(data) {
-			console.debug(this.view.attrs.id+" observed dataChanged");
-			console.debug(data);
+		observedDataChanged: function(dataObject) {
 		},
 		
 		loadDataDelayed: function() {
@@ -252,9 +250,10 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			if (Bxs.Response.success(action,response.status)) {
 				self.handleAction(action,response);
 				var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
-				$(Bxs.eventsPublisher).trigger("dataChanged."+self.view.attrs.name,[{ 
+				$(Bxs.eventsPublisher).trigger("dataChanged",[{
+					name: self.view.attrs.name,
 					source: self.view.attrs.id, 
-					action: action, 
+					action: action,
 					data: newData 
 				}]);
 			}
