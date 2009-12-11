@@ -243,18 +243,25 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			Bxs.Ajax.put(url,data,function(response) { self.handleData(response,"update"); });
 		},
 		
-		handleData: function(response,action) {
-			
+		handleData: function(response,action,deletedId) {
+
 			var self = this;
 			
 			if (Bxs.Response.success(action,response.status)) {
+				
 				self.handleAction(action,response);
+				
 				var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
+				
+				if (action === "delete") {
+					newData = { id: deletedId };
+				}
+				
 				$(Bxs.eventsPublisher).trigger("dataChanged",[{
 					name: self.view.attrs.name,
 					source: self.view.attrs.id, 
 					action: action,
-					data: newData 
+					data: newData
 				}]);
 			}
 			else {

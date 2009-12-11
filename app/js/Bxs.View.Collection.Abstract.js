@@ -164,13 +164,36 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				if (self.controller.schema[key].type === "boolean") {
 					column.setAttribute("checked",data[key].toString());
 				}
-				if (!column.getAttribute("association") && !(column.getAttribute("type") === "checkbox")) {
-					column.setAttribute("label",data[key]);
+				if (!column.getAttribute("association")) {
+					if (!(column.getAttribute("type") === "checkbox")) {
+						column.setAttribute("label",data[key]);
+					}
+				}
+				else {
+					self.labelAssociatedColumn(key,data[key],column);
 				}
 				column.setAttribute("value",data[key]);
 			}
 
 			return row;
+		},
+		
+		labelAssociatedColumn: function(columnName,value,column) {
+			
+			var self = this;
+			
+			if (value !== "") {
+				var realName = Bxs.Association.getName(columnName,self.attrs);
+				Bxs.Ajax.getMetadata(realName,function(metadata) {
+					$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
+						$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
+					});
+					self.controller.loadRowData(metadata.url+"/"+value);
+				})
+			}
+			else {
+				$(column).attr("label","");
+			}
 		},
 		
 		labelAssociatedColumns: function() {

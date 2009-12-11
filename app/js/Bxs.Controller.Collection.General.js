@@ -80,8 +80,30 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 					"descendant::xul:"+this.view.columnType+"[@name='"+columnName+"' and @value='"+id+"']"
 				);
 				
-			console.debug(columns);
-			// then update the column, or delete the row. Inserts don't matter.
+			if (columns.length === 0) {
+				return;
+			}
+			if (dataObject.action === "update") {
+				// do the associationUpdate
+			}
+			if (dataObject.action === "delete") {
+				return this.deleteAssociation(columns);
+			}
+		},
+		
+		updateAssociation: function(columns,data) {
+			
+		},
+		
+		deleteAssociation: function(columns) {
+			
+			var self = this;
+			
+			$(columns).each(function() {
+				var row = $(this).parents(self.view.rowType);
+				console.debug(row);
+				row.remove();
+			});
 		},
 		
 		loadRowData: function(url) {
@@ -118,9 +140,10 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				this.view.setState("deleting");
 			
 				var url = this.parseUrl()+"/"+this.view.getSelectedId(),
-					self = this;
+					self = this,
+					id = $(this.view.getSelectedRow()).children(this.view.columnType+"[name='id']").attr("value");
 			
-				Bxs.Ajax.deleteRow(url,function(response) { self.handleData(response,"delete"); });
+				Bxs.Ajax.deleteRow(url,function(response) { self.handleData(response,"delete",id); });
 			}
 		}),
 		

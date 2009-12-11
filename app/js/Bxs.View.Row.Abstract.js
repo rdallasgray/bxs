@@ -90,7 +90,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 					label = "";
 				
 				if (/_id$/.test(columnName)) {
-					self.labelAssociatedColumn(columnName,data[columnName],column);
+					self.parentView.labelAssociatedColumn(columnName,data[columnName],column);
 				}
 				else {
 					$(column).attr("label",data[columnName]);
@@ -110,24 +110,6 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 					$(column).attr({ value: data[columnName] });
 				}
 			});
-		},
-		
-		labelAssociatedColumn: function(columnName,value,column) {
-			
-			var self = this;
-			
-			if (value !== "") {
-				var realName = Bxs.Association.getName(columnName,self.parentView.attrs);
-				Bxs.Ajax.getMetadata(realName,function(metadata) {
-					$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
-						$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
-					});
-					self.parentView.controller.loadRowData(metadata.url+"/"+value);
-				})
-			}
-			else {
-				$(column).attr("label","");
-			}
 		},
 		
 		focusFirstWidget: function() {
