@@ -154,7 +154,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 				if (!this.view.editable()) {
 					return;
 				}
-			
+
 				switch (this.view.getState()) {
 					case "active":
 					this.editOpen();
@@ -171,7 +171,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			},
 		
 			confirm: function() {
-				
+
 				if (!this.view.editable()) {
 					return;
 				}
@@ -222,7 +222,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 		
 		transmitData: function() {
-			
+
 			this.view.setState("communicating");
 			
 			var data = this.view.getEditedData(),
@@ -244,11 +244,10 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 		
 		handleData: function(response,action,deletedId) {
-
+			
 			var self = this;
 			
 			if (Bxs.Response.success(action,response.status)) {
-				
 				self.handleAction(action,response);
 				
 				var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);

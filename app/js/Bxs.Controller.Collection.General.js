@@ -160,7 +160,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		},
 		
 		insert: function(data) {
-			
+			console.debug("inserting data");
 			var url = this.parseUrl(),
 				self = this;
 				
@@ -176,7 +176,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		},
 		
 		remoteInsert: function(data) {
-			this.view.appendRowAtHead(this.view.buildRow(data));
+			this.view.appendRowAtHead(this.view.buildRow(data,true));
 		},
 		
 		remoteUpdate: function(data) {

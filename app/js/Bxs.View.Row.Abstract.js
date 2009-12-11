@@ -81,12 +81,12 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 		},
 
 		updateData: function(data) {
-			
+
 			var self = this;
 
 			$.each(self.schema, function(columnName,values) {
-				
-				var column = $(self.domNode).children(self.parentView.columnType+"[name='"+columnName+"']"),
+				console.debug(columnName);
+				var column = $(self.domNode).children(self.parentView.columnType+"[name='"+columnName+"']").get(0),
 					label = "";
 				
 				if (/_id$/.test(columnName)) {

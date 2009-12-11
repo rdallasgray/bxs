@@ -153,7 +153,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			self.rowTemplate = row;
 		},
 		
-		buildRow: function(data) {
+		buildRow: function(data,singleRow) {
 			data = data || {};
 
 			var self = this,
@@ -169,7 +169,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 						column.setAttribute("label",data[key]);
 					}
 				}
-				else {
+				else if (singleRow === true) {
 					self.labelAssociatedColumn(column,data[key]);
 				}
 				column.setAttribute("value",data[key]);
@@ -179,7 +179,8 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		labelAssociatedColumn: function(column,value,data) {
-			
+			console.debug("labelling associated column");
+			console.debug([column,value,data]);
 			var self = this,
 				columnName = column.getAttribute("name");
 			

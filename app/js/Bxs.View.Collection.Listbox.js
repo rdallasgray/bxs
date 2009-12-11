@@ -129,7 +129,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				});
 			
 				var col = document.createElement('listcol');
-				var columnLength = values.length ? parseInt(values.length) : 4;
+				var columnLength = values.length ? parseInt(values.length) : 16;
 				col.setAttribute('width',Math.min(Math.round(Math.sqrt(columnLength) * 16),200));
 			
 				if (self.hidesColumn(columnName)) {
