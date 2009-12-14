@@ -118,6 +118,22 @@ Bxs.Ajax = {
 		
 	},
 	
+	preflight: function(url,callback) {
+		var req = {
+			service: "authenticatedRequest",
+			options: {
+				method: "HEAD",
+				url: url,
+				username: Bxs.auth.username,
+				password: Bxs.auth.password
+			},
+			callback: function() {
+				callback();
+			}
+		};
+		Bxs.service.get(req);
+	},
+	
 	put: function(url,data,callback) {
 		this._authenticatedRequest(Bxs.Url.construct(url),"PUT",data,callback);
 	},
