@@ -14,14 +14,19 @@ You should have received a copy of the GNU General Public License along with Box
 
 Bxs.Downloads = {
 	
-	create: function(url, callback) {
-		//do preflight
-		var frame = document.createElement("iframe");
-		$("#tempBox").append(frame);
-// TODO clean up frame after download, and respond to callback
-//		$(frame.contentWindow).one(function() { console.debug("done"); });
-		
-		$(frame).attr("src",url);
+	create: function(url) {
+		if (document.getElementById("downloadFrame") === null) {
+			
+			var frame = document.createElement("iframe");
+			
+			frame.id = "downloadFrame";
+			$("#tempBox").append(frame);
+		}
+		Bxs.Ajax.preflight(url,function() { Bxs.Downloads.start(url); });
+	},
+	
+	start: function(url) {
+		$("#downloadFrame").attr("src",url);
 	}
 	
 }
