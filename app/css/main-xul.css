@@ -198,7 +198,7 @@ listitem[selected="true"] {
 }
 
 listitem.open {
-	background-color: rgb(255,255,245) !important;
+	background-color: rgb(245,245,235) !important;
 	color: black;
 }
 
