@@ -222,6 +222,10 @@ Bxs = {
 		fatal: function(msg) {
 			// TODO make sure all errors are notified (by POSTING to server://base/errors ?), flash just one alert, and shut down
 			Bxs = null;
+			try {
+				console.debug(msg)
+			}
+			catch(e) {}
 			alert("Fatal error: \n"+msg+"\n\nPlease reload Boxes and try again. If errors continue please contact support.");
 		},
 		recoverable: function(response) {			
