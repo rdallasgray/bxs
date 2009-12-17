@@ -122,7 +122,7 @@ Bxs.Ajax = {
 		var req = {
 			service: "authenticatedRequest",
 			options: {
-				method: "GET",
+				method: "HEAD",
 				url: url,
 				username: Bxs.auth.username,
 				password: Bxs.auth.password
