@@ -37,11 +37,11 @@ Bxs.Filter.Foreign.prototype = $.extend(true,{},
 			var sep = document.createElement("menuseparator");
 			this.menupopup.appendChild(sep);
 			
-			$(Bxs.eventsPublisher).one("listReady."+self.attrs.listUrl, function() {
-				$(self.menupopup).append(self.list.getDomNode());
+			$(Bxs.eventsPublisher).one("listReady."+self.attrs.listUrl+self.attrs.target, function() {
+				var n = self.list.getDomNode();
+				$(self.menupopup).append(n);
 			});
-
-			this.list = Bxs.Factory.List.build(this.attrs.listUrl,this.name);
+			this.list = Bxs.Factory.List.build(this.attrs.listUrl,this.name,self.attrs.target);
 
 			this.setValue("null");
 			$(this.domNode).attr("label","All");

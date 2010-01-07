@@ -12,11 +12,12 @@ You should have received a copy of the GNU General Public License along with Box
 
 */
 
-Bxs.List = function(url,listName) {
+Bxs.List = function(url,listName,requester) {
 	
 	this.url = url;
 	this.listName = listName;
-}
+	this.requester = requester;
+};
 
 Bxs.List.prototype = {
 	
@@ -26,31 +27,28 @@ Bxs.List.prototype = {
 		this.domNode = document.createDocumentFragment();
 	
 		Bxs.Ajax.getMetadata(self.listName,function(metadata) {
-			
 			self.metadata = metadata;
 			
 			Bxs.Ajax.getJSON(self.url,function(dataSet,notModified) {
 				var validCachedNode = false;
-				
 				if (notModified) {
 					
 					var cachedNode = Bxs.Cache.get(["Lists",self.url]);
-
+					
 					if (cachedNode !== false) {
 						validCachedNode = true;
 						self.domNode = cachedNode;
-						$(Bxs.eventsPublisher).trigger("listReady."+self.url,[self]);
+						$(Bxs.eventsPublisher).trigger("listReady."+self.url+self.requester,[self]);
 					}
 				}
 				
 				if (!validCachedNode) {
-					
 					dataSet.forEach(function(row) {
 						self.createNode(row);
 					});
-				
-					Bxs.Cache.set(["Lists",self.url],self.domNode);
-					$(Bxs.eventsPublisher).trigger("listReady."+self.url,[self]);
+					
+					Bxs.Cache.set(["Lists",self.url],self.domNode.cloneNode(true));
+					$(Bxs.eventsPublisher).trigger("listReady."+self.url+self.requester,[self]);
 				}
 			});
 		});
