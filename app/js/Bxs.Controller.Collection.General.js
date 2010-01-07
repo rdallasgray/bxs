@@ -62,6 +62,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		
 		observedDataChanged: function(dataObject) {
 			if (dataObject.name === this.view.attrs.name) {
+				//TODO it's more complicated than this ... would need to know, e.g., the id set by any observed box.
 				return this["remote"+$.string(dataObject.action).capitalize().str](dataObject.data);
 			}
 			if (dataObject.action === "insert") {
