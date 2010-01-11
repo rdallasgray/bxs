@@ -51,7 +51,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 		
 		observedSelectionChanged: function() {
-
 			this.loadDataDelayed();
 		},
 		

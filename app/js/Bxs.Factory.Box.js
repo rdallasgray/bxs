@@ -19,7 +19,7 @@ if (Bxs.Factory === undefined) {
 Bxs.Factory.Box = {
 	
 	build: function(node,temp) {
-		
+
 		var temp = temp || false,
 			nodeType = $.string(node.nodeName).capitalize().str,
 			boxType = $.string(node.getAttribute("bxs")).capitalize().str,
@@ -37,7 +37,8 @@ Bxs.Factory.Box = {
 		
 		var parsedAttrs = Bxs.Parser.attributes(node.attributes);
 
-		box.controller = node.hasAttribute("media") ? new Bxs.Controller[boxType].Media : new Bxs.Controller[boxType].General;
+		box.controller = node.hasAttribute("media") ? 
+			new Bxs.Controller[boxType].Media : new Bxs.Controller[boxType].General;
 		
 		if (node.hasAttribute("media")) {
 			var mediaType = $.string(/^\w*/.exec(parsedAttrs.media.type)[0]).capitalize().str;
