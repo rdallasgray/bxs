@@ -58,6 +58,17 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 					
 				self.view.appendRowAtHead(row);
 			}
-		})
+		}),
+		
+		downloadMedia: function() {
+			var url = this.parseUrl(true)+"/"+this.view.getSelectedId();
+				
+			Bxs.Downloads.create(Bxs.Url.construct(url));
+		},
+		
+		viewMedia: function() {
+			var url = this.parseUrl(true)+"/"+this.view.getSelectedId(),
+				viewWindow = window.open(url,"viewWindow");
+		}
 	}
 );

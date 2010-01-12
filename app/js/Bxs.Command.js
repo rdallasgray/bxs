@@ -158,11 +158,11 @@ Bxs.Command = {
 			},
 			
 			viewMedia: function(target) {
-				alert("viewMedia");
+				return target.controller.viewMedia();
 			},
 			
 			downloadMedia: function(target) {
-				alert("downloadMedia");
+				return target.controller.downloadMedia();
 			},
 			
 			exportToCsv: function(target) {

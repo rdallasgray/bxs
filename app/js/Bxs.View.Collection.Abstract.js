@@ -218,7 +218,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 
 			self.associatedColumns.forEach(function(columnName) {
 				//Xpath for speed
-				var associatedColumns = Bxs.Xpath.getArray(self.domNode,"descendant::xul:"+self.columnType+"[@name='"+columnName+"']");
+				var associatedColumns = Bxs.Xpath.getArray(
+					self.domNode,
+					"descendant::xul:"+self.columnType+"[@name='"+columnName+"']"
+				);
 
 				if (associatedColumns.snapshotLength === 0) {
 					columnCount++;

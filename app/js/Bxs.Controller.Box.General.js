@@ -112,7 +112,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 				
 				options.format = "csv";
 				
-				Bxs.Downloads.create(Bxs.Url.construct(url,options));
+				Bxs.Downloads.create(url,options);
 		},
 		
 		refresh: function() {
