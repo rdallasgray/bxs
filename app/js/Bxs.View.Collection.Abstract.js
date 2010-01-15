@@ -40,9 +40,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				
 		getSelectedId: function() {
 			var sel = $(this.getSelectedRow()).children(this.columnType+"[name='id']").attr("value");
-			if ((sel !== undefined) && (sel !== "")) {
+			if ((sel !== undefined) && (sel !== "") && (sel !== null)) {
 				this._selectedId = sel;
 			}
+			sel = (sel === undefined) ? null : sel;
 			return sel;
 		},
 
@@ -487,10 +488,11 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			this.forwardState(this.editToolbar);
 			
 			$(self.domNode).bind("select", function() {
+
 				var s = self._selectedId,
 					g = self.getSelectedId();
 
-				if ((s !== g) && (g !== "") && (g !== undefined)) {
+				if ((s !== g) && (g !== "") && (g !== null)) {
 					$(Bxs.eventsPublisher).trigger("selectionChanged."+self.attrs.id);
 					if (self.getState() === "ready") self.setState("active");
 				}

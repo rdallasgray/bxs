@@ -73,6 +73,7 @@ You should have received a copy of the GNU General Public License along with Box
 
 			<popupset id="boxToolsPopupSet">
 				<menupopup id="boxToolsPopup" onpopupshowing="Bxs.Command.manageToolsMenu();">
+					<menuitem id="refresh-menuitem" key="refresh-key" command="refresh-command"/>
 					<menuitem id="viewMedia-menuitem" key="viewMedia-key" command="viewMedia-command"/>
 					<menuitem id="downloadMedia-menuitem" key="downloadMedia-key" command="downloadMedia-command"/>
 					<menuitem id="exportToCsv-menuitem" key="exportToCsv-key" command="exportToCsv-command"/>
@@ -89,6 +90,7 @@ You should have received a copy of the GNU General Public License along with Box
 			</keyset>
 			
 			<keyset id="boxToolsKeySet">
+				<key key="r" modifiers="meta shift" id="refresh-key" command="refresh-command"/>
 				<key key="v" modifiers="meta shift" id="viewMedia-key" command="viewMedia-command"/>
 				<key key="d" modifiers="meta shift" id="downloadMedia-key" command="downloadMedia-command"/>
 				<key key="e" modifiers="meta shift" id="exportToCsv-key" command="exportToCsv-command"/>
@@ -105,6 +107,8 @@ You should have received a copy of the GNU General Public License along with Box
 			</commandset>
 			
 			<commandset id="boxToolsCommandSet">
+				<command id="refresh-command" label="Refresh" 
+					oncommand="Bxs.Command.dispatchToolsCommand('refresh');"/>
 				<command id="viewMedia-command" label="View Media" 
 					oncommand="Bxs.Command.dispatchToolsCommand('viewMedia');"/>
 				<command id="downloadMedia-command" label="Download Media" 

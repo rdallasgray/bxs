@@ -67,7 +67,7 @@ Bxs.Command = {
 		commands.attr("disabled","true");
 		menuitems.addClass("hidden");
 		
-		var showItems = function(i) {
+		var showCommands = function(i) {
 			$.each(i, function() {
 				$("#"+this+"-menuitem").removeClass("hidden");
 			})
@@ -80,14 +80,14 @@ Bxs.Command = {
 		}
 		
 		if (target.view.mediaType !== undefined) {
-			showItems(["viewMedia","downloadMedia"]);
+			showCommands(["viewMedia","downloadMedia"]);
 			if (state === "active") {
 				enableCommands(["viewMedia","downloadMedia"]);
 			}
 		}
 		
 		if ($(target.view.getDomNode()).attr("bxs") === "collection") {
-			showItems(["openAsPanel","exportToCsv"]);
+			showCommands(["openAsPanel","exportToCsv"]);
 			
 			if (!target.view.isEmpty()) {
 				enableCommands(["exportToCsv"]);
@@ -98,7 +98,11 @@ Bxs.Command = {
 			}
 		}
 		
-		showItems(["print"]);
+		showCommands(["print","refresh"]);
+
+		if ((["active","ready"]).some(function(el) el === state)) {
+			enableCommands(["refresh"]);
+		}
 		
 		if (!target.view.isEmpty()) {
 			enableCommands(["print"]);
@@ -155,6 +159,10 @@ Bxs.Command = {
 				}
 		
 				Bxs.Boxes.getById(target.id).controller.doCommand("deleteRow");
+			},
+			
+			refresh: function(target) {
+				return target.controller.refresh();
 			},
 			
 			viewMedia: function(target) {

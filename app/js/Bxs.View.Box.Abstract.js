@@ -156,10 +156,10 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		},
 		
 		activate: function() {
-			
 			var self = this;
 
-			if (self.attrs.observing === undefined && self.attrs.suppressContentLoading === undefined) {
+			if ((self.attrs.observing === undefined || self.getObservedBox().view.getSelectedId() !== null) 
+				&& self.attrs.suppressContentLoading === undefined) {
 				self.requestData();
 			}
 			else {
