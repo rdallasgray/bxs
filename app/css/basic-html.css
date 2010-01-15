@@ -1,7 +1,7 @@
 body {
-	background-color: white;
 	font: 12px/18px sans-serif;
 	margin: 0;
+	height: 92%;
 }
 
 div#editor {
@@ -10,4 +10,14 @@ div#editor {
 
 body#tinymce {
 	padding: 9px 9px 0 9px;
+}
+
+.busy {
+	background-image: url(/Bxs/app/img/loading_16_grey.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.busy * {
+	opacity: 0;
 }

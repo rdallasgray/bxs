@@ -63,8 +63,8 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 			switch (options.state) {
 				
 				case "cancel":
-				this.textNode.innerHTML = this.storedValue;
 				this.deactivateEditor();
+				this.textNode.innerHTML = this.storedValue;
 				break;
 				
 				case "complete":
@@ -76,6 +76,17 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 			this.deactivateEditor();
 			$(this.domNode).removeClass("editing");
 		},
+		
+		states: $.extend(true, {}, Bxs.View.Box.Abstract.prototype.states, {
+			busy: function() {
+				$(this.textNode.parentNode).addClass("busy");
+			},
+			ready: function() {
+				$(this.textNode.parentNode).removeClass("busy");
+				this.enable();
+				this.setState("active");
+			},
+		}),
 		
 		boot: function() {
 			
