@@ -21,6 +21,7 @@ Bxs.View.Row.Abstract = function(parentView,domNode,values) {
 	this.parentView = parentView;
 	this.schema = $.extend(true,{},this.parentView.controller.schema);
 	this.defaultValues = values;
+	
 	var self = this;
 	
 	domNode = domNode || self.parentView.buildRow();
@@ -32,7 +33,7 @@ Bxs.View.Row.Abstract = function(parentView,domNode,values) {
 
 
 Bxs.View.Row.Abstract.prototype = $.extend(true,{},
-
+	
 	Bxs.Mixin.Stateable,
 
 	{		
@@ -56,16 +57,23 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			
 			var domNode = $(this.domNode).children(this.parentView.columnType+"[name='"+columnName+"']"),
 				self = this;
+				
+			domNode.addClass("communicating");
 			
 			if (self.defaultValues !== null && (value = self.defaultValues[columnName])) {
-				$(domNode).attr("value",value);
+				domNode.attr("value",value);
 			}
 
 			$(Bxs.eventsPublisher).one("widgetReady."+columnName, function(e,widget) {
 				
 				domNode.append(widget.getDomNode());
-// TODO check if this has side effects				
-//				$(widget.getDomNode()).attr("disabled","true");
+				domNode.removeClass("communicating");
+				domNode.addClass("open");
+				if(!domNode.attr("hidden") && !self.focussed) {
+					console.debug("focussing "+columnName);
+					widget.getDomNode().focus();
+					self.focussed = true;
+				}
 
 				$(Bxs.eventsPublisher).trigger("widgetAppended."+columnName);
 
@@ -76,7 +84,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				}
 			});
 			
-			self.widgets[columnName] = Bxs.Factory.Widget.build(schema,$(domNode).attr("value"),domNode.get(0),self.parentView);
+			self.widgets[columnName] = Bxs.Factory.Widget.build(schema,domNode.attr("value"),domNode.get(0),self.parentView);
 
 		},
 
@@ -110,48 +118,22 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				}
 			});
 		},
-		
-		focusFirstWidget: function() {
-			$.each(this.widgets,function() {
-				if(!$(this.getDomNode().parentNode).attr("hidden")) {
-					this.getDomNode().focus();
-					return false;
-				}
-			});
-		},
 
 		close: function() {
 
 			var self = this;
-			
-			self.setState("communicating");
+	
+			$(this.domNode).children(this.parentView.columnType).removeClass("communicating");
+			$(this.domNode).children(this.parentView.columnType).removeClass("open");
+			this.focussed = false;
+
+			self.disable();
 
 			$.each(self.widgets, function() {
 				$(this.getDomNode()).remove();
 			});
 
 			$(self.domNode).removeAttr("allowevents");
-			self.setState("closed");
-		},
-
-		states: {
-			
-			communicating: function() {
-				this.disable();
-				$(this.domNode).removeClass("open");
-				$(this.domNode).addClass("communicating");
-			},
-			open: function() {
-				$(this.domNode).removeClass("communicating");
-				$(this.domNode).addClass("open");
-				this.enable();
-				this.focusFirstWidget();
-			},
-			closed: function() {
-				$(this.domNode).removeClass("communicating");
-				$(this.domNode).removeClass("open");
-			}
-
 		},
 
 		disable: function() {
@@ -166,6 +148,12 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			});
 		},
 		
+		states: {
+			communicating: function() {
+				$(this.domNode).addClass("communicating");
+			}
+		},
+		
 		boot: function() {
 
 			var self = this;
@@ -175,13 +163,10 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			}); 
 			
 			self.widgetCount = self.schema.__count__;
-			
-			self.setState("communicating");
-			
+/*			
 			$(Bxs.eventsPublisher).one("allWidgetsAppended", function() {
-				self.setState("open");
 			});
-			
+*/			
 			$.each(self.schema,function(columnName,schema) {
 				self.buildWidget(columnName,schema);
 			});

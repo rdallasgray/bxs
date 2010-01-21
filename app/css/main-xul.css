@@ -197,13 +197,19 @@ listitem[selected="true"] {
 	color: white;
 }
 
-listitem.open {
+listcell.open {
 	background-color: rgb(255,255,245) !important;
 	color: black;
 }
 
-listitem.open .listcell-label {
+listcell.open .listcell-label {
 	visibility: collapse;
+}
+
+listcell.communicating {
+/*	background-color: rgb(210,210,210) !important;
+	-moz-user-focus: ignore;
+	-moz-user-select: none;*/
 }
 
 listitem.communicating {
@@ -212,8 +218,12 @@ listitem.communicating {
 	-moz-user-select: none;
 }
 
-listitem.communicating * {
-	visibility: hidden;
+listcell.communicating * {
+/*	visibility: hidden;*/
+}
+
+listcell.open[type="checkbox"] .listcell-check {
+	visibility: collapse;
 }
 
 listitem.open listcell[type="checkbox"] .listcell-check {
