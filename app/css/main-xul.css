@@ -193,12 +193,8 @@ listitem[selected="true"] {
 	color: white;
 }
 
-listitem[allowevents="true"] {
-	border: solid rgb(120,120,120) 1px;
-}
-
 listcell.open {
-	background-color: white !important;
+	background-color: rgb(250,250,240) !important;
 	color: black;
 }
 
