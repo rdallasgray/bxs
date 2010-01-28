@@ -109,6 +109,7 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 				self.activateEditor = function() {
 					cd.body.style.overflow = "hidden";
 					Bxs.Editor.init(cw);
+					self.setState("editing");
 				}
 				self.deactivateEditor = function() {
 					Bxs.Editor.deactivate(cw);
