@@ -34,6 +34,7 @@ Bxs.Downloads = {
 	},
 	
 	start: function(url) {
+		$("#downloadFrame").attr("src","");
 		$("#downloadFrame").attr("src",url);
 	}
 	
