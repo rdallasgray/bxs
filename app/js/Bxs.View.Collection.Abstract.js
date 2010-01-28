@@ -294,9 +294,9 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 	
 		editOpen: function(options) {
 			
-			var options = options || { state: "default" };
-			
-			var selectedRow = null,
+			var options = options || { state: "default" },
+				self = this,
+				selectedRow = null,
 				state = "editing",
 				values = options.values || null;
 			
@@ -320,10 +320,13 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				}
 				this.setSelectedRow(this.editView.getDomNode());
 			}
+			
+			$(Bxs.eventsPublisher).one("editViewReady", function() {
+				self.setState(state);
+				this.ensureRowIsVisible(this.editView.getDomNode());
+			});
 
 			this.editView.boot();
-			this.ensureRowIsVisible(this.editView.getDomNode());
-			this.setState(state);
 		},
 		
 		buildEditView: function(selectedRow,values) {

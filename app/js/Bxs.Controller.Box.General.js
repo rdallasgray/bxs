@@ -209,9 +209,11 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 	
 		editOpen: function() {
+			var self = this;
+			
 			Bxs.Boxes.disable();
-			this.view.editOpen();
-			this.view.setState("editing");
+			self.view.setState("opening");
+			self.view.editOpen();
 		},
 	
 		editClose: function(options) {

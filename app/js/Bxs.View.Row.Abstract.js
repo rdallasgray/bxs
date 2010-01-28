@@ -79,7 +79,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				self.widgetCount--;
 				
 				if (self.widgetCount === 0) {
-					$(Bxs.eventsPublisher).trigger("allWidgetsAppended");
+					$(Bxs.eventsPublisher).trigger("editViewReady");
 				}
 			});
 			
