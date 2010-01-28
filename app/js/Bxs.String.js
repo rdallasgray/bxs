@@ -19,11 +19,18 @@ Bxs.String = {
 		
 		default_pattern = default_pattern || "(no :match)";
 		
-		var string = pattern.replace(/:\w*/g,function(match) {
+		var string = pattern.replace(/:\w+/g,function(match) {
 			var property = match.substr(1),
 				stringPart = object[property];
+			
+			if (object[property] === undefined) {
+				if (object[property+"_id"] !== undefined) {
+					//TODO probably need to make this event-based so we can get a foreign list and make strings from that
+					stringPart = object[property+"_id"];
+				}
+			}
 				
-			if (stringPart == "") {
+			if (stringPart === "" || stringPart === undefined) {
 				return default_pattern.replace(/:match/,property);
 			}
 				
