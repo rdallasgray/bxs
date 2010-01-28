@@ -172,10 +172,6 @@ panel *[bxs="box"], panel *[bxs="collection"] {
 	margin: 0;
 }
 
-*[bxs="box"]:focus, *[bxs="collection"]:focus {
-	-moz-box-shadow: rgba(70,100,140,0.8) 0 0 8px;
-}
-
 listitem {
 	border: 0;
 	margin: 0;
@@ -185,7 +181,7 @@ listitem {
 }
 
 listitem:nth-child(even) {
-	background-color: rgb(245,245,245);
+	background-color: rgb(240,240,240);
 }
 
 listbox:focus listitem[selected="true"] {
@@ -197,8 +193,14 @@ listitem[selected="true"] {
 	color: white;
 }
 
+listitem[allowevents="true"] {
+	border: solid rgb(200,200,200) 1px;
+	border-left: 0;
+	border-right: 0;
+}
+
 listcell.open {
-	background-color: rgb(255,255,245) !important;
+	background-color: rgb(190,230,255) !important;
 	color: black;
 }
 
@@ -226,10 +228,6 @@ listcell.open[type="checkbox"] .listcell-check {
 	visibility: collapse;
 }
 
-listitem.open listcell[type="checkbox"] .listcell-check {
-	visibility: collapse;
-}
-
 listcell[type="checkbox"] .listcell-label {
 	visibility: collapse;
 }
@@ -239,7 +237,7 @@ listcell[type="checkbox"] {
 }
 
 listbox.deleting listitem[selected="true"] {
-	background-color: rgb(240,160,160) !important;
+	background-color: rgb(255,120,120) !important;
 	color: white !important;
 }
 
@@ -270,7 +268,7 @@ listcell[hidden="true"] {
 }
 
 listcell label {
-	padding: 3px 0px 1px 7px;
+	padding: 3px 0px 1px 8px;
 }
 
 listcell textbox {
