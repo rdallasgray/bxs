@@ -323,7 +323,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			
 			$(Bxs.eventsPublisher).one("editViewReady", function() {
 				self.setState(state);
-				this.ensureRowIsVisible(this.editView.getDomNode());
+				self.ensureRowIsVisible(self.editView.getDomNode());
 			});
 
 			this.editView.boot();
