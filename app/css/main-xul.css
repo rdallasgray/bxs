@@ -161,7 +161,7 @@ listbox.busy listitem {
 }
 
 listbox[disabled="true"] {
-	color: rgb(120,120,120);
+	color: rgb(180,180,180);
 }
 
 *[bxs="box"],*[bxs="collection"] {
@@ -231,7 +231,7 @@ listcell[type="checkbox"] {
 }
 
 listbox.deleting listitem[selected="true"] {
-	background-color: rgb(255,120,120) !important;
+	background-color: rgb(255,60,80) !important;
 	color: white !important;
 }
 
