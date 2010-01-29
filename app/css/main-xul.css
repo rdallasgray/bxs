@@ -193,8 +193,11 @@ listitem[selected="true"] {
 	color: white;
 }
 
+listitem[allowevents="true"] {
+}
+
 listcell.open {
-	background-color: rgb(250,250,240) !important;
+	background-color: rgb(255,255,230) !important;
 	color: black;
 }
 
