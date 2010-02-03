@@ -75,8 +75,8 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				this.parentTab = $(this.domNode).parents("tabpanels").prev("tabs")
 					.children("[linkedpanel='"+this.attrs.id+"_panel']").get(0);
 			}
-			$(this.parentTab).unbind("command");
-			$(this.parentTab).one("command",callback);
+			$(this.parentTab).unbind("command."+this.attrs.id);
+			$(this.parentTab).one("command."+this.attrs.id,callback);
 		},
 
 		boot: function(schema) {
