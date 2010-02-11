@@ -29,7 +29,6 @@ Bxs.Scripts = {
 		"Bxs.Boxes.js",
 		"Bxs.Panel.js",
 		"Bxs.List.js",
-		"Bxs.String.js",
 		"Bxs.Association.js",
 		
 		"Bxs.Factory.Box.js",
