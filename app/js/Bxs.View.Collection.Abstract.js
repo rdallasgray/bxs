@@ -189,22 +189,17 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			return row;
 		},
 		
-		labelAssociatedColumn: function(column,value,data) {
+		labelAssociatedColumn: function(column,value) {
 			var self = this,
 				columnName = column.getAttribute("name");
 			
 			if (value !== "") {
 				var realName = Bxs.Association.getName(columnName,self.attrs);
 				Bxs.Ajax.getMetadata(realName,function(metadata) {
-					if (data === undefined) {
-						$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
-							$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,rowData));
-						});
-						self.controller.loadRowData(metadata.url+"/"+value);
-					}
-					else {
-						$(column).attr("label",Bxs.String.fromPattern(metadata.to_string_pattern,data));
-					}
+					$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
+						$(column).attr("label",rowData.label);
+					});
+					self.controller.loadRowData(metadata.url+"/"+value, { list: "true" });
 				})
 			}
 			else {
