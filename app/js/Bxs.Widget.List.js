@@ -82,8 +82,6 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 
 								self.list = list;
 								$(self.popup).append(self.list.getDomNode());
-								// TODO trigger widgetReady while waiting for list, but defer setting
-								// default value from Factory.build(). Label with e.g. 'Loading ...' until list ready
 								self.fixFocusBehaviour();
 								$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
 							});
@@ -99,13 +97,25 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 							var selectedId = self.parentView.getObservedBox().view.getSelectedId();
 						}
 						else {
-							var selectedId = $(self.parentNode).siblings("[name='"+sharedKey+"']").attr("value");
+							var defaultColumn = $(self.parentNode).siblings("[name='"+sharedKey+"']"),
+								selectedId = defaultColumn.attr("value");
 						}
-						self.setNewRowDefault(sharedKey,selectedId);
-						Bxs.Ajax.getMetadata(sharedKey.substr(0,sharedKey.search(/_id$/)), function(keyMetadata) {
-							self.url = keyMetadata.name+"/"+selectedId+"/"+metadata.name;
+						
+						var buildListWithDefaults = function() {
+							self.setNewRowDefault(sharedKey,selectedId);
+							Bxs.Ajax.getMetadata(sharedKey.substr(0,sharedKey.search(/_id$/)), function(keyMetadata) {
+								self.url = keyMetadata.name+"/"+selectedId+"/"+metadata.name;
+								requestList();
+							});
+						}
+
+						if (!isNaN(parseInt(selectedId))) {
+							buildListWithDefaults();
+						}
+						else {
+							// TODO set up so that when defaultColumn changes, we rebuild the list accordingly.
 							requestList();
-						});
+						}
 					}
 					else {
 						requestList();
