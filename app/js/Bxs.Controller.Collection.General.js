@@ -85,7 +85,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				return;
 			}
 			if (dataObject.action === "update") {
-				return this.updateAssociation(columns,dataObject.data);
+				return this.updateAssociation(columns);
 			}
 			if (dataObject.action === "delete") {
 				return this.deleteAssociation(columns);
@@ -97,7 +97,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			var self =  this;
 			
 			columns.forEach(function(column) {
-				self.view.labelAssociatedColumn(column,column.getAttribute("value"),data);
+				self.view.labelAssociatedColumn(column,column.getAttribute("value"));
 			});
 		},
 		
@@ -111,11 +111,13 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			});
 		},
 		
-		loadRowData: function(url) {
-				
-			Bxs.Ajax.getJSON(url, function(data) {
-				$(Bxs.eventsPublisher).trigger("loadedRowData."+url,[data]);
-			});
+		loadRowData: function(url,options) {
+			
+			Bxs.Ajax.getJSON(
+				url, 
+				function(data) { $(Bxs.eventsPublisher).trigger("loadedRowData."+url,[data]); },
+				options
+			);
 		},
 		
 		commands: $.extend(true, {}, Bxs.Controller.Box.General.prototype.commands, {
