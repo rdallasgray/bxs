@@ -242,16 +242,15 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 						self.associations[metadata.name] = columnName;
 					}
 					Bxs.Ajax.getJSON(metadata.url, function(labelData) {
-						var labelDataById = {};
-						labelData.forEach(function(el) labelDataById[el.id] = el);
 					
 						setTimeout(function() {
-							associatedColumns.forEach(function(el) {
-								var column = el;
+							associatedColumns.forEach(function(column) {
 								if (column.getAttribute("value") === "") return;
-								var columnData = labelDataById[column.getAttribute("value")];
+								var columnData = labelData.filter(function(row) {
+									return row.id === parseInt(column.getAttribute("value"))
+								})[0];
 								if (columnData !== undefined) {
-									column.setAttribute("label",Bxs.String.fromPattern(metadata.to_string_pattern,columnData));
+									column.setAttribute("label",columnData.label);
 								}
 							});
 							columnCount++;
@@ -259,7 +258,8 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 								$(Bxs.eventsPublisher).trigger("associatedColumnsLabelled."+self.attrs.id);
 							}
 						},50);
-					});
+					},
+					{ list: "true" });
 				});
 			});			
 		},
