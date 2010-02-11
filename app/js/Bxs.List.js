@@ -29,7 +29,7 @@ Bxs.List.prototype = {
 		Bxs.Ajax.getMetadata(self.listName,function(metadata) {
 			self.metadata = metadata;
 			
-			Bxs.Ajax.getJSON(self.url,function(dataSet,notModified) {
+			Bxs.Ajax.getJSON(Bxs.Url.construct(self.url, { list: "true" }),function(dataSet,notModified) {
 				var validCachedNode = false;
 				if (notModified) {
 					
@@ -46,7 +46,6 @@ Bxs.List.prototype = {
 					dataSet.forEach(function(row) {
 						self.createNode(row);
 					});
-					
 					Bxs.Cache.set(["Lists",self.url],self.domNode.cloneNode(true));
 					$(Bxs.eventsPublisher).trigger("listReady."+self.url+self.requester,[self]);
 				}
@@ -59,13 +58,12 @@ Bxs.List.prototype = {
 	},
 	
 	createNode: function(data) {
-		
 		var menuitem = document.createElement("menuitem");
 		
 		menuitem.setAttribute("value",data.id);
-		menuitem.setAttribute("label",Bxs.String.fromPattern(this.metadata.to_string_pattern,data));
+		menuitem.setAttribute("label",data.label);
 		this.domNode.appendChild(menuitem);
-		
+
 		return menuitem;
 	},
 
@@ -78,8 +76,16 @@ Bxs.List.prototype = {
 	
 	insert: function(data) {
 		
-		var row = this.createNode(data);
-		$(Bxs.eventsPublisher).trigger("listRowAdded."+this.listName,[row]);
+		var self = this;
+		
+		Bxs.Ajax.getJSON(
+			self.url+'/'+data.id, // TODO could be problematic if url includes options already
+			function(newData) {
+				var row = self.createNode(newData);
+				$(Bxs.eventsPublisher).trigger("listRowAdded."+self.listName,[row]);
+			},
+			{ list: "true" }
+		);
 		// only using this to add an item from a panel (New ...)
 	},
 	// delete and update only to prevent exceptions
