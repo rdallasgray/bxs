@@ -175,7 +175,8 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 
 			$(Bxs.eventsPublisher).one("listRowAdded."+self.listName,function(e,row) {
 				$(self.popup).append(row);
-				self.defaultValue = $(row).attr("value");
+				var defaultValue = $(row).attr("value");
+				self.setValue(defaultValue)
 				self.cleanUpPanel();
 			});
 
