@@ -22,30 +22,29 @@ Bxs.Panel.prototype = {
 	
 	boot: function() {
 		this.domNode = document.createElement("panel");
-		$(this.domNode).attr({ noautofocus: "true", noautohide: "true", ignorekeys: "true" });
+		$(this.domNode).attr({ id: "temp-panel", noautofocus: "true", noautohide: "true", ignorekeys: "true" });
 		
 		$("#mainPopupSet").append(this.domNode);
 		
 	},
 	
 	open: function() {
-		
 		this.domNode.openPopup(this.parentNode,'after_start',0,0,false,false);
-		
 	},
 	
 	close: function() {
-		
 		this.domNode.hidePopup();
 		this.parentNode.focus();
-		
 	},
 	
 	cleanUp: function() {
-		
 		this.close();
-		$(this.domNode).remove();
-		
+		try {
+			// jQuery not working here for some reason
+			document.getElementById("mainPopupSet").removeChild(document.getElementById("temp-panel"));
+		}
+		catch(e) {
+		}
 	}
 	
 }
