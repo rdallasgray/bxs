@@ -66,8 +66,6 @@ Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 			var s = document.createElement("splitter");
 			s.setAttribute("resizeafter","farthest");
 			$(col).after(s);
-			
-			Bxs.View.Box.Abstract.prototype.boot.apply(this);
 		}
 	}
 );

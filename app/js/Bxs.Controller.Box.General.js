@@ -275,6 +275,10 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			return this.handlers[action](this,response);
 		},
 		
+		handleDropEvent: function(e) {
+			console.debug(e);
+		},
+		
 		handlers: {
 			update: function(self,response) {
 				var newData = Bxs.Json.parse(response.text);
