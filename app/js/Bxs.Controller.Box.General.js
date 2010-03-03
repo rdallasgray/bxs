@@ -276,7 +276,6 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 		
 		handleDropEvent: function(e) {
-			console.debug(e);
 		},
 		
 		handlers: {

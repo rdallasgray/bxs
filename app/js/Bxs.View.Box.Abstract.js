@@ -167,8 +167,18 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 				self.setState(state);
 			}
 			$(self.domNode).bind("drop", function(e) {
+				e.stopPropagation();  
+				e.preventDefault();
 				self.controller.handleDropEvent(e);
-			}
+			});
+			$(self.domNode).bind("dragover", function(e) {
+				e.stopPropagation();  
+				e.preventDefault();
+			});
+			$(self.domNode).bind("dragenter", function(e) {
+				e.stopPropagation();  
+				e.preventDefault();
+			});
 		},
 		
 	}

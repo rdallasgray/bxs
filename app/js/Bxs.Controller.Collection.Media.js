@@ -22,9 +22,10 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 	Bxs.Controller.Collection.General.prototype, 
 	
 	{
-		createRow: function() {
+		createRow: function(file) {
 			
-			var url = Bxs.Url.construct(this.parseUrl()),
+			var file = file || null,
+				url = Bxs.Url.construct(this.parseUrl()),
 				self = this,
 				req = {
 					service: "fileUpload",
@@ -36,7 +37,8 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 						},
 						username: Bxs.auth.username,
 						password: Bxs.auth.password,
-						contentType: this.view.attrs.media.type
+						contentType: this.view.attrs.media.type,
+						file: file
 					},
 					callback: function() {
 						if (Bxs.Url.construct(self.parseUrl()) === url) {
@@ -59,7 +61,28 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 				self.view.appendRowAtHead(row);
 			}
 		}),
-		
+				
+		handleDropEvent: function(e) {
+			
+			switch (this.view.getState()) {
+				case "active":
+				case "ready":
+				break;
+				
+				default:
+				return;
+			}
+			
+			var files = e.originalEvent.dataTransfer.files,
+				self = this;
+			
+			$.each(files, function() {
+				if (this.type === self.view.attrs.media.type) {
+					self.createRow(this);
+				}
+			});
+		},
+
 		downloadMedia: function() {
 			var url = this.parseUrl(true)+"/"+this.view.getSelectedId();
 				
