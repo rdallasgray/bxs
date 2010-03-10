@@ -22,10 +22,10 @@ Bxs.Conf = {
 	activityTimeout: 1800000,
 	
 	auth: {
-		loginUrl: "/admin/auth/login",
-		logoutUrl: "/admin/auth/logout"
+		loginUrl: "/admin/login",
+		logoutUrl: "/admin/logout"
 	},
 	
-	metadataUrl: "/admin/metadata",
+	metadataUrl: "/metadata",
 	
 };
