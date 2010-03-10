@@ -166,6 +166,7 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 				var state = (self.attrs.observing !== undefined) ? "inactive" : "ready";
 				self.setState(state);
 			}
+			
 			$(self.domNode).bind("drop", function(e) {
 				e.stopPropagation();  
 				e.preventDefault();
