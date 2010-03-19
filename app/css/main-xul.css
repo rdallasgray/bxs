@@ -16,6 +16,11 @@ hbox, vbox, tabbox, tabpanels, tabpanel, listbox, deck, iframe {
 	-moz-box-flex: 1;
 }
 
+caption.box_caption {
+	margin-bottom: -4px;
+	margin-top: 6px;
+}
+
 .editBar {
 	-moz-appearance: none;
 	min-height: 0 !important; /* prevents icons being stretched */
