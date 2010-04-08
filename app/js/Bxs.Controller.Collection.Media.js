@@ -23,7 +23,7 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 	
 	{
 		createRow: function(file) {
-			
+
 			var file = file || null,
 				url = Bxs.Url.construct(this.parseUrl()),
 				self = this,

@@ -151,11 +151,13 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		},
 		
 		boot: function() {
+			
 			$(Bxs.eventsPublisher).trigger("boxBooted."+this.attrs.id,[this]);
 			// need to pass [this] so can get view when creating box on the fly, e.g. for adding new item in menulist
 		},
 		
 		activate: function() {
+			
 			var self = this;
 
 			if ((self.attrs.observing === undefined || self.getObservedBox().view.getSelectedId() !== null) 
@@ -166,6 +168,10 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 				var state = (self.attrs.observing !== undefined) ? "inactive" : "ready";
 				self.setState(state);
 			}
+			
+			$(self.domNode).unbind("drop");
+			$(self.domNode).unbind("dragover");
+			$(self.domNode).unbind("dragenter");
 			
 			$(self.domNode).bind("drop", function(e) {
 				e.stopPropagation();  
