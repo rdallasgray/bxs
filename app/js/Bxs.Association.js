@@ -16,7 +16,8 @@ Bxs.Association = {
 	
 	getName: function(columnName,viewAttrs) {
 		
-		var name = columnName;
+		var name = columnName,
+			viewAttrs = viewAttrs || {};
 		
 		if (/_id$/.test(name)) {
 			name = name.slice(0,columnName.search(/_id$/));
