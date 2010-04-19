@@ -87,25 +87,25 @@ Bxs.Command = {
 		}
 		
 		if ($(target.view.getDomNode()).attr("bxs") === "collection") {
-			showCommands(["openAsPanel","exportToCsv"]);
+			showCommands([/*"openAsPanel",*/"exportToCsv"]);
 			
 			if (!target.view.isEmpty()) {
 				enableCommands(["exportToCsv"]);
 			}
 			
 			if (state === "active") {
-				enableCommands(["openAsPanel"]);
+//				enableCommands(["openAsPanel"]);
 			}
 		}
 		
-		showCommands(["print","refresh"]);
+		showCommands([/*"print",*/"refresh"]);
 
 		if ((["active","ready"]).some(function(el) el === state)) {
 			enableCommands(["refresh"]);
 		}
 		
 		if (!target.view.isEmpty()) {
-			enableCommands(["print"]);
+//			enableCommands(["print"]);
 		}
 	},
 	
