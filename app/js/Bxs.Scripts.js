@@ -62,6 +62,7 @@ Bxs.Scripts = {
 		
 		"Bxs.Filter.Abstract.js",
 		"Bxs.Filter.Year.js",
+		"Bxs.Filter.List.js",
 		"Bxs.Filter.Foreign.js",
 		
 		"Bxs.Toolbar.Abstract.js",

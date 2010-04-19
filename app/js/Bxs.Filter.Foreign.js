@@ -25,26 +25,7 @@ Bxs.Filter.Foreign.prototype = $.extend(true,{},
 	{
 		build: function() {
 			
-			var self = this;
-
-			this.menupopup = document.createElement("menupopup");
-			this.domNode.appendChild(this.menupopup);
-
-			var allItem = document.createElement('menuitem');
-			$(allItem).attr({ label: "All", value: "null", class: "strong" });
-			this.menupopup.appendChild(allItem);
-
-			var sep = document.createElement("menuseparator");
-			this.menupopup.appendChild(sep);
-			
-			$(Bxs.eventsPublisher).one("listReady."+self.attrs.listUrl+self.attrs.target, function() {
-				var n = self.list.getDomNode();
-				$(self.menupopup).append(n);
-			});
-			this.list = Bxs.Factory.List.build(this.attrs.listUrl,this.name,self.attrs.target);
-
-			this.setValue("null");
-			$(this.domNode).attr("label","All");
+			Bxs.Filter.List.prototype.build.apply(this);
 		},
 
 		getValue: function() {
