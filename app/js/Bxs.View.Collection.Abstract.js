@@ -88,6 +88,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		
 		clearContent: function() {
 			this.removeAllRows();
+			this._selectedId = null;
 		},
 		
 		buildContent: function(data) {
