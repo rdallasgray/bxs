@@ -16,6 +16,33 @@ hbox, vbox, tabbox, tabpanels, tabpanel, listbox, deck, iframe {
 	-moz-box-flex: 1;
 }
 
+#logoutOverlay {
+	background-color: white;
+	opacity: 0.6;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 9998;
+	display: none;
+}
+
+#logoutOverlaySpinner {
+	background-color: white;
+	background: url(/Bxs/app/img/large-spinner.gif);
+	background-repeat: no-repeat;
+	background-position: center;
+	opacity: 0.6;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 9999;
+	display: none;
+}
+
 caption.box_caption {
 	margin-bottom: -4px;
 	margin-top: 6px;
