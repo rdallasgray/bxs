@@ -66,7 +66,9 @@ Bxs = {
 				$(window).unbind("click",Bxs.activity);
 				$(window).unbind("unload",Bxs.logoutOnUnload);
 				clearTimeout(Bxs.activityTimeout);
+				Bxs.hideLogoutOverlay();
 				Bxs.logoutButton.unbind("command");
+				Bxs.logoutButton.attr("label", "Log Out");
 				Bxs.mainDeck.get(0).selectedIndex = 0;
 				Bxs.login.controls.deck.get(0).selectedIndex = 0;
 				Bxs.login.controls.username.removeAttr("disabled");
@@ -91,6 +93,10 @@ Bxs = {
 				Bxs.login.controls.status.attr("label","OK");
 				Bxs.auth = { username: Bxs.login.controls.username.val(), password: Bxs.login.controls.password.val() };
 				Bxs.boot.start();
+			},
+			loggingOut: function() {
+				Bxs.showLogoutOverlay();
+				Bxs.logoutButton.attr("label", "Logging Out ...");
 			}
 		},
 		start: function() {
@@ -106,13 +112,6 @@ Bxs = {
 				
 				case KeyEvent.DOM_VK_RETURN:
 				Bxs.login.submit();
-				break;
-				
-				// fix tab behavour
-				case KeyEvent.DOM_VK_TAB:
-				if (e.shiftKey) {
-					Bxs.login.controls.username.get(0).focus();
-				}
 				break;
 			}
 		},
@@ -138,6 +137,8 @@ Bxs = {
 	},
 		
 	logout: function() {
+		Bxs.login.setState("loggingOut");
+		
 		Bxs.Ajax.logout(function() {
 			var req = {
 				service: "clearHttpAuth",
@@ -148,6 +149,16 @@ Bxs = {
 			};
 			Bxs.service.get(req);
 		});
+	},
+	
+	showLogoutOverlay: function() {
+		$("#logoutOverlay").show();
+		$("#logoutOverlaySpinner").show();
+	},
+	
+	hideLogoutOverlay: function() {
+		$("#logoutOverlay").hide();
+		$("#logoutOverlaySpinner").hide();
 	},
 	
 	activity: function() {

@@ -22,6 +22,9 @@ You should have received a copy of the GNU General Public License along with Box
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="bxs-window-main">
 
 	<box id="bxs-scripts-box" collapse="true"/>
+	
+	<box id="logoutOverlay"/>
+	<box id="logoutOverlaySpinner"/>
 
 	<deck id="bxs-deck-main">
 
