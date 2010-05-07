@@ -28,4 +28,11 @@ Bxs.Conf = {
 	
 	metadataUrl: "/metadata",
 	
+	media: {
+		"image/jpeg" : {
+			url: "/media/images/small/:id.jpg",
+			viewUrl: "/media/images/large/:id.jpg"
+		}
+	}
+	
 };

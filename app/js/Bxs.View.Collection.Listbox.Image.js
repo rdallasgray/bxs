@@ -30,8 +30,8 @@ Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 			var row = Bxs.View.Collection.Listbox.prototype.buildRow.apply(this,arguments),
 				col = $(row).children(this.columnType+"[media='image']").get(0),
 				id = $(col).siblings("[name='id']").get(0).getAttribute("value"),
-				url = this.attrs.media.url.replace(/:\w*/,id),
-				img = new Bxs.Media.Image(col,url,function(attr) { col.setAttribute("image",attr); });
+				attrs = this.attrs.media,
+				img = new Bxs.Media.Image(col,id,attrs,function(attr) { col.setAttribute("image",attr); });
 					
 				img.load();
 				return row;

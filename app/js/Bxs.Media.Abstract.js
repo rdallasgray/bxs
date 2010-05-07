@@ -16,12 +16,20 @@ if (Bxs.Media === undefined) {
 	Bxs.Media = {};
 }
 
-Bxs.Media.Abstract = function(node,url,callback) {
+Bxs.Media.Abstract = function(node,id,attrs,callback) {
 
 	this.targetNode = node;
-	this.url = url;	
+	this.id = id;
+	this.attrs = attrs;	
 	this.callback = callback;
-
+	
+	var urlTemplate = (this.attrs.url === undefined) 
+			? Bxs.Conf.media[this.attrs.type].url : this.attrs.url,
+		viewUrlTemplate = (this.attrs.viewUrl === undefined) 
+			? Bxs.Conf.media[this.attrs.type].viewUrl : this.attrs.viewUrl;
+	
+	this.url = urlTemplate.replace(/:\w*/,this.id);
+	this.viewUrl = viewUrlTemplate.replace(/:\w*/,this.id);
 }
 
 Bxs.Media.Abstract.prototype = {

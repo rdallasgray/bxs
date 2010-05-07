@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.Media.Image = function(node,url,callback) {
+Bxs.Media.Image = function(node,id,attrs,callback) {
 
 	Bxs.Media.Abstract.apply(this,arguments);
 	
