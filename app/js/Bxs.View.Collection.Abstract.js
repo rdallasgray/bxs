@@ -496,6 +496,12 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 					if (self.getState() === "ready") self.setState("active");
 				}
 			});
+			$(Bxs.eventsPublisher).bind("enteringNewRow."+self.attrs.id, function() {
+				self.setState("inactive");
+			});
+			$(Bxs.eventsPublisher).bind("doneEnteringNewRow."+self.attrs.id, function() {
+				self.setState(self.getPreviousState());
+			});
 			
 			Bxs.View.Box.Abstract.prototype.boot.apply(this);
 		}
