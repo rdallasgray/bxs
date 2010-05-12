@@ -43,6 +43,7 @@ Bxs.Command = {
 		if (this._contexts[context][command] !== undefined) {
 			return this._contexts[context][command](target);
 		}
+		return false;
 	},
 	
 	dispatchToolsCommand: function(command) {
@@ -112,7 +113,6 @@ Bxs.Command = {
 	_contexts: {
 		
 		unknown: {
-			
 		},
 			
 		box: {
