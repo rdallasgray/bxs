@@ -64,7 +64,8 @@ Bxs = {
 				delete Bxs.auth;
 				$(window).unbind("keydown",Bxs.activity);
 				$(window).unbind("click",Bxs.activity);
-				$(window).unbind("unload",Bxs.logoutOnUnload);
+				$(window).unbind("unload",Bxs.logout);
+				$(window).unbind("beforeunload",Bxs.checkBeforeUnload);
 				clearTimeout(Bxs.activityTimeout);
 				Bxs.hideLogoutOverlay();
 				Bxs.logoutButton.unbind("command");
@@ -171,9 +172,12 @@ Bxs = {
 		Bxs.logout();
 	},
 	
-	logoutOnUnload: function() {
-		Bxs.logout();
-		alert('Logging out ...');
+	checkBeforeUnload: function() {
+		var e = e || window.event;
+		if (e) {
+			e.returnValue = 'If you do wish to leave the page, you will be logged out automatically.';
+		}
+		return 'If you do wish to leave the page, you will be logged out automatically.';
 	},
 	
 	boot: {
@@ -214,7 +218,8 @@ Bxs = {
 			complete: function() {
 				$(window).bind("keydown",Bxs.activity);
 				$(window).bind("click",Bxs.activity);
-				$(window).bind("unload",Bxs.logoutOnUnload);
+				$(window).bind("unload",Bxs.logout);
+				$(window).bind("beforeunload",Bxs.checkBeforeUnload);
 				Bxs.logoutButton.bind("command",Bxs.logout);
 				Bxs.activityTimeout = setTimeout(Bxs.noActivity,Bxs.Conf.activityTimeout);
 				Bxs.mainDeck.get(0).selectedIndex = 1;
