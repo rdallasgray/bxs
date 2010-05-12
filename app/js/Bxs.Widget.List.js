@@ -160,6 +160,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				$(self.newEntry.panel.domNode).one("popupshown",function() {
 					view.controller.doCommand("newRow");
 				});
+				$(Bxs.eventsPublisher).trigger("enteringNewRow."+self.parentView.attrs.id);
 				self.newEntry.panel.open();
 			});
 		
@@ -176,7 +177,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			$(Bxs.eventsPublisher).one("listRowAdded."+self.listName,function(e,row) {
 				$(self.popup).append(row);
 				var defaultValue = $(row).attr("value");
-				self.setValue(defaultValue)
+				self.setValue(defaultValue);
 				self.cleanUpPanel();
 			});
 
@@ -209,14 +210,14 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 		},
 		
 		cleanUpPanel: function() {
-			
-			if (this.newEntry === undefined) {
+			if (this.newEntry === undefined || this.newEntry.isClosing) {
 				return;
 			}
-			
+			this.newEntry.isClosing = true;
 			this.newEntry.panel.cleanUp();
 			Bxs.Boxes.remove("temp-box");
 			delete this.newEntry;
+			$(Bxs.eventsPublisher).trigger("doneEnteringNewRow."+this.parentView.attrs.id);
 		},
 		
 		addNewRow: function() {
