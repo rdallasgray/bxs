@@ -42,7 +42,12 @@ Bxs.Factory.Box = {
 		
 		if (node.hasAttribute("media")) {
 			var mediaType = $.string(/^\w*/.exec(parsedAttrs.media.type)[0]).capitalize().str;
-			box.view = new Bxs.View[boxType][nodeType][mediaType](node);
+			try {
+				box.view = new Bxs.View[boxType][nodeType][mediaType](node);
+			}
+			catch(e) {
+				box.view = new Bxs.View[boxType][nodeType](node);
+			}
 		}
 		else {
 			box.view = new Bxs.View[boxType][nodeType](node);
