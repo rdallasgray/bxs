@@ -62,13 +62,13 @@ Bxs = {
 		states: {
 			start: function() {
 				delete Bxs.auth;
-				$(window).unbind("keydown",Bxs.activity);
-				$(window).unbind("click",Bxs.activity);
-				$(window).unbind("unload",Bxs.logout);
-				$(window).unbind("beforeunload",Bxs.checkBeforeUnload);
+				$(window).unbind("keydown");
+				$(window).unbind("click");
+				$(window).unbind("unload");
+				$(window).unbind("beforeunload");
+				Bxs.logoutButton.unbind("command");
 				clearTimeout(Bxs.activityTimeout);
 				Bxs.hideLogoutOverlay();
-				Bxs.logoutButton.unbind("command");
 				Bxs.logoutButton.attr("label", "Log Out");
 				Bxs.mainDeck.get(0).selectedIndex = 0;
 				Bxs.login.controls.deck.get(0).selectedIndex = 0;
@@ -138,6 +138,9 @@ Bxs = {
 	},
 		
 	logout: function() {
+		if (Bxs.auth === undefined) {
+			return;
+		}
 		Bxs.login.setState("loggingOut");
 		
 		Bxs.Ajax.logout(function() {
@@ -192,6 +195,8 @@ Bxs = {
 		},
 		states: {
 			start: function() {
+				$(Bxs.eventsPublisher).unbind("scriptLoaded");
+				$(Bxs.eventsPublisher).unbind("boxBuilt");
 				Bxs.boot.controls.scriptsStatus.attr("hidden","true");
 				Bxs.boot.controls.scriptsProgress.val(0);
 				Bxs.boot.controls.boxesStatus.attr("hidden","true");
@@ -217,10 +222,10 @@ Bxs = {
 			},
 			complete: function() {
 				$(window).bind("keydown",Bxs.activity);
-				$(window).bind("click",Bxs.activity);
-				$(window).bind("unload",Bxs.logout);
+				$(window).bind("click", Bxs.activity);
+				$(window).bind("unload", Bxs.logout);
 				$(window).bind("beforeunload",Bxs.checkBeforeUnload);
-				Bxs.logoutButton.bind("command",Bxs.logout);
+				Bxs.logoutButton.one("command", Bxs.logout);
 				Bxs.activityTimeout = setTimeout(Bxs.noActivity,Bxs.Conf.activityTimeout);
 				Bxs.mainDeck.get(0).selectedIndex = 1;
 			}
