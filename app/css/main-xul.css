@@ -30,7 +30,7 @@ hbox, vbox, tabbox, tabpanels, tabpanel, listbox, deck, iframe {
 
 #logoutOverlaySpinner {
 	background-color: white;
-	background: url(/Bxs/app/img/large-spinner.gif);
+	background-image: url(/Bxs/app/img/large-spinner.gif);
 	background-repeat: no-repeat;
 	background-position: center;
 	opacity: 0.6;
@@ -183,7 +183,7 @@ listbox.singleRow listboxbody {
 }
 
 listbox.busy listboxbody {
-	background-image: url(/Bxs/app/img/loading_16_grey.gif);
+	background-image: url(/Bxs/app/img/large-spinner.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 }
