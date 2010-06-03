@@ -157,12 +157,12 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		
 		getColumnLabel: function(value, type) {
 			switch (type) {
-				case "date":
+/*				case "date":
 				return Bxs.Date.formatDate(value);
 				break;
 				case "datetime":
 				return Bxs.Date.formatDateTime(value);
-				break;
+				break;*/
 				default:
 				return value;
 			}
