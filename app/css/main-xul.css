@@ -296,11 +296,15 @@ listcell[hidden="true"] {
 	display: none;
 }
 
+listcell[type="date"], listcell[type="datetime"] {
+	-moz-box-pack: end;
+}
+
 listcell label {
 	padding: 3px 0px 1px 8px;
 }
 
-listcell textbox {
+listcell textbox, listcell .datetimepicker-input-box {
 	-moz-appearance: none;
 	-moz-user-focus: ignore;
 	-moz-box-flex: 1;
@@ -309,6 +313,31 @@ listcell textbox {
 	border: 0;
 	padding: 3px 4px 1px 7px;
 	margin: 0;
+}
+
+datepicker, timepicker {
+	margin: 0;
+	border: 0 none;
+	padding: 0;
+	height: 22px;
+	min-height: 22px;
+}
+
+.datetimepicker-input-box {
+	margin-right: 6px;
+}
+
+.datetimepicker-input-subbox {
+	width: 1.4em;
+}
+
+.datetimepicker-year {
+	width: 2.8em;
+}
+
+.datetimepicker-separator {
+	margin: 0;
+	padding: 0;
 }
 
 .strong {
