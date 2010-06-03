@@ -30,7 +30,13 @@ Bxs.Factory.Widget = {
 			switch(schema.type) {
 			
 				case "date":
+				widgetType = "Date";
+				break;
+				
 				case "datetime":
+				widgetType = "DateTime";
+				break;
+				
 				case "integer":
 				case "string":
 				case "float":

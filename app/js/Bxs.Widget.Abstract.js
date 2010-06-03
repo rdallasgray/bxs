@@ -47,6 +47,10 @@ Bxs.Widget.Abstract.prototype = {
 		return this.domNode;
 	},
 	
+	afterAppend: function() {
+		
+	},
+	
 	setValue: function(value) {
 		$(this.domNode).attr("value",value);
 	},

@@ -133,7 +133,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				
 				var column = document.createElement(self.columnType);
 				
-				$(column).attr({ "name": columnName });
+				$(column).attr({ "name": columnName, "type": values['type'] });
 				
 				if (/_id$/.test(columnName) && !self.ignoresColumn(columnName)) {
 					// it's an association column
@@ -155,15 +155,32 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			self.rowTemplate = row;
 		},
 		
+		getColumnLabel: function(value, type) {
+			switch (type) {
+				case "date":
+				return Bxs.Date.formatDate(value);
+				break;
+				case "datetime":
+				return Bxs.Date.formatDateTime(value);
+				break;
+				default:
+				return value;
+			}
+		},
+		
 		buildRow: function(data,singleRow) {
 			data = data || {};
 
 			var self = this,
-				row = this.rowTemplate.cloneNode(true);
+				row = this.rowTemplate.cloneNode(true)
+				schema = self.controller.schema;
 
 			for (var key in data) {
 				
-				if (!(key in self.controller.schema)) {
+				var type = schema[key].type,
+					value = data[key];
+				
+				if (!(key in schema)) {
 					try {
 						console.debug("key "+key+" not found in schema for "+sel.attrs.id);
 					}
@@ -172,19 +189,19 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				}
 				
 				var column = Bxs.Xpath.getNode(row,"descendant::xul:"+self.columnType+"[@name='"+key+"']");
-				if (self.controller.schema[key].type === "boolean") {
-					column.setAttribute("checked",data[key].toString());
+				
+				if (type === "boolean") {
+					column.setAttribute("checked",value.toString());
 				}
 				if (!column.getAttribute("association")) {
 					if (!(column.getAttribute("type") === "checkbox")) {
-						column.setAttribute("label",data[key]);
+						column.setAttribute("label", self.getColumnLabel(value, type));
 					}
 				}
 				else if (singleRow === true) {
-					self.labelAssociatedColumn(column,data[key]);
+					self.labelAssociatedColumn(column, value);
 				}
-				
-				column.setAttribute("value",data[key]);
+				column.setAttribute("value", value);
 			}
 			
 			return row;
@@ -198,7 +215,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				var realName = Bxs.Association.getName(columnName,self.attrs);
 				Bxs.Ajax.getMetadata(realName,function(metadata) {
 					$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
-						$(column).attr("label",rowData.label);
+						$(column).attr("label", rowData.label);
 					});
 					self.controller.loadRowData(metadata.url+"/"+value, { list: "true" });
 				})

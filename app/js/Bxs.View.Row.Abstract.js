@@ -67,6 +67,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			$(Bxs.eventsPublisher).one("widgetReady."+columnName, function(e,widget) {
 				
 				domNode.append(widget.getDomNode());
+				widget.afterAppend();
 				domNode.removeClass("communicating");
 				domNode.addClass("open");
 				if(!domNode.attr("hidden") && !self.focussed) {
@@ -99,7 +100,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 					self.parentView.labelAssociatedColumn(column,data[columnName]);
 				}
 				else {
-					$(column).attr("label",data[columnName]);
+					$(column).attr("label", self.parentView.getColumnLabel(data[columnName], values['type']));
 				}
 				
 				if (self.schema[columnName].type === "boolean") {
