@@ -30,7 +30,7 @@ Bxs.Scripts = {
 		"Bxs.Panel.js",
 		"Bxs.List.js",
 		"Bxs.Association.js",
-		"Bxs.Date.js",
+//		"Bxs.Date.js",
 		
 		"Bxs.Factory.Box.js",
 		"Bxs.Factory.Filter.js",
