@@ -52,7 +52,7 @@ Bxs.Widget.Date.prototype = $.extend(true,{},
 		
 		bindKeypressHandler: function() {
 			$(this.domNode).bind("keypress", function(e) {
-				if (e.charCode === 45) {
+				if (e.charCode !== 0 && (e.charCode < 48 || e.charCode > 57)) {
 					e.originalTarget.value = (e.originalTarget.maxLength === 4) ? "----" : "--";
 				}
 			});
