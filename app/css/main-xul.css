@@ -297,7 +297,7 @@ listheader[columnType="datetime"] .listheader-label, listheader[columnType="date
 	padding-right: 6px;
 }
 
-listheader[columnType="datetime"][sortDirection] .listheader-label, listheader[columnType="datetime"][sortDirection] .listheader-label {
+listheader[columnType="datetime"][sortDirection] .listheader-label, listheader[columnType="date"][sortDirection] .listheader-label {
 	padding-right: 12px;
 }
 

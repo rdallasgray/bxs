@@ -43,6 +43,10 @@ Bxs.Widget.Abstract.prototype = {
 		});
 	},
 	
+	focus: function() {
+		this.getDomNode().focus();
+	},
+	
 	getDomNode: function() {
 		return this.domNode;
 	},

@@ -42,6 +42,10 @@ Bxs.Widget.DateTime.prototype = $.extend(true,{},
 			$(Bxs.eventsPublisher).trigger("widgetReady."+$(this.parentNode).attr("name"),[this]);
 		},
 		
+		focus: function() {
+			this.datePicker.focus();
+		},
+		
 		afterAppend: function() {
 			this.fixDatePicker(this.datePicker);
 			this.bindKeypressHandler();

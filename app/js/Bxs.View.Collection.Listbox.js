@@ -79,6 +79,16 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			$(this.parentTab).unbind("command."+this.attrs.id);
 			$(this.parentTab).one("command."+this.attrs.id,callback);
 		},
+		
+		editOpen: function(options) {
+			Bxs.View.Collection.Abstract.prototype.editOpen.apply(this, arguments);
+			$(this.domNode).find("listheader").attr("disabled", "true");
+		},
+		
+		editClose: function(options) {
+			Bxs.View.Collection.Abstract.prototype.editClose.apply(this, arguments);
+			$(this.domNode).find("listheader").removeAttr("disabled");
+		},
 
 		boot: function(schema) {
 			
@@ -118,6 +128,10 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				header.setAttribute("columnType", values["type"]);
 				
 				$(header).bind("click", function() {
+					
+					if (header.hasAttribute("disabled")) {
+						return;
+					}
 			
 					var dir = $(header).attr("sortDirection");
 				

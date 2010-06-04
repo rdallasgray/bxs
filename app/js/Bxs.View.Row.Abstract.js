@@ -71,7 +71,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				domNode.removeClass("communicating");
 				domNode.addClass("open");
 				if(!domNode.attr("hidden") && !self.focussed) {
-					widget.getDomNode().focus();
+					widget.focus();
 					self.focussed = true;
 				}
 
