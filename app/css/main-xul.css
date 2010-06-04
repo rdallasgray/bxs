@@ -284,12 +284,16 @@ panel {
 }
 
 listcol {
-	min-width: 40px;
 	-moz-box-flex: 1;
+	min-width: 40px;
 }
 
 listcol[type="datetime"] {
-	min-width: 110px;
+	min-width: 175px;
+}
+
+listcol[type="date"] {
+	min-width: 100px;
 }
 
 listheader[columnType="datetime"] .listheader-label, listheader[columnType="date"] .listheader-label {
