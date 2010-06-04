@@ -115,6 +115,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 					
 				header.setAttribute("label",headerLabel);
 				header.setAttribute("columnName",columnName);
+				header.setAttribute("columnType", values["type"]);
 				
 				$(header).bind("click", function() {
 			
@@ -131,7 +132,8 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			
 				var col = document.createElement('listcol');
 				var columnLength = values.length ? parseInt(values.length) : 16;
-				col.setAttribute('width',Math.min(Math.round(Math.sqrt(columnLength) * 16),200));
+				col.setAttribute("width",Math.min(Math.round(Math.sqrt(columnLength) * 16),200));
+				col.setAttribute("type", values["type"]);
 			
 				if (self.hidesColumn(columnName)) {
 					$(header).attr("hidden","true");

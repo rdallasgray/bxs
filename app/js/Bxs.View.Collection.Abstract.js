@@ -157,12 +157,14 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		
 		getColumnLabel: function(value, type) {
 			switch (type) {
-/*				case "date":
+				case "date":
 				return Bxs.Date.formatDate(value);
 				break;
+				
 				case "datetime":
 				return Bxs.Date.formatDateTime(value);
-				break;*/
+				break;
+				
 				default:
 				return value;
 			}
@@ -172,7 +174,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			data = data || {};
 
 			var self = this,
-				row = this.rowTemplate.cloneNode(true)
+				row = this.rowTemplate.cloneNode(true),
 				schema = self.controller.schema;
 
 			for (var key in data) {
@@ -218,7 +220,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 						$(column).attr("label", rowData.label);
 					});
 					self.controller.loadRowData(metadata.url+"/"+value, { list: "true" });
-				})
+				});
 			}
 			else {
 				$(column).attr("label","");
@@ -450,14 +452,13 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			var self = this; //used in sort function
 			
 			rows.sort(function(a,b) {
-				
-				var columnA = $(a).children(self.columnType+"[name='"+column+"']").get(0);
-				var columnB = $(b).children(self.columnType+"[name='"+column+"']").get(0);
-				
-				var labelA = columnA.hasAttribute("label") ? columnA.getAttribute("label") : columnA.getAttribute("value");
-				var labelB = columnB.hasAttribute("label") ? columnB.getAttribute("label") : columnB.getAttribute("value");
+				var columnA = $(a).children(self.columnType+"[name='"+column+"']").get(0),
+					columnB = $(b).children(self.columnType+"[name='"+column+"']").get(0),
+					attr = (columnA.hasAttribute("label") 
+						&& !["date", "datetime"].some(function(el) el == columnA.getAttribute("type"))) ?
+							"label" : "value";
 
-				return Bxs.Comparator(labelA,labelB);
+				return Bxs.Comparator(columnA.getAttribute(attr), columnB.getAttribute(attr));
 			});
 			
 			if (direction === "descending") rows.reverse();
