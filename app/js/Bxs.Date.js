@@ -48,7 +48,8 @@ Bxs.Date = {
 	},
 	
 	parseTime: function(isoTime) {
-		var dateTime = isoTime.split(" "),
+		var isoTime = isoTime || "0000-00-00 00:00:00", 
+			dateTime = isoTime.split(" "),
 			time = (dateTime.length > 1) ? dateTime[1] : dateTime[0],
 			parts = time.split(":"),
 			hour = parts[0],
