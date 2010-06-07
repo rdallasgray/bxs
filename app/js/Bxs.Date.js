@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with Box
 Bxs.Date = {
 	
 	parseDate: function(isoDate) {
+		
 		var dateTime = isoDate.split(" "),
 			parts = dateTime[0].split("-"),
 			year = (parts[0] === "0000") ? "----" : parts[0],
@@ -48,8 +49,12 @@ Bxs.Date = {
 	},
 	
 	parseTime: function(isoTime) {
-		var isoTime = isoTime || "0000-00-00 00:00:00", 
-			dateTime = isoTime.split(" "),
+		
+		if (isoTime === undefined) {
+			return ["00", "00"];
+		}
+		
+		var dateTime = isoTime.split(" "),
 			time = (dateTime.length > 1) ? dateTime[1] : dateTime[0],
 			parts = time.split(":"),
 			hour = parts[0],
