@@ -49,7 +49,6 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 		
 		getEditedData: function() {
 			return { text: this.getEditorContent() };
-//			return { text: this.textNode.innerHTML };
 		},
 				
 		updateEditView: function(data) {
@@ -79,10 +78,10 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 		
 		states: $.extend(true, {}, Bxs.View.Box.Abstract.prototype.states, {
 			busy: function() {
-				$(this.textNode.parentNode).addClass("busy");
+				$(this.textNode.parentNode).attr("state", "busy");
 			},
 			ready: function() {
-				$(this.textNode.parentNode).removeClass("busy");
+				$(this.textNode.parentNode).attr("state", "ready");
 				this.enable();
 				this.setState("active");
 			},

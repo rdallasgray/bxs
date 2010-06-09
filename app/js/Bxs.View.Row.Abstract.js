@@ -33,8 +33,6 @@ Bxs.View.Row.Abstract = function(parentView,domNode,values) {
 
 
 Bxs.View.Row.Abstract.prototype = $.extend(true,{},
-	
-	Bxs.Mixin.Stateable,
 
 	{		
 		getDomNode: function() {
@@ -123,7 +121,6 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 
 			var self = this;
 	
-			$(this.domNode).children(this.parentView.columnType).removeClass("communicating");
 			$(this.domNode).children(this.parentView.columnType).removeClass("open");
 			this.focussed = false;
 
@@ -148,12 +145,6 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			});
 		},
 		
-		states: {
-			communicating: function() {
-				$(this.domNode).addClass("communicating");
-			}
-		},
-		
 		boot: function() {
 
 			var self = this;
@@ -163,10 +154,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			}); 
 			
 			self.widgetCount = self.schema.__count__;
-/*			
-			$(Bxs.eventsPublisher).one("allWidgetsAppended", function() {
-			});
-*/			
+
 			$.each(self.schema,function(columnName,schema) {
 				self.buildWidget(columnName,schema);
 			});

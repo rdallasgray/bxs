@@ -429,21 +429,18 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		
 		states: $.extend(true, {}, Bxs.View.Box.Abstract.prototype.states, {
 			ready: function() {
-				$(this.domNode).removeClass("busy");
-				$(this.domNode).removeClass("deleting");
+				$(this.domNode).attr("state", "ready");
 				this.enable();
 				
 				if (this.getSelectedRow() !== null) {
 					this.setState("active");
 				}
 			},
-			active: function() {
-				$(this.domNode).removeClass("deleting");
-			},
 			creating: function() {
+				$(this.domNode).attr("state", "creating");
 			},
 			deleting: function() {
-				$(this.domNode).addClass("deleting");
+				$(this.domNode).attr("state", "deleting");
 			}
 		}),
 		

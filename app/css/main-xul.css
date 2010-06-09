@@ -182,13 +182,13 @@ listbox.singleRow listboxbody {
 	overflow: hidden;
 }
 
-listbox.busy listboxbody {
+listbox[state="busy"] listboxbody {
 	background-image: url(/Bxs/app/img/large-spinner.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 }
 
-listbox.busy listitem {
+listbox[state="busy"] listitem {
 	opacity: 0;
 }
 
@@ -196,7 +196,7 @@ listbox[disabled="true"] {
 	color: rgb(180,180,180);
 }
 
-*[bxs="box"],*[bxs="collection"] {
+*[bxs="box"], *[bxs="collection"] {
 	margin-top: 8px;
 }
 
@@ -217,15 +217,17 @@ listitem:nth-child(even) {
 }
 
 listbox:focus listitem[selected="true"] {
-	background-color: rgb(61,128,223);
+	background-color: rgb(61,128,223) !important;
 }
 
-listitem[selected="true"] {
-	background-color: rgb(210,210,210);
+listbox[state="communicating"] listcell.open {
+	-moz-user-focus: ignore;
+	-moz-user-select: none;
+}
+
+listitem[selected="true"], listbox[state="communicating"] listcell.open {
+	background-color: rgb(210,210,210) !important;
 	color: white;
-}
-
-listitem[allowevents="true"] {
 }
 
 listcell.open {
@@ -235,22 +237,6 @@ listcell.open {
 
 listcell.open .listcell-label {
 	visibility: collapse;
-}
-
-listcell.communicating {
-/*	background-color: rgb(210,210,210) !important;
-	-moz-user-focus: ignore;
-	-moz-user-select: none;*/
-}
-
-listitem.communicating {
-	background-color: rgb(210,210,210) !important;
-	-moz-user-focus: ignore;
-	-moz-user-select: none;
-}
-
-listcell.communicating * {
-/*	visibility: hidden;*/
 }
 
 listcell.open[type="checkbox"] .listcell-check {
@@ -265,7 +251,7 @@ listcell[type="checkbox"] {
 	-moz-box-flex: 0;
 }
 
-listbox.deleting listitem[selected="true"] {
+listbox[state="deleting"] listitem[selected="true"] {
 	background-color: rgb(255,60,80) !important;
 	color: white !important;
 }

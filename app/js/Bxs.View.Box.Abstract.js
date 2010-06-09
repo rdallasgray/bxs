@@ -114,18 +114,21 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 				this.disable();
 			},
 			busy: function() {
-				$(this.domNode).addClass("busy");
+				$(this.domNode).attr("state", "busy");
 			},
 			ready: function() {
-				$(this.domNode).removeClass("busy");
+				$(this.domNode).attr("state", "ready");
 				this.enable();
 				this.setState("active");
 			},
 			active: function() {
+				$(this.domNode).attr("state", "active");
 			},
 			communicating: function() {
+				$(this.domNode).attr("state", "communicating");
 			},
 			editing: function() {
+				$(this.domNode).attr("state", "editing");
 			}
 		},
 		
