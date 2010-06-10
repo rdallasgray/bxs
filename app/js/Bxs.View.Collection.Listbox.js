@@ -92,7 +92,8 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 		
 		setColumnWidths: function() {
 			$(this.domNode).find("listcol").each(function() {
-				$(this).attr("width", this.clientWidth);
+				var width = Math.min(this.clientWidth, 200);
+				$(this).attr("width", width);
 			});
 			this.columnWidthsSet = true;
 		},
