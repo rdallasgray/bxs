@@ -62,7 +62,7 @@ Bxs.Scripts = {
 		"Bxs.Widget.Boolean.js",
 		"Bxs.Widget.List.js",
 		"Bxs.Widget.Date.js",
-		"Bxs.Widget.DateTime.js",
+		"Bxs.Widget.Datetime.js",
 		
 		"Bxs.Filter.Abstract.js",
 		"Bxs.Filter.Year.js",
