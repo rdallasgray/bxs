@@ -170,6 +170,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 		},
 		
+		setColumnWidths: function() {
+			this.columnWidthsSet = true;
+		},
+		
 		buildRow: function(data,singleRow) {
 			data = data || {};
 
@@ -430,6 +434,9 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		states: $.extend(true, {}, Bxs.View.Box.Abstract.prototype.states, {
 			ready: function() {
 				$(this.domNode).attr("state", "ready");
+				if (!this.columnWidthsSet) {
+					this.setColumnWidths();
+				}
 				this.enable();
 				
 				if (this.getSelectedRow() !== null) {

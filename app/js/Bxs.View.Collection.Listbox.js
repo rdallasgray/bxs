@@ -89,6 +89,13 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			Bxs.View.Collection.Abstract.prototype.editClose.apply(this, arguments);
 			$(this.domNode).find("listheader").removeAttr("disabled");
 		},
+		
+		setColumnWidths: function() {
+			$(this.domNode).find("listcol").each(function() {
+				$(this).attr("width", this.clientWidth);
+			});
+			this.columnWidthsSet = true;
+		},
 
 		boot: function(schema) {
 			
