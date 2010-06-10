@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.Widget.Password = function(schema,parentNode) {
+Bxs.Widget.Password = function(parentNode) {
 
 	Bxs.Widget.Abstract.apply(this,arguments);
 };

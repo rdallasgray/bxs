@@ -29,6 +29,7 @@ Bxs.Scripts = {
 		"Bxs.Boxes.js",
 		"Bxs.Panel.js",
 		"Bxs.List.js",
+		"Bxs.Column.js",
 		"Bxs.Association.js",
 		"Bxs.Date.js",
 		

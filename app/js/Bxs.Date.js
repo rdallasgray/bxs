@@ -16,6 +16,10 @@ Bxs.Date = {
 	
 	parseDate: function(isoDate) {
 		
+		if (!Bxs.Date.isIsoDateFormat(isoDate)) {
+			return ["----", "--", "--"];
+		}
+		
 		var dateTime = isoDate.split(" "),
 			parts = dateTime[0].split("-"),
 			year = (parts[0] === "0000") ? "----" : parts[0],
@@ -23,6 +27,10 @@ Bxs.Date = {
 			date = (parts[2] === "00") ? "--" : parts[2];
 			
 		return [year, month, date];
+	},
+	
+	isIsoDateFormat: function(date) {
+		return /\d{4}-\d{2}-\d{2}/.test(date);
 	},
 	
 	formatDate: function(isoDate) {

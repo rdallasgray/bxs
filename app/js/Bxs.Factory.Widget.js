@@ -15,52 +15,17 @@ You should have received a copy of the GNU General Public License along with Box
 
 Bxs.Factory.Widget = {
 	
-	build: function(schema,value,parentNode,parentView) {
+	build: function(value,parentNode,parentView) {
 		
 		var widgetType,
-			name = $(parentNode).attr("name");
+			name = $(parentNode).attr("name"),
+			type = Bxs.Column.isAssociation(name) 
+				? "List" : $.string(Bxs.Column.type(name)).capitalize().str;
 		
-		if (/_id$/.test(name)) {
-			widgetType = "List";
-		}
-/*		else if (name === "password") {
-			widgetType = "Password";
-		}*/
-		else {
-			switch(schema.type) {
-			
-				case "date":
-				widgetType = "Date";
-				break;
-				
-				case "datetime":
-				widgetType = "DateTime";
-				break;
-				
-				case "integer":
-				case "string":
-				case "float":
-				case "text":
-				case "time":
-				case "timestamp":
-				case "decimal":
-				widgetType = "String";
-				break;
-						
-				case "boolean":
-				widgetType = "Boolean";
-				break;
-				
-				default:
-				widgetType = "String";
-				break;
-			}
-		}
-		
-		var widget = new Bxs.Widget[widgetType](schema,parentNode,parentView);
+		var widget = new Bxs.Widget[type](parentNode,parentView);
 		
 		$(Bxs.eventsPublisher).one("widgetAppended."+name,function() {
-			widget.setValue(value); 
+			widget.setValue(value);
 		});
 		
 		widget.boot();

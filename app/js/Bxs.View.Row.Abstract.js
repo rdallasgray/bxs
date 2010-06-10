@@ -42,20 +42,35 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 
 		getData: function() {
 
-			var data = {};
-
-			$.each(this.widgets, function(columnName, widget) {
-				data[columnName] = widget.getValue();
+			var data = {},
+				self = this;
+			
+			$.each(this.schema, function(name) {
+				if (name in self.widgets) {
+					data[name] = self.widgets[name].getValue();
+				}
+				else {
+					data[name] = $(self.domNode).children(self.parentView.columnType + "[name='" + name + "']")
+						.attr("value");
+				}
 			});
 
 			return data;
 		},
 
-		buildWidget: function(columnName,schema) {
+		buildWidget: function(columnName) {
 			
 			var domNode = $(this.domNode).children(this.parentView.columnType+"[name='"+columnName+"']"),
 				self = this;
-				
+			
+			if ($(domNode).attr("hidden") === "true") {
+				self.widgetCount--;
+				if (self.widgetCount === 0) {
+					$(Bxs.eventsPublisher).trigger("editViewReady");
+				}
+				return;
+			}
+			
 			domNode.addClass("communicating");
 			
 			if (self.defaultValues !== null && (value = self.defaultValues[columnName])) {
@@ -76,13 +91,12 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 				$(Bxs.eventsPublisher).trigger("widgetAppended."+columnName);
 
 				self.widgetCount--;
-				
 				if (self.widgetCount === 0) {
 					$(Bxs.eventsPublisher).trigger("editViewReady");
 				}
 			});
 			
-			self.widgets[columnName] = Bxs.Factory.Widget.build(schema,domNode.attr("value"),domNode.get(0),self.parentView);
+			self.widgets[columnName] = Bxs.Factory.Widget.build(domNode.attr("value"), domNode.get(0), self.parentView);
 
 		},
 
@@ -90,18 +104,19 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 
 			var self = this;
 
-			$.each(self.schema, function(columnName,values) {
+			$.each(self.schema, function(columnName) {
 				var column = $(self.domNode).children(self.parentView.columnType+"[name='"+columnName+"']").get(0),
-					label = "";
+					label = "",
+					type = Bxs.Column.type(columnName);
 				
-				if (/_id$/.test(columnName)) {
+				if (Bxs.Column.isAssociation(columnName)) {
 					self.parentView.labelAssociatedColumn(column,data[columnName]);
 				}
 				else {
-					$(column).attr("label", self.parentView.getColumnLabel(data[columnName], values['type']));
+					$(column).attr("label", self.parentView.getColumnLabel(data[columnName], type));
 				}
 				
-				if (self.schema[columnName].type === "boolean") {
+				if (type === "boolean") {
 					$(column)
 						.attr({
 							type: "checkbox",
@@ -155,8 +170,8 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			
 			self.widgetCount = self.schema.__count__;
 
-			$.each(self.schema,function(columnName,schema) {
-				self.buildWidget(columnName,schema);
+			$.each(self.schema,function(columnName) {
+				self.buildWidget(columnName);
 			});
 
 		}

@@ -129,19 +129,19 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			
 			self.associatedColumns = [];
 			
-			$.each(self.controller.schema, function(columnName,values) {
+			$.each(self.controller.schema, function(columnName) {
 				
-				var column = document.createElement(self.columnType);
+				var column = document.createElement(self.columnType),
+					type = Bxs.Column.type(columnName);
 				
-				$(column).attr({ "name": columnName, "type": values['type'] });
+				$(column).attr({ "name": columnName, "type": type });
 				
-				if (/_id$/.test(columnName) && !self.ignoresColumn(columnName)) {
-					// it's an association column
+				if (Bxs.Column.isAssociation(columnName) && !self.ignoresColumn(columnName)) {
 					$(column).attr({ "association": "true" });
 					self.associatedColumns.push(columnName);
 				}
 				
-				if (values["type"] === "boolean") {
+				if (type === "boolean") {
 					$(column).attr({ "type": "checkbox","disabled": "true" });
 				}
 				
@@ -179,7 +179,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 
 			for (var key in data) {
 				
-				var type = schema[key].type,
+				var type = Bxs.Column.type(key),
 					value = data[key];
 				
 				if (!(key in schema)) {

@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.Widget.List = function(schema,parentNode,parentView) {
+Bxs.Widget.List = function(parentNode,parentView) {
 	
 	Bxs.Widget.Abstract.apply(this,arguments);
 	
@@ -44,15 +44,14 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			
 			$(this.domNode).append(this.popup);
 			
-			if (this.schema.null !== false) {
-				var nullItem = document.createElement("menuitem");
-				$(nullItem).attr("label","None");
-				$(nullItem).attr("value","");
-				$(nullItem).addClass("strong");
-				$(this.popup).append(nullItem);
-				var sep = document.createElement("menuseparator");
-				$(this.popup).append(sep);
-			}
+			var nullItem = document.createElement("menuitem");
+			$(nullItem).attr("label","None");
+			$(nullItem).attr("value","");
+			$(nullItem).addClass("strong");
+			$(this.popup).append(nullItem);
+			var sep = document.createElement("menuseparator");
+			$(this.popup).append(sep);
+
 			var newItem = document.createElement("menuitem");
 			$(newItem).attr({ label: "New "+this.listName, value: "" });
 			$(newItem).addClass("strong");
@@ -88,9 +87,8 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 
 							Bxs.Factory.List.build(self.url,self.listName);
 						}; 
-					// could optimize by creating array from columnSchema and filtering with regex /_id$/
 					
-					$.each(columnSchema, function(key) { if (/_id$/.test(key)) associateKeys.push(key) });
+					$.each(columnSchema, function(key) { if (Bxs.Column.isAssociation(key)) associateKeys.push(key) });
 					
 					if (!!(sharedKey = associateKeys.filter(function(el) el in parentSchema)[0])) {
 						if (self.parentView.attrs.observing !== undefined) {
@@ -103,10 +101,13 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 						
 						var buildListWithDefaults = function() {
 							self.setNewRowDefault(sharedKey,selectedId);
-							Bxs.Ajax.getMetadata(sharedKey.substr(0,sharedKey.search(/_id$/)), function(keyMetadata) {
-								self.url = keyMetadata.name+"/"+selectedId+"/"+metadata.name;
-								requestList();
-							});
+							Bxs.Ajax.getMetadata(
+								Bxs.Association.getName(sharedKey, self.parentView.attrs), 
+								function(keyMetadata) {
+									self.url = keyMetadata.name+"/"+selectedId+"/"+metadata.name;
+									requestList();
+								}
+							);
 						}
 
 						if (!isNaN(parseInt(selectedId))) {

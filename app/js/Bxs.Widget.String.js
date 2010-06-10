@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.Widget.String = function(schema,parentNode) {
+Bxs.Widget.String = function(parentNode) {
 
 	Bxs.Widget.Abstract.apply(this,arguments);
 };
@@ -27,12 +27,6 @@ Bxs.Widget.String.prototype = $.extend(true,{},
 		boot: function() {
 
 			this.domNode = document.createElement("textbox");
-			
-			if (this.schema.length !== null) {
-				$(this.domNode).attr({
-					"maxlength": this.schema.length
-				});
-			}
 						
 			this.fixFocusBehaviour();
 

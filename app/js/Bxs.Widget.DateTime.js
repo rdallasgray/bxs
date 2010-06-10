@@ -13,12 +13,12 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.Widget.DateTime = function(schema,parentNode) {
+Bxs.Widget.Datetime = function(parentNode) {
 
 	Bxs.Widget.Date.apply(this,arguments);
 };
 
-Bxs.Widget.DateTime.prototype = $.extend(true,{},
+Bxs.Widget.Datetime.prototype = $.extend(true,{},
 	
 	Bxs.Widget.Date.prototype,
 

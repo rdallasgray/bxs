@@ -107,12 +107,12 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			
 			
 			// some of below could be extracted out to Bxs.View.Collection.Abstract
-			$.each(schema, function(columnName,values) {
+			$.each(schema, function(columnName) {
 				
 				if (self.ignoresColumn(columnName)) return;
 				
 				// deal with *_id, i.e. belongs_to relationships
-				if (/_id$/.test(columnName)) {
+				if (Bxs.Column.isAssociation(columnName)) {
 					var label = Bxs.Association.getName(columnName,self.attrs);
 					// preload the box data
 					Bxs.Ajax.getMetadata(label,function(metadata) {
@@ -121,11 +121,12 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				}
 				
 				var header = document.createElement('listheader'),
-					headerLabel = label === undefined ? columnName : label;
+					headerLabel = label === undefined ? columnName : label,
+					type = Bxs.Column.type(columnName);
 					
 				header.setAttribute("label",headerLabel);
 				header.setAttribute("columnName",columnName);
-				header.setAttribute("columnType", values["type"]);
+				header.setAttribute("columnType", type);
 				
 				$(header).bind("click", function() {
 					
@@ -145,9 +146,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				});
 			
 				var col = document.createElement('listcol');
-				var columnLength = values.length ? parseInt(values.length) : 16;
-				col.setAttribute("width",Math.min(Math.round(Math.sqrt(columnLength) * 16),200));
-				col.setAttribute("type", values["type"]);
+				col.setAttribute("type", type);
 			
 				if (self.hidesColumn(columnName)) {
 					$(header).attr("hidden","true");

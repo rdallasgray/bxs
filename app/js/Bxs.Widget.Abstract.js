@@ -16,9 +16,8 @@ if (Bxs.Widget === undefined) {
 	Bxs.Widget = {};
 }
 
-Bxs.Widget.Abstract = function(schema,parentNode,parentView) {
+Bxs.Widget.Abstract = function(parentNode,parentView) {
 
-	this.schema = schema;
 	this.parentNode = parentNode;
 	this.parentView = parentView;
 };

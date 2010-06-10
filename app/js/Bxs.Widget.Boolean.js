@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 
-Bxs.Widget.Boolean = function(schema,parentNode) {
+Bxs.Widget.Boolean = function(parentNode) {
 
 	Bxs.Widget.Abstract.apply(this,arguments);
 };
