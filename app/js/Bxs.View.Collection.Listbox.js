@@ -90,12 +90,14 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			$(this.domNode).find("listheader").removeAttr("disabled");
 		},
 		
-		setColumnWidths: function() {
-			$(this.domNode).find("listcol").each(function() {
-				var width = Math.min(this.clientWidth, 200);
-				$(this).attr("width", width);
-			});
-			this.columnWidthsSet = true;
+		setColumnWidths: function(dataCount) {
+			if (dataCount > 0) {
+				$(this.domNode).find("listcol").each(function() {
+					var width = Math.min(this.clientWidth, 200);
+					$(this).attr("width", width);
+				});
+				this.columnWidthsSet = true;
+			}
 		},
 
 		boot: function(schema) {

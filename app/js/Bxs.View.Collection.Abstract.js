@@ -96,10 +96,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			var self = this,
 				frag = document.createDocumentFragment(),
 				rows = [];
-		
-			$.each(data,function() {
-				rows.push(self.buildRow(this));
-			});
+			
+			data.forEach(function(el) {
+				rows.push(self.buildRow(el));
+			})
 			
 			if (this.sortedBy !== undefined) {
 				this.sortRowArray(rows,this.sortedBy.columnName,this.sortedBy.direction);
@@ -112,10 +112,12 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			self.domNode.appendChild(frag);
 			
 			if (self.associatedColumns.__count__ === 0) {
+				self.setColumnWidths(data.length);
 				self.setState("ready");
 			}
 			else {
 				$(Bxs.eventsPublisher).one("associatedColumnsLabelled."+self.attrs.id, function() {
+					self.setColumnWidths(data.length);
 					self.setState("ready");
 				});
 				self.labelAssociatedColumns();
@@ -170,8 +172,10 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 		},
 		
-		setColumnWidths: function() {
-			this.columnWidthsSet = true;
+		setColumnWidths: function(dataCount) {
+			if (dataCount > 0) {
+				this.columnWidthsSet = true;
+			}
 		},
 		
 		buildRow: function(data,singleRow) {
