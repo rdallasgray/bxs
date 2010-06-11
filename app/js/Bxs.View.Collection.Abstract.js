@@ -222,13 +222,13 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				columnName = column.getAttribute("name");
 			
 			if (value !== "") {
-				var realName = Bxs.Association.getName(columnName,self.attrs);
-				Bxs.Ajax.getMetadata(realName,function(metadata) {
-					$(Bxs.eventsPublisher).one("loadedRowData."+metadata.url+"/"+value,function(e,rowData) {
-						$(column).attr("label", rowData.label);
-					});
-					self.controller.loadRowData(metadata.url+"/"+value, { list: "true" });
+				var modelName = Bxs.Association.getModelName(columnName,self.attrs),
+					url = "/" + url;
+			
+				$(Bxs.eventsPublisher).one("loadedRowData." + url + "/" + value, function(e, rowData) {
+					$(column).attr("label", rowData.label);
 				});
+				self.controller.loadRowData(url + "/" + value, { list: "true" });
 			}
 			else {
 				$(column).attr("label","");
@@ -255,17 +255,16 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 					return;
 				}
 				
-				var realName = Bxs.Association.getName(columnName,self.attrs);
+				var modelName = Bxs.Association.getModelName(columnName,self.attrs),
+					url = "/" + modelName;
 				
-				Bxs.Ajax.getMetadata(realName, function(metadata) {
 					if (self.associations === undefined) {
 						self.associations = {};
 					}
-					if (self.associations[metadata.name] === undefined) {
-						self.associations[metadata.name] = columnName;
+					if (self.associations[modelName] === undefined) {
+						self.associations[modelName] = columnName;
 					}
-					Bxs.Ajax.getJSON(metadata.url, function(labelData) {
-					
+					Bxs.Ajax.getJSON(url, function(labelData) {
 						setTimeout(function() {
 							associatedColumns.forEach(function(column) {
 								if (column.getAttribute("value") === "") return;
@@ -283,7 +282,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 						},50);
 					},
 					{ list: "true" });
-				});
 			});			
 		},
 		

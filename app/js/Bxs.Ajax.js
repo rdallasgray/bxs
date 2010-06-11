@@ -79,26 +79,6 @@ Bxs.Ajax = {
 			}
 		});
 	},
-	
-	getMetadata: function(name,callback) {
-		
-		var cached = Bxs.Cache.get(["metadata",name]),
-			callback = callback || function() { return true; };
-		
-		if (cached) {
-			callback(cached);
-		}
-		
-		else {
-			var url = Bxs.Url.construct(":metadata/"+name);
-			this._authenticatedRequest(url,"GET",null,function(response) {
-				var metadata = Bxs.Json.parse(response.text);
-				Bxs.Cache.set(["metadata",name],metadata);
-				callback(metadata);
-			});
-		}
-		
-	},
 
 	getSchema: function(url,callback) {
 		var url = Bxs.Url.construct(url+"/new"),

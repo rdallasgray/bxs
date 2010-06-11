@@ -17,7 +17,7 @@ Bxs.Widget.List = function(parentNode,parentView) {
 	
 	Bxs.Widget.Abstract.apply(this,arguments);
 	
-	this.columnName = $(parentNode).attr("name");	
+	this.columnName = $(parentNode).attr("name");
 };
 
 Bxs.Widget.List.prototype = $.extend(true,{},
@@ -31,6 +31,8 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				this.columnName,
 				this.parentView.attrs
 			);
+			this.modelName = Bxs.Inflector.pluralize(this.listName);
+			this.url = "/" + this.modelName;
 			
 			this.domNode = document.createElement("menulist");
 
@@ -65,63 +67,57 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			
 			var sep = document.createElement("menuseparator");
 			$(self.popup).append(sep);
-			
-			Bxs.Ajax.getMetadata(this.listName, function(metadata) {
 				
-				self.url = metadata.url;
+			Bxs.Ajax.getSchema(self.url, function(columnSchema) {
+				var parentSchema = self.parentView.controller.schema,
+					observedId = self.parentView.attrs.observing,
+					associateKeys = [],
+					sharedKey,
+					requestList = function() {
+
+						$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
+
+							self.list = list;
+							$(self.popup).append(self.list.getDomNode());
+							self.fixFocusBehaviour();
+							$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
+						});
+
+						Bxs.Factory.List.build(self.url,self.listName);
+					}; 
 				
-				Bxs.Ajax.getSchema(metadata.url, function(columnSchema) {
-					var parentSchema = self.parentView.controller.schema,
-						observedId = self.parentView.attrs.observing,
-						associateKeys = [],
-						sharedKey,
-						requestList = function() {
-
-							$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
-
-								self.list = list;
-								$(self.popup).append(self.list.getDomNode());
-								self.fixFocusBehaviour();
-								$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
-							});
-
-							Bxs.Factory.List.build(self.url,self.listName);
-						}; 
-					
-					$.each(columnSchema, function(key) { if (Bxs.Column.isAssociation(key)) associateKeys.push(key) });
-					
-					if (!!(sharedKey = associateKeys.filter(function(el) el in parentSchema)[0])) {
-						if (self.parentView.attrs.observing !== undefined) {
-							var selectedId = self.parentView.getObservedBox().view.getSelectedId();
-						}
-						else {
-							var defaultColumn = $(self.parentNode).siblings("[name='"+sharedKey+"']"),
-								selectedId = defaultColumn.attr("value");
-						}
-						
-						var buildListWithDefaults = function() {
-							self.setNewRowDefault(sharedKey,selectedId);
-							Bxs.Ajax.getMetadata(
-								Bxs.Association.getName(sharedKey, self.parentView.attrs), 
-								function(keyMetadata) {
-									self.url = keyMetadata.name+"/"+selectedId+"/"+metadata.name;
-									requestList();
-								}
-							);
-						}
-
-						if (!isNaN(parseInt(selectedId))) {
-							buildListWithDefaults();
-						}
-						else {
-							// TODO set up so that when defaultColumn changes, we rebuild the list accordingly.
-							requestList();
-						}
+				$.each(columnSchema, function(key) { if (Bxs.Column.isAssociation(key)) associateKeys.push(key) });
+				
+				if (!!(sharedKey = associateKeys.filter(function(el) el in parentSchema)[0])) {
+					if (self.parentView.attrs.observing !== undefined) {
+						var selectedId = self.parentView.getObservedBox().view.getSelectedId();
 					}
 					else {
+						var defaultColumn = $(self.parentNode).siblings("[name='"+sharedKey+"']"),
+							selectedId = defaultColumn.attr("value");
+					}
+					
+					var buildListWithDefaults = function() {
+						
+						var keyModelName = Bxs.Inflector.pluralize(sharedKey);
+						
+						self.setNewRowDefault(sharedKey,selectedId);
+						self.url = "/" + keyModelName + "/" + selectedId + "/" + this.modelName;
+						
 						requestList();
 					}
-				});
+
+					if (!isNaN(parseInt(selectedId))) {
+						buildListWithDefaults();
+					}
+					else {
+						// TODO set up so that when defaultColumn changes, we rebuild the list accordingly.
+						requestList();
+					}
+				}
+				else {
+					requestList();
+				}
 			});
 		},
 	
@@ -181,33 +177,28 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 				self.setValue(defaultValue);
 				self.cleanUpPanel();
 			});
-
-			Bxs.Ajax.getMetadata(this.listName,function(metadata) {
+		
+			var hide = [];
 			
-				var boxName = metadata.name,
-					hide = [];
-				
-				$.each(self.getNewRowDefaults(), function(key) {
-					hide.push(key);
-				});
-				
-				$(self.newEntry.boxNode)
-					.attr({ 
-						bxs: "collection", 
-						id: "temp-box", 
-						name:  boxName, 
-						rootUrl: "/"+self.url, 
-						hide: hide.toSource(), 
-						rows: "1" ,
-						suppressContentLoading: "true"
-					})
-					.addClass("singleRow");
-	
-				$(self.newEntry.panel.domNode).append(self.newEntry.boxNode);
-
-				var box = Bxs.Factory.Box.build(self.newEntry.boxNode);
-				
+			$.each(self.getNewRowDefaults(), function(key) {
+				hide.push(key);
 			});
+			
+			$(self.newEntry.boxNode)
+				.attr({ 
+					bxs: "collection", 
+					id: "temp-box", 
+					name:  self.modelName, 
+					rootUrl: self.url, 
+					hide: hide.toSource(), 
+					rows: "1" ,
+					suppressContentLoading: "true"
+				})
+				.addClass("singleRow");
+
+			$(self.newEntry.panel.domNode).append(self.newEntry.boxNode);
+
+			var box = Bxs.Factory.Box.build(self.newEntry.boxNode);
 		},
 		
 		cleanUpPanel: function() {

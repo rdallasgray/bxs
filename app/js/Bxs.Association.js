@@ -30,6 +30,10 @@ Bxs.Association = {
 		}
 		
 		return name;
+	},
+	
+	getModelName: function(columnName, viewAttrs) {
+		return Bxs.Inflector.pluralize(Bxs.Association.getName(columnName, viewAttrs));
 	}
 	
 };

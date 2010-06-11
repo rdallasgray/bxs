@@ -18,6 +18,7 @@ Bxs.Scripts = {
 		"Bxs.Downloads.js",
 		"Bxs.Editor.js",
 		"Bxs.Parser.js",
+		"Bxs.Inflector.js",
 		"Bxs.Response.js",
 		
 		"Bxs.Mixin.Commandable.js",

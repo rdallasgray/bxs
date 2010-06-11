@@ -16,42 +16,40 @@ Bxs.List = function(url,listName,requester) {
 	
 	this.url = url;
 	this.listName = listName;
+	this.modelName = Bxs.Inflector.pluralize(this.listName);
 	this.requester = requester;
 };
 
 Bxs.List.prototype = {
 	
 	boot: function() {
+
 		var self = this;
 		
 		this.domNode = document.createDocumentFragment();
-	
-		Bxs.Ajax.getMetadata(self.listName,function(metadata) {
-			self.metadata = metadata;
-			
-			Bxs.Ajax.getJSON(Bxs.Url.construct(self.url, { list: "true" }),function(dataSet,notModified) {
-				var validCachedNode = false;
-				if (notModified) {
-					
-					var cachedNode = Bxs.Cache.get(["Lists",self.url]);
-					
-					if (cachedNode !== false) {
-						validCachedNode = true;
-						self.domNode = cachedNode;
-						$(Bxs.eventsPublisher).trigger("listReady."+self.url+self.requester,[self]);
-					}
-				}
+		
+		Bxs.Ajax.getJSON(Bxs.Url.construct(self.url, { list: "true" }), function(dataSet,notModified) {
+			var validCachedNode = false;
+			if (notModified) {
 				
-				if (!validCachedNode) {
-					dataSet.forEach(function(row) {
-						self.createNode(row);
-					});
-					Bxs.Cache.set(["Lists",self.url],self.domNode.cloneNode(true));
+				var cachedNode = Bxs.Cache.get(["Lists",self.url]);
+				
+				if (cachedNode !== false) {
+					validCachedNode = true;
+					self.domNode = cachedNode;
 					$(Bxs.eventsPublisher).trigger("listReady."+self.url+self.requester,[self]);
 				}
-			});
+			}
+			
+			if (!validCachedNode) {
+				dataSet.forEach(function(row) {
+					self.createNode(row);
+				});
+				Bxs.Cache.set(["Lists",self.url],self.domNode.cloneNode(true));
+				$(Bxs.eventsPublisher).trigger("listReady."+self.url+self.requester,[self]);
+			}
 		});
-
+			
 		$(Bxs.eventsPublisher).bind("dataChanged",function(e,dataObject) {
 			self.handleData(dataObject);
 		});
@@ -68,7 +66,7 @@ Bxs.List.prototype = {
 	},
 
 	handleData: function(dataObject) {
-		if (dataObject.name !== this.metadata.name) {
+		if (dataObject.name !== this.modelName) {
 			return;
 		}
 		this[dataObject.action](dataObject.data);

@@ -123,11 +123,10 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				
 				// deal with *_id, i.e. belongs_to relationships
 				if (Bxs.Column.isAssociation(columnName)) {
-					var label = Bxs.Association.getName(columnName,self.attrs);
+					var label = Bxs.Association.getName(columnName,self.attrs),
+						url = "/" + Bxs.Inflector.pluralize(label);
 					// preload the box data
-					Bxs.Ajax.getMetadata(label,function(metadata) {
-						Bxs.Ajax.getJSON(metadata.url);
-					});
+					Bxs.Ajax.getJSON(url);
 				}
 				
 				var header = document.createElement('listheader'),
