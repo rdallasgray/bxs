@@ -14,16 +14,20 @@ You should have received a copy of the GNU General Public License along with Box
 
 Bxs.Inflector = {
 	
+	urlize: function(str) {
+		return str.replace("_", "-");
+	},
+	
 	pluralize: function(str) {
 		
 		Bxs.Inflector.init();
 		
 		if (Bxs.Inflector.uncountables.some(function(el) str === el)) {
-			return str;
+			return Bxs.Inflector.urlize(str);
 		}
 		
 		if (str in Bxs.Inflector.irregulars) {
-			return Bxs.Inflector.irregulars[str];
+			return Bxs.Inflector.urlize(Bxs.Inflector.irregulars[str]);
 		}
 		
 		var pattern, match, matched = false, count = 0;
@@ -36,7 +40,7 @@ Bxs.Inflector = {
 			}
 			count++;
 		}
-		return str.replace(pattern, match);
+		return Bxs.Inflector.urlize(str.replace(pattern, match));
 	},
 	
 	plurals: {
