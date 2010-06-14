@@ -35,6 +35,7 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 	
 				Bxs.Ajax.getSchema(url,function(data) {
 						self.schema = data;
+						self.schema.id = null;
 						$(Bxs.eventsPublisher).trigger("schemaLoaded."+self.view.attrs.id,[self]);
 					}
 				);
