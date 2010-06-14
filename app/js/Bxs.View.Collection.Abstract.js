@@ -19,7 +19,7 @@ if (Bxs.View.Collection === undefined) {
 Bxs.View.Collection.Abstract = function(node) {
 	
 	this.domNode = node;
-	this.autoHideColumns = ["id","created_at","modified_at"];
+	this.autoHideColumns = ["id","created_at","updated_at"];
 	this.rowType = "";
 	this.columnType = "";
 	
