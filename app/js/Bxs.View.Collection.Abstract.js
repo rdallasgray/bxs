@@ -223,7 +223,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			
 			if (value !== "") {
 				var modelName = Bxs.Association.getModelName(columnName,self.attrs),
-					url = "/" + url;
+					url = "/" + modelName;
 			
 				$(Bxs.eventsPublisher).one("loadedRowData." + url + "/" + value, function(e, rowData) {
 					$(column).attr("label", rowData.label);
