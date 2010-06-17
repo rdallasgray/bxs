@@ -144,12 +144,23 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				if (!this.view.confirmDelete()) {
 					return;
 				}
-				
-				this.view.setState("deleting");
 			
 				var url = this.parseUrl()+"/"+this.view.getSelectedId(),
 					self = this,
 					id = $(this.view.getSelectedRow()).children(this.view.columnType+"[name='id']").attr("value");
+				
+				if (this.view.attrs.id === "users") {
+					if (id == Bxs.auth.id) {
+						var self = this;
+						$(Bxs.eventsPublisher).one("dataChanged",function(e, dataObject) {
+							if (dataObject.source === self.view.attrs.id 
+								&& dataObject.data.id == Bxs.auth.id
+								&& dataObject.action === "delete") {
+								self.bounceUser("Your authorization data has been deleted. Please log in again.");
+							}
+						});
+					}
+				}
 			
 				Bxs.Ajax.deleteRow(url,function(response) { self.handleData(response,"delete",id); });
 			}

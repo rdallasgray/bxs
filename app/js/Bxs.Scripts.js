@@ -59,7 +59,7 @@ Bxs.Scripts = {
 		
 		"Bxs.Widget.Abstract.js",
 		"Bxs.Widget.String.js",
-//		"Bxs.Widget.Password.js",
+		"Bxs.Widget.Password.js",
 		"Bxs.Widget.Boolean.js",
 		"Bxs.Widget.List.js",
 		"Bxs.Widget.Date.js",

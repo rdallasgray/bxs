@@ -138,8 +138,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				
 				$(column).attr({ "name": columnName, "type": type });
 				
-				if (Bxs.Column.isAssociation(columnName) && !self.ignoresColumn(columnName)) {
-					$(column).attr({ "association": "true" });
+				if (type === "list" && !self.ignoresColumn(columnName)) {
 					self.associatedColumns.push(columnName);
 				}
 				
@@ -155,21 +154,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			});
 			
 			self.rowTemplate = row;
-		},
-		
-		getColumnLabel: function(value, type) {
-			switch (type) {
-				case "date":
-				return Bxs.Date.formatDate(value);
-				break;
-				
-				case "datetime":
-				return Bxs.Date.formatDateTime(value);
-				break;
-				
-				default:
-				return value;
-			}
 		},
 		
 		setColumnWidths: function(dataCount) {
@@ -200,21 +184,44 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				
 				var column = Bxs.Xpath.getNode(row,"descendant::xul:"+self.columnType+"[@name='"+key+"']");
 				
-				if (type === "boolean") {
+				switch(type) {
+					case "boolean":
 					column.setAttribute("checked",value.toString());
-				}
-				if (!column.getAttribute("association")) {
-					if (!(column.getAttribute("type") === "checkbox")) {
-						column.setAttribute("label", self.getColumnLabel(value, type));
+					break;
+					
+					case "list":
+					if (singleRow === true) {
+						self.labelAssociatedColumn(column, value);
 					}
+					break;
+					
+					default:
+					column.setAttribute("label", self.getColumnLabel(value, type));
 				}
-				else if (singleRow === true) {
-					self.labelAssociatedColumn(column, value);
-				}
+				
 				column.setAttribute("value", value);
 			}
 			
 			return row;
+		},
+   	
+		getColumnLabel: function(value, type) {
+			switch (type) {
+				case "password":
+				return "••••••••";
+				break;
+					
+				case "date":
+				return Bxs.Date.formatDate(value);
+				break;
+				
+				case "datetime":
+				return Bxs.Date.formatDateTime(value);
+				break;
+				
+				default:
+				return value;
+			}
 		},
 		
 		labelAssociatedColumn: function(column,value) {

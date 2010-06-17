@@ -19,7 +19,9 @@ Bxs.Column = {
 		var types = {
 			"_on$" : "date",
 			"_at$" : "datetime",
-			"^is_" : "boolean"
+			"^is_" : "boolean",
+			"^password$" : "password",
+			"_id$" : "list"
 		};
 		
 		for (var re in types) {

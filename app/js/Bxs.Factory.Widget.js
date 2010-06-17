@@ -19,8 +19,7 @@ Bxs.Factory.Widget = {
 		
 		var widgetType,
 			name = $(parentNode).attr("name"),
-			type = Bxs.Column.isAssociation(name) 
-				? "List" : $.string(Bxs.Column.type(name)).capitalize().str;
+			type = $.string(Bxs.Column.type(name)).capitalize().str;
 		
 		var widget = new Bxs.Widget[type](parentNode,parentView);
 		

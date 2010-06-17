@@ -88,12 +88,10 @@ Bxs = {
 			},
 			failure: function() {
 				Bxs.login.setState("start");
-				Bxs.login.controls.status.attr("label","Incorrect username or password");
+				Bxs.login.controls.status.attr("label","Wrong username or password");
 			},
 			success: function() {
 				Bxs.login.controls.status.attr("label","OK");
-				Bxs.auth = { username: Bxs.login.controls.username.val(), password: Bxs.login.controls.password.val() };
-				Bxs.boot.start();
 			},
 			loggingOut: function() {
 				Bxs.showLogoutOverlay();
@@ -119,7 +117,7 @@ Bxs = {
 		handleResponse: function(response) {
 			switch (response.status) {
 				case 200:
-				Bxs.login.success();
+				Bxs.login.success(Bxs.Json.parse(response.text));
 				break;
 				case 401:
 				Bxs.login.failure();
@@ -128,8 +126,14 @@ Bxs = {
 				Bxs.error.recoverable(response);
 			}
 		},
-		success: function() {
+		success: function(response) {
 			Bxs.login.setState("success");
+			Bxs.auth = { 
+				id: response.id,
+				username: Bxs.login.controls.username.val(), 
+				password: Bxs.login.controls.password.val() 
+			};
+			Bxs.boot.start();
 		},
 		failure: function() {
 			Bxs.login.setState("failure");
@@ -143,16 +147,18 @@ Bxs = {
 		}
 		Bxs.login.setState("loggingOut");
 		
-		Bxs.Ajax.logout(function() {
-			var req = {
-				service: "clearHttpAuth",
-				callback: function() {
-					Bxs.Boxes.reset();
-					Bxs.login.setState("start");
-				}
-			};
-			Bxs.service.get(req);
-		});
+		Bxs.Ajax.logout(Bxs.doLogout);
+	},
+	
+	doLogout: function() {
+		var req = {
+			service: "clearHttpAuth",
+			callback: function() {
+				Bxs.Boxes.reset();
+				Bxs.login.setState("start");
+			}
+		};
+		Bxs.service.get(req);
 	},
 	
 	showLogoutOverlay: function() {

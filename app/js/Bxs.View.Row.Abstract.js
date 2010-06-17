@@ -109,7 +109,7 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 					label = "",
 					type = Bxs.Column.type(columnName);
 				
-				if (Bxs.Column.isAssociation(columnName)) {
+				if (type === "list") {
 					self.parentView.labelAssociatedColumn(column,data[columnName]);
 				}
 				else {
@@ -125,7 +125,6 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 						})
 						.removeAttr("label");
 				}
-				
 				else {
 					$(column).attr({ value: data[columnName] });
 				}

@@ -233,7 +233,26 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 				transmitType = "insert";
 			}
 			
+			if (this.view.attrs.id === "users" && transmitType === "update") {
+				if (data.id == Bxs.auth.id) {
+					if ((data.password !== Bxs.auth.password && data.password !== '')
+						|| data.username !== Bxs.auth.username) {
+						var self = this;
+						$(Bxs.eventsPublisher).one("dataChanged",function(e, dataObject) {
+							if (dataObject.source === self.view.attrs.id && dataObject.data.id == Bxs.auth.id) {
+								self.bounceUser("Your username or password has changed - please log in again with your new details.");
+							}
+						});
+					}
+				}
+			}
+				
 			this[transmitType](data);
+		},
+		
+		bounceUser: function(msg) {
+			alert(msg);
+			Bxs.doLogout();
 		},
 		
 		update: function(data) {

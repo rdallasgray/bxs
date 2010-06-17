@@ -51,7 +51,6 @@ Bxs.Widget.Abstract.prototype = {
 	},
 	
 	afterAppend: function() {
-		
 	},
 	
 	setValue: function(value) {
