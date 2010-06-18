@@ -158,9 +158,13 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 			// need to pass [this] so can get view when creating box on the fly, e.g. for adding new item in menulist
 		},
 		
-		activate: function() {
+		activate: function(forceRefresh) {
 			
 			var self = this;
+			
+			if (forceRefresh === true) {
+				this.forceNextRefresh = true;
+			}
 
 			if ((self.attrs.observing === undefined || self.getObservedBox().view.getSelectedId() !== null) 
 				&& self.attrs.suppressContentLoading === undefined) {

@@ -53,13 +53,13 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 		},
 		
 		isVisible: function() {
-			var tabPanels = Bxs.Xpath.getArray(this.domNode,"ancestor::xul:tabpanel");
-			
-			if (tabPanels.length < 2) {
+			if (this.forceNextRefresh === true) {
 				return true;
+				this.forceNextRefresh = false;
 			}
-		
-			var visiblePanels = 0;
+			
+			var tabPanels = Bxs.Xpath.getArray(this.domNode,"ancestor::xul:tabpanel"),
+				visiblePanels = 0;
 
 			tabPanels.forEach(function(el) {
 				if (el.parentNode.selectedPanel === el) {
@@ -71,7 +71,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 		},
 		
 		onVisibility: function(callback) {
-			if (this.parentTab == undefined) {
+			if (this.parentTab === undefined) {
 				this.parentTab = $(this.domNode).parents("tabpanels").prev("tabs")
 					.children("[linkedpanel='"+this.attrs.id+"_panel']").get(0);
 			}

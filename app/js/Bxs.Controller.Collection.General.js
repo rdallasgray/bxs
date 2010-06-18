@@ -67,9 +67,11 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				return this["remote"+$.string(dataObject.action).capitalize().str](dataObject.data);
 			}
 			if (dataObject.action === "insert") {
+				// Don't need to check associations for inserts
 				return;
 			}
 			if (this.view.associations !== undefined && this.view.associations[dataObject.name] !== undefined) {
+				console.debug("checking Associations: " + this.view.attrs.id);
 				this.checkAssociation(dataObject);
 			}
 		},
@@ -190,15 +192,24 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		},
 		
 		remoteInsert: function(data) {
-			this.view.appendRowAtHead(this.view.buildRow(data,true));
+			if (this.view.attrs.observing === undefined) {
+				this.view.appendRowAtHead(this.view.buildRow(data,true));
+			}
+			else {
+				this.refresh(true);
+			}
 		},
 		
 		remoteUpdate: function(data) {
-			// TODO remoteUpdates
+			if (row = this.view.getRowById(data.id)) {
+				this.view.buildRow(data, true, row.get(0));
+			}
 		},
 		
 		remoteDelete: function(data) {
-			// TODO remoteDeletes
+			if (row = this.view.getRowById(data.id)) {
+				this.view.completeDeletion(row);
+			}
 		},
 		
 		handlers: $.extend(true, {}, Bxs.Controller.Box.General.prototype.handlers, {

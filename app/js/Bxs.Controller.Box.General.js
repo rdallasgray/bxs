@@ -115,8 +115,8 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 				Bxs.Downloads.create(url,options);
 		},
 		
-		refresh: function() {
-			this.view.activate();
+		refresh: function(forceRefresh) {
+			this.view.activate(forceRefresh);
 		},
 		
 		parseUrl: function(shortUrl) {

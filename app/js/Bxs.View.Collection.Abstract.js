@@ -46,6 +46,14 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			sel = (sel === undefined) ? null : sel;
 			return sel;
 		},
+		
+		getRowById: function(id) {
+			var row = $(this.getDomNode())
+				.find(this.columnType + '[name="id"][value="' + id + '"]')
+				.parent();
+			
+			return row.length > 0 ? row.get(0) : null;
+		},
 
 		addFilter: function(filter) {
 			if (this.filters === undefined) {
@@ -162,11 +170,11 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			}
 		},
 		
-		buildRow: function(data,singleRow) {
+		buildRow: function(data, singleRow, row) {
 			data = data || {};
 
 			var self = this,
-				row = this.rowTemplate.cloneNode(true),
+				row = row || this.rowTemplate.cloneNode(true),
 				schema = self.controller.schema;
 
 			for (var key in data) {
@@ -422,18 +430,21 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			return false;
 		},
 		
-		completeDeletion: function() {
+		completeDeletion: function(row) {
 			
-			var defaultSelection = null;
+			var defaultSelection = null,
+				row = row || this.getSelectedRow();
 			
-			if ($(this.getSelectedRow()).next().length > 0) {
-				defaultSelection = $(this.getSelectedRow()).next().get(0);
+			if (row.getAttribute("selected") === "true") {
+				if ($(row).next().length > 0) {
+					defaultSelection = $(row).next().get(0);
+				}
+				else if ($(row).prev().length > 0) {
+					defaultSelection = $(row).prev().get(0);
+				}
 			}
-			else if ($(this.getSelectedRow()).prev().length > 0) {
-				defaultSelection = $(this.getSelectedRow()).prev().get(0);
-			}
 			
-			$(this.getSelectedRow()).remove();
+			$(row).remove();
 			
 			if (defaultSelection !== null) {
 				this.setSelectedRow(defaultSelection);
