@@ -126,7 +126,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 					var label = Bxs.Association.getName(columnName,self.attrs),
 						url = "/" + Bxs.Inflector.pluralize(label);
 					// preload the box data
-					Bxs.Ajax.getJSON(url);
+//					Bxs.Ajax.getJSON(url, null,  { list: true });
 				}
 				
 				var header = document.createElement('listheader'),

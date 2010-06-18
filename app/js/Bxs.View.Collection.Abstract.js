@@ -51,7 +51,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			var row = $(this.getDomNode())
 				.find(this.columnType + '[name="id"][value="' + id + '"]')
 				.parent();
-			
+
 			return row.length > 0 ? row.get(0) : null;
 		},
 

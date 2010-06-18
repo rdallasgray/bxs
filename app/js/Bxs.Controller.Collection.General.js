@@ -201,12 +201,15 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 		},
 		
 		remoteUpdate: function(data) {
+			var row = null;
+
 			if (row = this.view.getRowById(data.id)) {
-				this.view.buildRow(data, true, row.get(0));
+				this.view.buildRow(data, true, row);
 			}
 		},
 		
 		remoteDelete: function(data) {
+			var row = null;
 			if (row = this.view.getRowById(data.id)) {
 				this.view.completeDeletion(row);
 			}
