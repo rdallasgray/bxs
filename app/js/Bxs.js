@@ -267,7 +267,6 @@ Bxs = {
 	promptForBxtDownload: function() {
 		var ok = confirm("Boxes needs to download an extension called Bxtension to help with some of its functions. Is this OK with you?");
 		if (ok) {
-			//TODO should do this in an iframe or with installTrigger.
 			window.location = "http://bxtension.googlecode.com/svn/dist/current/bxtension.xpi";
 		}
 		else {
