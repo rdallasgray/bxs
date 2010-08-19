@@ -165,9 +165,13 @@ Bxs.View.Row.Abstract.prototype = $.extend(true,{},
 			
 			$.each(self.schema, function(col) {
 				if (self.parentView.ignoresColumn(col)) delete self.schema[col];
-			}); 
+			});
 			
-			self.widgetCount = self.schema.__count__;
+			self.widgetCount = 0;
+			
+			for (var i in self.schema) {
+				self.widgetCount++;
+			}
 
 			$.each(self.schema,function(columnName) {
 				self.buildWidget(columnName);
