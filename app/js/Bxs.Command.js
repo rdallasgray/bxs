@@ -14,9 +14,22 @@ You should have received a copy of the GNU General Public License along with Box
 
 Bxs.Command = {
 	
+	_context: null,
+	
+	setContext: function(target) {
+		this._context = target;
+	},
+	
+	_clearContext: function() {
+		this._context = null;
+	},
+	
+	_hasContext: function() {
+		return this._context !== null;
+	},
+	
 	_getContext: function() {
-		
-		var target = document.commandDispatcher.focusedElement,
+		var target = this._hasContext() ? $("#"+this._context).get(0) : document.commandDispatcher.focusedElement,
 			t = null,
 			boxTargets = ["box","collection"];
 
@@ -35,14 +48,14 @@ Bxs.Command = {
 		return ["unknown",null];
 		
 	},
-	
+
 	dispatch: function(command) {
-		
 		var [context, target] = this._getContext();
 
 		if (this._contexts[context][command] !== undefined) {
 			return this._contexts[context][command](target);
 		}
+		this._clearContext();
 		return false;
 	},
 	

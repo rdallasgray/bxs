@@ -42,7 +42,8 @@ Bxs.Toolbar.Box.prototype = $.extend(true,{},
 				$(self.controls[b]).attr({ 
 					command: b+"-command", 
 					targetId: self.target,
-					tooltiptext: $("#"+b+"-command").attr("label")
+					onclick: "Bxs.Command.setContext('" + self.target + "');",
+					tooltiptext: $("#"+b+"-command").attr("label"),
 				});
 				self.domNode.appendChild(self.controls[b]);
 			})
