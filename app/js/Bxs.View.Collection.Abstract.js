@@ -100,7 +100,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		buildContent: function(data) {
-
 			var self = this,
 				frag = document.createDocumentFragment(),
 				rows = [];
@@ -108,7 +107,6 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			data.forEach(function(el) {
 				rows.push(self.buildRow(el));
 			})
-			
 			if (this.sortedBy !== undefined) {
 				this.sortRowArray(rows,this.sortedBy.columnName,this.sortedBy.direction);
 			}
@@ -118,8 +116,8 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			});
 			
 			self.domNode.appendChild(frag);
-			
-			if (self.associatedColumns.__count__ === 0) {
+
+			if (self.associatedColumns.length === 0) {
 				self.setColumnWidths(data.length);
 				self.setState("ready");
 			}
@@ -264,7 +262,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 
 				if (associatedColumns.snapshotLength === 0) {
 					columnCount++;
-					if (columnCount === self.associatedColumns.__count__) {
+					if (columnCount === self.associatedColumns.length) {
 						$(Bxs.eventsPublisher).trigger("associatedColumnsLabelled."+self.attrs.id);
 					}
 					return;
@@ -291,7 +289,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 								}
 							});
 							columnCount++;
-							if (columnCount === self.associatedColumns.__count__) {
+							if (columnCount === self.associatedColumns.length) {
 								$(Bxs.eventsPublisher).trigger("associatedColumnsLabelled."+self.attrs.id);
 							}
 						},50);

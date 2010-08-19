@@ -79,13 +79,13 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 		},
 	
 		loadData: function() {
+			
 			var self = this;
 
 			if (!self.view.isVisible()) {
 				self.view.onVisibility(function() { self.loadData(); });
 				return;
 			}
-			
 			self.view.setState("busy");
 
 			var url = self.parseUrl(),
