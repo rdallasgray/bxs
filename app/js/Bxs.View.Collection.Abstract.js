@@ -270,7 +270,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 				
 				var modelName = Bxs.Association.getModelName(columnName,self.attrs),
 					url = "/" + modelName;
-				
+
 					if (self.associations === undefined) {
 						self.associations = {};
 					}

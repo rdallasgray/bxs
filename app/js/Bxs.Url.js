@@ -31,9 +31,8 @@ Bxs.Url = {
 	},
 	
 	construct: function(path,options) {
-		
-		var queryString = (typeof options === "object" && options.__count__ > 0) ? $.param(options) : null,
-			path = (queryString === null) ? path : path+"?"+queryString,
+		var queryString = (typeof options === "object") ? $.param(options) : "",
+			path = (queryString === "") ? path : path+"?"+queryString,
 			path = path.replace(/^\//,"").replace(/^:[a-zA-Z]*/,function(str) { return Bxs.Url[str.substr(1)](); });
 				
 		if (!Bxs.Url.hasProtocol(path)) {
