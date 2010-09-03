@@ -69,8 +69,12 @@ caption.box_caption {
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
-	background-image: url(/Bxs/app/img/edit_buttons_grad.png);
+	background: url(/Bxs/app/img/edit_buttons_grad.png);
 	width: 26px;
+}
+
+.editBar toolbarbutton:focus {
+	background: none;
 }
 
 .editBar toolbarbutton[disabled="true"] {
@@ -355,6 +359,10 @@ datepicker, timepicker {
 
 menulist * {
 	-moz-box-flex: 0 !important;
+}
+
+menulist[filterType="year"] {
+	min-width: 100px;
 }
 
 listcell menulist {
