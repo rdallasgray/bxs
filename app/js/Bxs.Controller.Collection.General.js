@@ -71,7 +71,6 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 				return;
 			}
 			if (this.view.associations !== undefined && this.view.associations[dataObject.name] !== undefined) {
-				console.debug("checking Associations: " + this.view.attrs.id);
 				this.checkAssociation(dataObject);
 			}
 		},
