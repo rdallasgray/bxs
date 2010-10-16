@@ -131,34 +131,32 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		buildRowTemplate: function() {
-			
 			var row = document.createElement(this.rowType),
 				self = this;
-			
+
 			self.associatedColumns = [];
 			
 			$.each(self.controller.schema, function(columnName) {
-				
 				var column = document.createElement(self.columnType),
 					type = Bxs.Column.type(columnName);
-				
+
 				$(column).attr({ "name": columnName, "type": type });
-				
+
 				if (type === "list" && !self.ignoresColumn(columnName)) {
 					self.associatedColumns.push(columnName);
 				}
-				
+
 				if (type === "boolean") {
 					$(column).attr({ "type": "checkbox","disabled": "true" });
 				}
-				
+
 				if (self.hidesColumn(columnName) || self.ignoresColumn(columnName)) {
 					$(column).attr({ "hidden": "true" });
 				}
 				
 				row.appendChild(column);
 			});
-			
+
 			self.rowTemplate = row;
 		},
 		
@@ -299,6 +297,12 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		hidesColumn: function(columnName) {
+			if (this.attrs.hide === undefined) {
+				this.attrs.hide = [];
+			}
+			if (this.autoHideColumns === undefined) {
+				this.autoHideColumns = [];
+			}
 			return (
 				this.attrs.hide.some(function(el) el === columnName)) 
 				|| (this.autoHideColumns.some(function(el) el === columnName)
@@ -306,12 +310,16 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		ignoresColumn: function(columnName) {
-			var ignores = this.attrs.ignore;
+			if (this.attrs.ignore === undefined) {
+				this.attrs.ignore = [];
+			}
 			if (this.attrs.observing !== undefined) {
 				var parentColumn = this.attrs.rootUrl.match(/:\w*/g)[0].substr(1);
-				ignores.push(parentColumn);
+				if (!this.attrs.ignore.some(function(el) el === parentColumn)) {
+					this.attrs.ignore.push(parentColumn);
+				}
 			}
-			return ignores.some(function(el) el === columnName);
+			return this.attrs.ignore.some(function(el) el === columnName);
 		},
 		
 		getArrayOfRows: function() {
@@ -521,7 +529,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 		},
 		
 		boot: function() {
-			
+
 			var self = this;
 						
 			this.forwardState(this.editToolbar);

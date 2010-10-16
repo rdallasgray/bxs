@@ -101,7 +101,6 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 		},
 
 		boot: function(schema) {
-			
 			var parentNode = this.domNode.parentNode,
 				container = document.createElement("vbox"),
 				frag = document.createDocumentFragment(),
@@ -114,12 +113,10 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			$(this.domNode).before(container);
 			$(this.domNode).remove();
 			$(container).append(this.domNode);
-			
-			
 			// some of below could be extracted out to Bxs.View.Collection.Abstract
 			$.each(schema, function(columnName) {
-				
-				if (self.ignoresColumn(columnName)) return;
+
+//				if (self.ignoresColumn(columnName)) return;
 				
 				// deal with *_id, i.e. belongs_to relationships
 				if (Bxs.Column.isAssociation(columnName)) {
@@ -128,7 +125,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 					// preload the box data
 //					Bxs.Ajax.getJSON(url, null,  { list: true });
 				}
-				
+
 				var header = document.createElement('listheader'),
 					headerLabel = label === undefined ? columnName : label,
 					type = Bxs.Column.type(columnName);
@@ -153,7 +150,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 					
 					self.sortRows($(header).attr("columnName"),dir);
 				});
-			
+
 				var col = document.createElement('listcol');
 				col.setAttribute("type", type);
 			
@@ -164,30 +161,28 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 				else {
 					visibleCols.push(col);
 				}
-			
+	
 				listhead.appendChild(header);
 				listcols.appendChild(col);
 			});
-			
+
 			visibleCols.shift();
 			$.each(visibleCols, function() {
 				var splitter = document.createElement('splitter');
 				splitter.setAttribute('resizeafter','farthest');
 				this.parentNode.insertBefore(splitter,this);
 			});
-		
 			frag.appendChild(listhead);
 			frag.appendChild(listcols);
 			self.domNode.appendChild(frag);
-			
+
 			self.buildRowTemplate();
-			
+
 			$(self.domNode).bind("dblclick",function() {
 				if (self.editView === undefined) {
 					Bxs.Command.dispatch('edit'); 
 				}
 			});
-			
 			var hbox = document.createElement("hbox");
 			hbox.setAttribute("flex",0);
 			
@@ -196,7 +191,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			hbox.appendChild(this.editToolbar.getDomNode());
 			
 			$(this.domNode).after(hbox);
-			
+
 			Bxs.View.Collection.Abstract.prototype.boot.apply(this);
 		}
 	}

@@ -71,7 +71,6 @@ Bxs.Factory.Box = {
 		if (!temp) {
 			Bxs.Boxes.add(box);
 		}
-		
 		return box;
 	},
 	
