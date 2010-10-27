@@ -116,7 +116,7 @@ Bxs.View.Collection.Listbox.prototype = $.extend(true,{},
 			// some of below could be extracted out to Bxs.View.Collection.Abstract
 			$.each(schema, function(columnName) {
 
-//				if (self.ignoresColumn(columnName)) return;
+				if (self.ignoresColumn(columnName)) return;
 				
 				// deal with *_id, i.e. belongs_to relationships
 				if (Bxs.Column.isAssociation(columnName)) {
