@@ -29,7 +29,6 @@ Bxs.Command = {
 	},
 	
 	_getContext: function() {
-		console.debug(this._context);
 		var target = this._hasContext() ? $("#"+this._context).get(0) : document.commandDispatcher.focusedElement,
 			t = null,
 			boxTargets = ["box","collection"];
