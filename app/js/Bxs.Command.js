@@ -51,18 +51,17 @@ Bxs.Command = {
 
 	dispatch: function(command) {
 		var [context, target] = this._getContext();
-
+		this._clearContext();
 		if (this._contexts[context][command] !== undefined) {
 			return this._contexts[context][command](target);
 		}
-		this._clearContext();
 		return false;
 	},
 	
 	dispatchToolsCommand: function(command) {
 		var context = "box", 
 			target = Bxs.Boxes.getById($(document.popupNode).attr("targetId"));
-		
+		this._clearContext();
 		return this._contexts[context][command](target);
 	},
 	
