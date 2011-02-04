@@ -19,7 +19,6 @@ if (Bxs.Factory === undefined) {
 Bxs.Factory.List = {
 
 	build: function(url,listName,requester) {
-		
 		var requester = requester || "",
 			list = new Bxs.List(url,listName,requester);
 
