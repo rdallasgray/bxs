@@ -67,22 +67,18 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			
 			var sep = document.createElement("menuseparator");
 			$(self.popup).append(sep);
-				
 			Bxs.Ajax.getSchema(self.url, function(columnSchema) {
 				var parentSchema = self.parentView.controller.schema,
 					observedId = self.parentView.attrs.observing,
 					associateKeys = [],
 					sharedKey,
 					requestList = function() {
-
 						$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
-
 							self.list = list;
 							$(self.popup).append(self.list.getDomNode());
 							self.fixFocusBehaviour();
 							$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
 						});
-
 						Bxs.Factory.List.build(self.url,self.listName);
 					}; 
 				
@@ -99,10 +95,10 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 					
 					var buildListWithDefaults = function() {
 						
-						var keyModelName = Bxs.Inflector.pluralize(sharedKey);
+						var keyModelName = Bxs.Inflector.pluralize(Bxs.Association.getName(sharedKey));
 						
 						self.setNewRowDefault(sharedKey,selectedId);
-						self.url = "/" + keyModelName + "/" + selectedId + "/" + this.modelName;
+						self.url = "/" + keyModelName + "/" + selectedId + "/" + self.modelName;
 						
 						requestList();
 					}
