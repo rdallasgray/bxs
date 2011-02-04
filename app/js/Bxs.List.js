@@ -27,7 +27,7 @@ Bxs.List.prototype = {
 		var self = this;
 		
 		this.domNode = document.createDocumentFragment();
-		
+
 		Bxs.Ajax.getJSON(Bxs.Url.construct(self.url, { list: "true" }), function(dataSet,notModified) {
 			var validCachedNode = false;
 			if (notModified) {
@@ -77,7 +77,7 @@ Bxs.List.prototype = {
 		var self = this;
 		
 		Bxs.Ajax.getJSON(
-			self.url+'/'+data.id, // TODO could be problematic if url includes options already
+			self.modelName+'/'+data.id, // TODO could be problematic if url includes options already
 			function(newData) {
 				var row = self.createNode(newData);
 				$(Bxs.eventsPublisher).trigger("listRowAdded."+self.listName,[row]);
