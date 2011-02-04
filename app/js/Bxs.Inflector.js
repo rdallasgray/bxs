@@ -65,10 +65,8 @@ Bxs.Inflector = {
 	},
 	
 	uncountables: [
-		"committee", 
 		"equipment", 
 		"information", 
-		"rice", 
 		"money", 
 		"species", 
 		"series", 
