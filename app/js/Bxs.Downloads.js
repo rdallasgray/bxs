@@ -18,8 +18,6 @@ Bxs.Downloads = {
 		
 		var options = options || {};
 		
-		options.download = "true";
-		
 		if (document.getElementById("downloadFrame") === null) {
 			
 			var frame = document.createElement("iframe");
@@ -28,7 +26,7 @@ Bxs.Downloads = {
 			$("#tempBox").append(frame);
 		}
 		
-		var downloadUrl = Bxs.Url.construct(url,options);
+		var downloadUrl = Bxs.Url.construct(url + "/download", options);
 		
 		Bxs.Ajax.preflight(downloadUrl,function() { Bxs.Downloads.start(downloadUrl); });
 	},
