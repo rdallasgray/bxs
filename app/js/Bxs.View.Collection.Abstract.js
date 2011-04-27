@@ -266,16 +266,16 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 					return;
 				}
 				
-				var modelName = Bxs.Association.getModelName(columnName,self.attrs),
-					url = "/" + modelName;
+				var modelName = Bxs.Association.getModelName(columnName,self.attrs);
 
-					if (self.associations === undefined) {
-						self.associations = {};
-					}
-					if (self.associations[modelName] === undefined) {
-						self.associations[modelName] = columnName;
-					}
-					Bxs.Ajax.getJSON(url, function(labelData) {
+				if (self.associations === undefined) {
+					self.associations = {};
+				}
+				if (self.associations[modelName] === undefined) {
+					self.associations[modelName] = columnName;
+				}
+				$(Bxs.eventsPublisher).one("gotListUrl." + modelName + "-" + self.attrs.id, function(e, data) {
+					Bxs.Ajax.getJSON(data.url, function(labelData) {
 						setTimeout(function() {
 							associatedColumns.forEach(function(column) {
 								if (column.getAttribute("value") === "") return;
@@ -293,6 +293,8 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 						},50);
 					},
 					{ list: "true" });
+				});
+				Bxs.Association.getListUrl(modelName, self);
 			});			
 		},
 		
