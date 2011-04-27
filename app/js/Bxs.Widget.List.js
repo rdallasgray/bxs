@@ -67,54 +67,22 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			
 			var sep = document.createElement("menuseparator");
 			$(self.popup).append(sep);
-			Bxs.Ajax.getSchema(self.url, function(columnSchema) {
-				var parentSchema = self.parentView.controller.schema,
-					observedId = self.parentView.attrs.observing,
-					associateKeys = [],
-					sharedKey,
-					requestList = function() {
-						$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
-							self.list = list;
-							$(self.popup).append(self.list.getDomNode());
-							self.fixFocusBehaviour();
-							$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
-						});
-						Bxs.Factory.List.build(self.url,self.listName);
-					}; 
-				
-				$.each(columnSchema, function(key) { if (Bxs.Column.isAssociation(key)) associateKeys.push(key) });
-				
-				if (!!(sharedKey = associateKeys.filter(function(el) el in parentSchema)[0])) {
-					if (self.parentView.attrs.observing !== undefined) {
-						var selectedId = self.parentView.getObservedBox().view.getSelectedId();
-					}
-					else {
-						var defaultColumn = $(self.parentNode).siblings("[name='"+sharedKey+"']"),
-							selectedId = defaultColumn.attr("value");
-					}
-					
-					var buildListWithDefaults = function() {
-						
-						var keyModelName = Bxs.Inflector.pluralize(Bxs.Association.getName(sharedKey));
-						
-						self.setNewRowDefault(sharedKey,selectedId);
-						self.url = "/" + keyModelName + "/" + selectedId + "/" + self.modelName;
-						
-						requestList();
-					}
-
-					if (!isNaN(parseInt(selectedId))) {
-						buildListWithDefaults();
-					}
-					else {
-						// TODO set up so that when defaultColumn changes, we rebuild the list accordingly.
-						requestList();
-					}
+			
+			$(Bxs.eventsPublisher).one("gotListUrl." + self.modelName + "-" + self.parentView.attrs.id, function(e, data) {
+				if (data.url != self.url) {
+					self.url = data.url;
+					var keyModelName = Bxs.Inflector.pluralize(Bxs.Association.getName(data.key));
+					self.setNewRowDefault(data.key, data.id);
 				}
-				else {
-					requestList();
-				}
+				$(Bxs.eventsPublisher).one("listReady."+self.url, function(e,list) {
+					self.list = list;
+					$(self.popup).append(self.list.getDomNode());
+					self.fixFocusBehaviour();
+					$(Bxs.eventsPublisher).trigger("widgetReady."+self.columnName,[self]);
+				});
+				Bxs.Factory.List.build(self.url,self.listName);
 			});
+			Bxs.Association.getListUrl(self.modelName, self.parentView);
 		},
 	
 		setValue: function(value) {
