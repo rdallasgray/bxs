@@ -111,8 +111,9 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 				options = self.view.hasFilters() ? self.view.getFilterOptions() : {};
 				
 				options.format = "csv";
+				options.download = "true";
 				
-				Bxs.Downloads.create(url,options);
+				Bxs.Downloads.create(url, options, false);
 		},
 		
 		refresh: function(forceRefresh) {

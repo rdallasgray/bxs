@@ -14,9 +14,14 @@ You should have received a copy of the GNU General Public License along with Box
 
 Bxs.Downloads = {
 	
-	create: function(url,options) {
+	create: function(url, options, useDownloadAction) {
 		
-		var options = options || {};
+		var options = options || {},
+			useDownloadAction = (useDownloadAction === undefined) ? true : useDownloadAction;
+			
+		if (useDownloadAction) {
+			url += "/download";
+		}
 		
 		if (document.getElementById("downloadFrame") === null) {
 			
@@ -26,7 +31,7 @@ Bxs.Downloads = {
 			$("#tempBox").append(frame);
 		}
 		
-		var downloadUrl = Bxs.Url.construct(url + "/download", options);
+		var downloadUrl = Bxs.Url.construct(url, options);
 		
 		Bxs.Ajax.preflight(downloadUrl,function() { Bxs.Downloads.start(downloadUrl); });
 	},
