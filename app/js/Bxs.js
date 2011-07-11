@@ -248,12 +248,12 @@ Bxs = {
 	error: {
 		fatal: function(msg) {
 			// TODO make sure all errors are notified (by POSTING to server://base/errors ?)
-			Bxs = null;
 			try {
 				console.debug(msg);
 			}
 			catch(e) {}
 			alert("Fatal error: \n"+msg+"\n\nPlease reload Boxes and try again. If errors continue please contact support.");
+			Bxs = null;
 		},
 		recoverable: function(response) {			
 			alert("Error: "+response.status+"\n"+response.text);
