@@ -19,7 +19,7 @@ Bxs = {
 		root: "http://"+window.location.hostname
 	},
 	
-	reqBxtVersion: "1.0.6.7",
+	reqBxtVersion: "1.0.6.9",
 	
 	mainDeck: $("#bxs-deck-main"),
 
