@@ -252,16 +252,16 @@ Bxs = {
 				console.debug(msg);
 			}
 			catch(e) {}
-			alert("Fatal error: \n"+msg+"\n\nPlease reload Boxes and try again. If errors continue please contact support.");
+			setTimeout(function() { alert("Fatal error: \n"+msg+"\n\nPlease reload Boxes and try again. If errors continue please contact support."); }, 1)
 			Bxs = null;
 		},
-		recoverable: function(response) {			
-			alert("Error: "+response.status+"\n"+response.text);
+		recoverable: function(response) {
+			setTimeout(function() { alert("Error "+response.status+": "+response.text); }, 1)
 		}
 	},
 	
 	serverError: function(response) {
-		alert("Error "+response.status+": "+response.text);
+			setTimeout(function() { alert("Error "+response.status+": "+response.text); }, 1)
 	},
 	
 	promptForBxtDownload: function() {
@@ -270,7 +270,7 @@ Bxs = {
 			window.location = "http://bxtension.googlecode.com/svn/dist/current/bxtension.xpi";
 		}
 		else {
-			alert("Boxes will not function correctly without Bxtension.");
+			confirm("Boxes will not function correctly without Bxtension.");
 		}
 	},
 	
@@ -280,7 +280,7 @@ Bxs = {
 			window.location = "http://bxtension.googlecode.com/svn/dist/current/bxtension.xpi";
 		}
 		else {
-			alert("Boxes will not function correctly without Bxtension.");
+			confirm("Boxes will not function correctly without Bxtension.");
 		}
 	},
 	
