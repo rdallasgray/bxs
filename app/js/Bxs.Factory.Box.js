@@ -41,13 +41,14 @@ Bxs.Factory.Box = {
 			new Bxs.Controller[boxType].Media : new Bxs.Controller[boxType].General;
 		
 		if (node.hasAttribute("media")) {
-			var mediaType = $.string(/^\w*/.exec(parsedAttrs.media.type)[0]).capitalize().str;
+			var mediaType = /^\w*/.exec(parsedAttrs.media.type)[0];;
 			try {
-				box.view = new Bxs.View[boxType][nodeType][mediaType](node);
+				box.view = new Bxs.View[boxType][nodeType][$.string(mediaType).capitalize().str](node);
 			}
 			catch(e) {
 				box.view = new Bxs.View[boxType][nodeType](node);
 			}
+			box.view.mediaType = mediaType;
 		}
 		else {
 			box.view = new Bxs.View[boxType][nodeType](node);

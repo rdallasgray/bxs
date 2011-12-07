@@ -50,9 +50,7 @@ Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 		boot: function(schema) {
 			
 			Bxs.View.Collection.Listbox.prototype.boot.apply(this,[schema]);
-			
-			this.mediaType = /^\w*/.exec(this.attrs.media.type)[0];
-			
+						
 			var head = $(this.domNode).children("listhead").get(0);
 			var header = document.createElement("listheader");
 			$(header).attr({label: this.mediaType, class: "media" });
