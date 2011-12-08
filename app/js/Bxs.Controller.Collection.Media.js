@@ -63,7 +63,6 @@ Bxs.Controller.Collection.Media.prototype = $.extend(true,{},
 		}),
 				
 		handleDropEvent: function(e) {
-			
 			switch (this.view.getState()) {
 				case "active":
 				case "ready":
