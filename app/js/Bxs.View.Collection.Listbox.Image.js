@@ -26,7 +26,6 @@ Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 	{
 		
 		buildRow: function(data) {
-			
 			var row = Bxs.View.Collection.Listbox.prototype.buildRow.apply(this,arguments),
 				col = $(row).children(this.columnType+"[media='image']").get(0),
 				id = $(col).siblings("[name='id']").get(0).getAttribute("value"),
@@ -44,7 +43,12 @@ Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 			var col = document.createElement(this.columnType);
 			$(col).attr({ class: "listcell-iconic", media: "image" });
 			var firstCol = $(this.rowTemplate).children(this.columnType+":not([hidden])").get(0);
+		    if (firstCol !== undefined) {
 			$(firstCol).before(col);
+		    }
+		    else {
+			$(this.rowTemplate).append(col);
+		    }
 		},
 		
 		boot: function(schema) {
@@ -54,16 +58,26 @@ Bxs.View.Collection.Listbox.Image.prototype = $.extend(true,{},
 			var head = $(this.domNode).children("listhead").get(0);
 			var header = document.createElement("listheader");
 			$(header).attr({label: this.mediaType, class: "media" });
-			var firstHeader = $(head).children("listheader:not([hidden])").get(0);
-			$(firstHeader).before(header);
+		    var firstHeader = $(head).children("listheader:not([hidden])").get(0);
+		    if (firstHeader !== undefined) {
+			$(firstHeader).before(header);			
+		    }
+		    else {
+			$(head).append(header);
+		    }
 			
 			var cols = $(this.domNode).children("listcols").get(0);
 			var col = document.createElement("listcol");
-			var firstCol = $(cols).children("listcol:not([hidden])").get(0);
+		    var firstCol = $(cols).children("listcol:not([hidden])").get(0);
+		    if (firstCol !== undefined) {
 			$(firstCol).before(col);
 			var s = document.createElement("splitter");
 			s.setAttribute("resizeafter","farthest");
 			$(col).after(s);
+		    }
+		    else {
+			$(cols).append(col);
+		    }
 		}
 	}
 );
