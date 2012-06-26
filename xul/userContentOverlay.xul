@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<?xul-overlay href="usersOverlay.xul"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
+
+	<tabbox id="mainTabBox">
+		<tabs id = "mainTabs">
+			<tab label="Users" linkedpanel="users_panel"/>
+		</tabs>
+
+		<tabpanels id="mainTabPanels">
+			
+			<tabpanel id="users_panel">
+				<vbox id="usersOverlay"/>
+			</tabpanel>
+
+		</tabpanels>
+	</tabbox>
+
+</overlay>
