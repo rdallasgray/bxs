@@ -1,7 +1,7 @@
 Bxs.Response = {
 	
 	success: function(action,status) {
-
+      console.debug([action, status]);
  		switch(action) {
 
 			case "insert":
@@ -11,7 +11,7 @@ Bxs.Response = {
 			break;
 		
 			case "update":
-			if (status === 200) {
+			if (status === 200 || status === 304) {
 				return true;
 			}
 			break;

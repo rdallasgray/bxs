@@ -261,18 +261,22 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			var url = this.parseUrl(),
 				self = this;
 
-			Bxs.Ajax.put(url,data,function(response) { self.handleData(response,"update"); });
+			Bxs.Ajax.put(url,data,function(response) {
+          self.handleData(response,"update", null, url);
+      });
 		},
 		
-		handleData: function(response,action,deletedId) {
+		handleData: function(response, action, deletedId, url) {
 			
 			var self = this;
-			
+        if (action === "update" && response.status === 204) {
+            return Bxs.Ajax.get(url, function(newResponse) { self.handleData(newResponse, "update"); });
+        }
+        
 			if (Bxs.Response.success(action,response.status)) {
 				self.handleAction(action,response);
-				
-				var newData = (response.text === "") ? {} : Bxs.Json.parse(response.text);
-				
+
+				var newData = (response.text === "" || response.text === "null") ? {} : Bxs.Json.parse(response.text);
 				if (action === "delete") {
 					newData = { id: deletedId };
 				}

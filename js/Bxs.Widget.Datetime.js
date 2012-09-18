@@ -52,7 +52,7 @@ Bxs.Widget.Datetime.prototype = $.extend(true,{},
 		},
 	
 		setValue: function(value) {
-			if (value === "") {
+			if (value === "" || value === undefined) {
 				value = "0000-00-00 00:00:00";
 			}
 			this.setDateValue(this.datePicker, value);

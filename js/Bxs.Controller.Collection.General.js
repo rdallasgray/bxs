@@ -187,7 +187,9 @@ Bxs.Controller.Collection.General.prototype = $.extend(true,{},
 			var url = this.parseUrl(true)+"/"+data.id,
 				self = this;
 			
-			Bxs.Ajax.put(url,data,function(response) { self.handleData(response,"update"); });
+			Bxs.Ajax.put(url,data,function(response) {
+          self.handleData(response,"update", null, url);
+      });
 		},
 		
 		remoteInsert: function(data) {

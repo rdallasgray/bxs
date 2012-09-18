@@ -56,7 +56,6 @@ Bxs.Ajax = {
 			  data;
 
 		    var ajaxGet = $.getJSON(url,null,function(data) {
-			      
 			      if (ajaxGet.status === 401) {
 				        return Bxs.Ajax._authenticatedRequest(url,"GET",data,callback);
 			      }
@@ -113,6 +112,10 @@ Bxs.Ajax = {
 		    };
 		    Bxs.service.get(req);
 	  },
+
+    get: function(url, callback) {
+        this._authenticatedRequest(Bxs.Url.construct(url), "GET", null, callback);
+    },
 	  
 	  put: function(url,data,callback) {
 		    this._authenticatedRequest(Bxs.Url.construct(url),"PUT",data,callback);
