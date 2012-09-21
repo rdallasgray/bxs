@@ -1,7 +1,6 @@
 Bxs.Response = {
 	
 	success: function(action,status) {
-      console.debug([action, status]);
  		switch(action) {
 
 			case "insert":
