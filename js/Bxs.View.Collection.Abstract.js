@@ -176,7 +176,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			for (var key in data) {
 				
 				var type = Bxs.Column.type(key),
-					value = data[key];
+					value = data[key] || "";
 				
 				if (!(key in schema)) {
 					try {
