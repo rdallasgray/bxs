@@ -37,6 +37,7 @@ Bxs.View.Box.Textbox.prototype = $.extend(true,{},
 		},
 		
 		buildContent: function(data) {
+        if (!data.text) data.text = "";
 			this.textNode.innerHTML = data.text;
 			this.setState("ready");
 		},

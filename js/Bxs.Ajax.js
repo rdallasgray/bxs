@@ -51,7 +51,7 @@ Bxs.Ajax = {
 	  },
 	  
 	  getJSON: function(url,callback,options) {
-
+        
 		    var url = Bxs.Url.construct(url,options),
 			  data;
 
@@ -74,7 +74,7 @@ Bxs.Ajax = {
 			      }
 						
 			      if (typeof callback === "function") {
-				        callback(data,notModified);
+				        callback(data, notModified);
 			      }
 		    });
 	  },

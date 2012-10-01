@@ -63,7 +63,7 @@ Bxs.View.Box.Abstract.prototype = $.extend(true,{},
 		},
 		
 		render: function(data) {
-        if (data === null) return;
+        data = data || {};
 			var self = this;
 						
 			$(Bxs.eventsPublisher).trigger("contentChanged."+self.attrs.id);

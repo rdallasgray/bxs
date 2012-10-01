@@ -255,7 +255,7 @@ Bxs.Controller.Box.General.prototype = $.extend(true,{},
 			alert(msg);
 			Bxs.doLogout();
 		},
-		
+
 		update: function(data) {
 			
 			var url = this.parseUrl(),
