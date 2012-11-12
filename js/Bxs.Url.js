@@ -10,7 +10,7 @@ Bxs.Url = {
 	
 	root: function(path) {
 		var path = path || "";
-		return $.url.setUrl().attr("protocol")+"://"+$.url.attr("host")+path;
+		return $.url.setUrl().attr("base").slice(0, -1) + path;
 	},
 	
 	app: function(path) {
