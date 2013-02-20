@@ -232,7 +232,7 @@ Bxs.View.Collection.Abstract.prototype = $.extend(true,{},
 			var self = this,
 				columnName = column.getAttribute("name");
 			
-			if (value !== "") {
+			if (value !== "" && value != null) {
 				var modelName = Bxs.Association.getModelName(columnName,self.attrs),
 					url = "/" + modelName;
 			
