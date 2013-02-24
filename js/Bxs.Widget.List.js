@@ -91,7 +91,7 @@ Bxs.Widget.List.prototype = $.extend(true,{},
 			this.defaultValue = value;
 		},
 		
-		getItemByValue: function(value) {			
+		getItemByValue: function(value) {
 			return $(this.popup).children("menuitem[value='"+value+"']").get(0);
 		},
 		
