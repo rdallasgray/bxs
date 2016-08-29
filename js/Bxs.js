@@ -267,7 +267,7 @@ Bxs = {
 	promptForBxtDownload: function() {
 		var ok = confirm("Boxes needs to download an extension called Bxtension to help with some of its functions. Is this OK with you?");
 		if (ok) {
-			window.location = "https://github.com/rdallasgray/bxtension/blob/master/dist/current/bxtension.xpi";
+			window.location = "https://github.com/rdallasgray/bxtension/raw/master/dist/current/bxtension.xpi";
 		}
 		else {
 			confirm("Boxes will not function correctly without Bxtension.");
@@ -277,7 +277,7 @@ Bxs = {
 	promptForBxtUpdate: function() {
 		var ok = confirm("Boxes needs to update Bxtension. Is this OK with you?");
 		if (ok) {
-			window.location = "https://github.com/rdallasgray/bxtension/blob/master/dist/current/bxtension.xpi";
+			window.location = "https://github.com/rdallasgray/bxtension/raw/master/dist/current/bxtension.xpi";
 		}
 		else {
 			confirm("Boxes will not function correctly without Bxtension.");
