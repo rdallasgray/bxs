@@ -5,7 +5,7 @@ Copyright (c) 2009 Robert Johnston
 This file is part of Boxes.
 
 Boxes is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software  Foundation, either version 3 of the License, or (at your option) any later version.
- 
+
 Boxes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with Boxes. If not, see http://www.gnu.org/licenses/.
@@ -13,14 +13,14 @@ You should have received a copy of the GNU General Public License along with Box
 */
 
 Bxs = {
-	
+
 	location: {
 		admin: "http://"+window.location.hostname+"/admin",
 		root: "http://"+window.location.hostname
 	},
-	
+
 	reqBxtVersion: "1.0.7.5",
-	
+
 	mainDeck: $("#bxs-deck-main"),
 
 	service: {
@@ -45,7 +45,7 @@ Bxs = {
 		},
 
 	},
-	
+
 	logoutButton: $("#logoutButton"),
 
 	login: {
@@ -106,9 +106,9 @@ Bxs = {
 			var request = Bxs.Ajax.login(Bxs.login.controls.username.val(),Bxs.login.controls.password.val());
 		},
 		passwordKeyPress: function(e) {
-			
+
 			switch (e.keyCode) {
-				
+
 				case KeyEvent.DOM_VK_RETURN:
 				Bxs.login.submit();
 				break;
@@ -128,10 +128,10 @@ Bxs = {
 		},
 		success: function(response) {
 			Bxs.login.setState("success");
-			Bxs.auth = { 
+			Bxs.auth = {
 				id: response.id,
-				username: Bxs.login.controls.username.val(), 
-				password: Bxs.login.controls.password.val() 
+				username: Bxs.login.controls.username.val(),
+				password: Bxs.login.controls.password.val()
 			};
 			Bxs.boot.start();
 		},
@@ -140,16 +140,16 @@ Bxs = {
 		}
 
 	},
-		
+
 	logout: function() {
 		if (Bxs.auth === undefined) {
 			return;
 		}
 		Bxs.login.setState("loggingOut");
-		
+
 		Bxs.Ajax.logout(Bxs.doLogout);
 	},
-	
+
 	doLogout: function() {
 		var req = {
 			service: "clearHttpAuth",
@@ -160,27 +160,27 @@ Bxs = {
 		};
 		Bxs.service.get(req);
 	},
-	
+
 	showLogoutOverlay: function() {
 		$("#logoutOverlay").show();
 		$("#logoutOverlaySpinner").show();
 	},
-	
+
 	hideLogoutOverlay: function() {
 		$("#logoutOverlay").hide();
 		$("#logoutOverlaySpinner").hide();
 	},
-	
+
 	activity: function() {
 		clearTimeout(Bxs.activityTimeout);
 		Bxs.activityTimeout = setTimeout(Bxs.noActivity,Bxs.Conf.activityTimeout);
 	},
-	
+
 	noActivity: function() {
 		Bxs.login.controls.status.attr("label","Session timed out");
 		Bxs.logout();
 	},
-	
+
 	checkBeforeUnload: function() {
 		var e = e || window.event;
 		if (e) {
@@ -188,7 +188,7 @@ Bxs = {
 		}
 		return 'If you do wish to leave the page, you will be logged out automatically.';
 	},
-	
+
 	boot: {
 		controls: {
 			scriptsStatus:    $("#scriptsStatus"),
@@ -244,7 +244,7 @@ Bxs = {
 			Bxs.Factory.Box.init();
 		}
 	},
-	
+
 	error: {
 		fatal: function(msg) {
 			// TODO make sure all errors are notified (by POSTING to server://base/errors ?)
@@ -259,42 +259,42 @@ Bxs = {
 			setTimeout(function() { alert("Error "+response.status+": "+response.text); }, 1)
 		}
 	},
-	
+
 	serverError: function(response) {
 			setTimeout(function() { alert("Error "+response.status+": "+response.text); }, 1)
 	},
-	
+
 	promptForBxtDownload: function() {
 		var ok = confirm("Boxes needs to download an extension called Bxtension to help with some of its functions. Is this OK with you?");
 		if (ok) {
-			window.location = "http://bxtension.googlecode.com/svn/dist/current/bxtension.xpi";
+			window.location = "https://github.com/rdallasgray/bxtension/blob/master/dist/current/bxtension.xpi";
 		}
 		else {
 			confirm("Boxes will not function correctly without Bxtension.");
 		}
 	},
-	
+
 	promptForBxtUpdate: function() {
 		var ok = confirm("Boxes needs to update Bxtension. Is this OK with you?");
 		if (ok) {
-			window.location = "http://bxtension.googlecode.com/svn/dist/current/bxtension.xpi";
+			window.location = "https://github.com/rdallasgray/bxtension/blob/master/dist/current/bxtension.xpi";
 		}
 		else {
 			confirm("Boxes will not function correctly without Bxtension.");
 		}
 	},
-	
+
 	init: function() {
-		
+
 		document.title = "Boxes: "+window.location.hostname;
 		Bxs.mode = Bxs.Parser.queryString(document.location.search)["debug"] === "true" ? "debug" : "production";
-		
+
 		if (document.documentElement.getAttribute("bxt-version") === "") {
 			Bxs.promptForBxtDownload();
 		}
-		else if (document.documentElement.getAttribute("bxt-version").toString().replace(".","") < 
+		else if (document.documentElement.getAttribute("bxt-version").toString().replace(".","") <
 			Bxs.reqBxtVersion.replace(".","")) {
-			Bxs.promptForBxtUpdate();	
+			Bxs.promptForBxtUpdate();
 		}
 		else {
 			Bxs.login.controls.submit.bind("command",Bxs.login.submit);
